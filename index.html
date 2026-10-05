@@ -312,7 +312,12 @@ label.f{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:60
 const CATS=['Phí trợ lý thẻ','Phí Alias','Phí số đẹp','Phí Gói TK','Bảo hiểm VBI','Manulife'];
 const COL=['--c1','--c2','--c3','--c4','--c5','--c6'];
 const LKEY='so-phi-gia-dinh-v1';
-const API_URL=''; /* địa chỉ Web App Apps Script; để trống = chỉ lưu trên máy */
+/* nơi lưu dữ liệu chung (Web App Apps Script). Có thể đổi bằng link ?db=<URL /exec> */
+const API_DEFAULT='https://script.google.com/macros/s/AKfycbxmuWSJnQ0JmY5tQ_S_D9-wJAJ7h23-PZTNQdRe_lQRrn8DOwj0AhvTr5fvFmWDhWHz/exec';
+const API_URL=(function(){var ok=function(u){return /^https:\/\/script\.google\.com\/macros\/s\/[A-Za-z0-9_\-]+\/exec$/.test(u||'')};
+  try{var q=new URLSearchParams(location.search).get('db');if(ok(q)){localStorage.setItem('qlp-api',q);if(q!==localStorage.getItem('qlp-api-last')){localStorage.removeItem('qlp-pin');localStorage.removeItem('qlp-cache-v1')}localStorage.setItem('qlp-api-last',q);return q}
+  var st=localStorage.getItem('qlp-api');if(ok(st))return st}catch(e){}
+  return (typeof window!=='undefined'&&window.claude)?'':API_DEFAULT})();
 const PKEY='qlp-pin',CKEY='qlp-cache-v1';
 const $=id=>document.getElementById(id);
 const fmt=n=>new Intl.NumberFormat('vi-VN').format(n);
