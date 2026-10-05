@@ -1,4 +1,4 @@
-<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0e2a47"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Quản lý phí"><meta name="description" content="Quản lý phí và bảo hiểm – dữ liệu lưu trên máy người dùng"></head><body>
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0e2a47"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Quản lý phí"><meta name="description" content="Quản lý phí và bảo hiểm"></head><body>
 <title>Quản lý phí</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
@@ -289,6 +289,14 @@ label.f{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:60
   </form>
 </dialog>
 
+<dialog id="dlgPin">
+  <form class="dlg" id="frmPin" novalidate>
+    <div class="dlg-h"><div><h3>Mã truy cập</h3><p id="pinMsg">Nhập mã truy cập do chủ sổ cung cấp.</p></div></div>
+    <div class="dlg-b"><label class="f" for="iPin">Mã truy cập<input id="iPin" type="password" inputmode="numeric" autocomplete="off" required></label><p class="err" id="pinErr" hidden>Mã truy cập không đúng, nhập lại.</p></div>
+    <div class="dlg-f" style="justify-content:flex-end"><button class="btn-primary" type="submit">Vào sổ</button></div>
+  </form>
+</dialog>
+
 <dialog id="dlgDel">
   <div class="dlg">
     <div class="dlg-h"><div><h3>Xóa giao dịch?</h3><p>Thao tác này không hoàn tác được.</p></div></div>
@@ -304,6 +312,8 @@ label.f{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:60
 const CATS=['Phí trợ lý thẻ','Phí Alias','Phí số đẹp','Phí Gói TK','Bảo hiểm VBI','Manulife'];
 const COL=['--c1','--c2','--c3','--c4','--c5','--c6'];
 const LKEY='so-phi-gia-dinh-v1';
+const API_URL=''; /* địa chỉ Web App Apps Script; để trống = chỉ lưu trên máy */
+const PKEY='qlp-pin',CKEY='qlp-cache-v1';
 const $=id=>document.getElementById(id);
 const fmt=n=>new Intl.NumberFormat('vi-VN').format(n);
 const money=n=>fmt(n)+' ₫';
@@ -331,12 +341,35 @@ function clean(o){
 }
 function loadLocal(){try{const v=JSON.parse(localStorage.getItem(LKEY)||'[]');rows=Array.isArray(v)?v.map(r=>({id:r.id,...clean(r)})):[]}catch(e){rows=[]}}
 function saveLocal(){try{localStorage.setItem(LKEY,JSON.stringify(rows))}catch(e){toast('Trình duyệt không cho lưu. Hãy xuất CSV để giữ dữ liệu.')}}
+function getPin(){try{return localStorage.getItem(PKEY)||''}catch(e){return ''}}
+function cacheRemote(){try{localStorage.setItem(CKEY,JSON.stringify(rows))}catch(e){}}
+let pinWaiters=[];
+function askPin(msg){return new Promise(res=>{pinWaiters.push(res);$('pinMsg').textContent=msg||'Nhập mã truy cập do chủ sổ cung cấp.';$('pinErr').hidden=!msg;if(!$('dlgPin').hasAttribute('open'))$('dlgPin').showModal();setTimeout(()=>$('iPin').focus(),60)})}
+async function api(payload){
+  for(let attempt=0;attempt<3;attempt++){
+    let pin=getPin();if(!pin){await askPin();pin=getPin()}
+    const res=payload?await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({},payload,{pin:pin}))})
+                     :await fetch(API_URL+(API_URL.indexOf('?')<0?'?':'&')+'pin='+encodeURIComponent(pin)+'&t='+Date.now());
+    const j=await res.json();
+    if(j&&j.ok){return j}
+    if(j&&j.error==='pin'){try{localStorage.removeItem(PKEY)}catch(e){}await askPin('Mã truy cập không đúng, nhập lại.');continue}
+    throw new Error((j&&j.error)||'server');
+  }
+  throw new Error('pin');
+}
+function applyRemote(list){rows=(list||[]).map(r=>({id:r.id,...clean(r)}));cacheRemote();render();setSync(true,'Dữ liệu chung · '+rows.length+' giao dịch · '+new Date().toLocaleTimeString('vi-VN',{hour:'2-digit',minute:'2-digit'}))}
+let busyRemote=false;
+async function refreshRemote(quiet){if(busyRemote)return;busyRemote=true;try{if(!quiet)setSync(false,'Đang tải dữ liệu chung…');const j=await api(null);applyRemote(j.rows)}catch(e){setSync(false,'Chưa kết nối được dữ liệu chung. Kiểm tra mạng rồi tải lại.')}finally{busyRemote=false}}
 async function putRow(id,data){
   data.updated=new Date().toISOString();
-  if(mode==='db'){await col.doc(id).set(data)}
-  else{const i=rows.findIndex(r=>r.id===id);const r={id,...data};if(i>=0)rows[i]=r;else rows.push(r);saveLocal();render()}
+  const i=rows.findIndex(r=>r.id===id);const r={id,...data};if(i>=0)rows[i]=r;else rows.push(r);
+  if(mode==='remote'){render();setSync(false,'Đang lưu lên dữ liệu chung…');const j=await api({action:'upsert',row:r});applyRemote(j.rows)}
+  else{saveLocal();render()}
 }
-async function delRow(id){if(mode==='db'){await col.doc(id).delete()}else{rows=rows.filter(r=>r.id!==id);saveLocal();render()}}
+async function delRow(id){
+  rows=rows.filter(r=>r.id!==id);render();
+  if(mode==='remote'){setSync(false,'Đang xóa…');const j=await api({action:'delete',id:id});applyRemote(j.rows)}else{saveLocal()}
+}
 
 /* period + filters */
 const period=()=>allTime?'':$('fMonth').value;
@@ -427,8 +460,11 @@ function render(){
 }
 
 /* dialog fallback (older Safari, in-app browsers) */
-['dlg','dlgDel'].forEach(id=>{const d=$(id);if(typeof d.showModal!=='function'){d.classList.add('fb');d.showModal=function(){d.setAttribute('open','')};d.close=function(){d.removeAttribute('open')}}});
+['dlg','dlgDel','dlgPin'].forEach(id=>{const d=$(id);if(typeof d.showModal!=='function'){d.classList.add('fb');d.showModal=function(){d.setAttribute('open','')};d.close=function(){d.removeAttribute('open')}}});
 document.addEventListener('keydown',e=>{if(e.key==='Escape')['dlg','dlgDel'].forEach(id=>{const d=$(id);if(d.classList.contains('fb')&&d.hasAttribute('open'))d.close()})});
+
+$('frmPin').addEventListener('submit',e=>{e.preventDefault();const v=$('iPin').value.trim();if(!v)return;try{localStorage.setItem(PKEY,v)}catch(err){}$('iPin').value='';$('dlgPin').close();const w=pinWaiters;pinWaiters=[];w.forEach(f=>f())});
+$('dlgPin').addEventListener('cancel',e=>e.preventDefault());
 
 /* form */
 $('iFees').innerHTML=CATS.map((c,i)=>'<div class="fee" data-i="'+i+'"><input type="checkbox" id="ck'+i+'"><label for="ck'+i+'"><i style="background:var('+COL[i]+')"></i>'+c+'</label><input class="amt num" id="am'+i+'" inputmode="numeric" placeholder="Số tiền" autocomplete="off" disabled aria-label="Số tiền '+c+'"></div>').join('');
@@ -460,7 +496,7 @@ $('frm').addEventListener('submit',async e=>{
   const data=clean({date:$('iDate').value,officer:$('iOff').value,cif:$('iCif').value,customer:$('iCus').value,items,note:$('iNote').value});
   $('btnSave').disabled=true;
   try{await putRow(editingId||newId(),data);$('dlg').close();toast((editingId?'Đã cập nhật · ':'Đã lưu · ')+money(data.total))}
-  catch(ex){const ro=ex&&ex.code==='invalid_argument';$('frmErr').textContent=ro?'Bạn chỉ có quyền xem. Nhờ chủ sổ cấp quyền chỉnh sửa.':'Chưa lưu được, kiểm tra mạng rồi thử lại.';$('frmErr').hidden=false;if(ro){canWrite=false;render()}}
+  catch(ex){const ro=false;if(mode==='remote')refreshRemote(true);$('frmErr').textContent=ro?'Bạn chỉ có quyền xem. Nhờ chủ sổ cấp quyền chỉnh sửa.':'Chưa lưu được, kiểm tra mạng rồi thử lại.';$('frmErr').hidden=false;if(ro){canWrite=false;render()}}
   finally{$('btnSave').disabled=false}
 });
 function onListClick(e){
@@ -470,7 +506,7 @@ function onListClick(e){
 }
 $('ledgerBody').addEventListener('click',onListClick);$('ledgerCards').addEventListener('click',onListClick);
 $('delNo').onclick=()=>$('dlgDel').close();
-$('delYes').onclick=async()=>{try{await delRow(deletingId);toast('Đã xóa giao dịch')}catch(e){toast('Chưa xóa được, thử lại.')}$('dlgDel').close()};
+$('delYes').onclick=async()=>{try{await delRow(deletingId);toast('Đã xóa giao dịch')}catch(e){toast('Chưa xóa được, thử lại.');if(mode==='remote')refreshRemote(true)}$('dlgDel').close()};
 ['fQ','fOff','fCat'].forEach(id=>$(id).addEventListener('input',render));
 $('fMonth').addEventListener('input',()=>{allTime=!$('fMonth').value;render()});
 $('mPrev').onclick=()=>shiftMonth(-1);$('mNext').onclick=()=>shiftMonth(1);
@@ -500,22 +536,34 @@ $('fileImp').addEventListener('change',async e=>{
   const file=e.target.files[0];e.target.value='';if(!file)return;
   const t=parseCsv(await file.text());const hi=t.findIndex(r=>r.some(c=>/user ad/i.test(c)));if(hi<0){toast('Không thấy cột “User AD Cán bộ” trong file');return}
   const h=t[hi].map(c=>c.trim().replace(/^'/,'').toLowerCase()),ix=n=>h.indexOf(n.toLowerCase());
-  const iD=ix('Ngày'),iO=ix('User AD Cán bộ'),iC=ix('CIF'),iK=ix('Tên KH'),iN=ix('Ghi chú');let n=0;
+  const iD=ix('Ngày'),iO=ix('User AD Cán bộ'),iC=ix('CIF'),iK=ix('Tên KH'),iN=ix('Ghi chú');let n=0;const batch=[];
   for(const r of t.slice(hi+1)){
     const v=k=>k>=0?String(r[k]==null?'':r[k]).trim().replace(/^'/,''):'';
     let date=v(iD);const dm=date.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})$/);date=dm?dm[3]+'-'+pad(dm[2])+'-'+pad(dm[1]):(/^\d{4}-\d{2}-\d{2}$/.test(date)?date:today());
     const items={};CATS.forEach(c=>{const a=Number(digits(v(ix(c))));if(a>0)items[c]=a});
-    if(v(iO)&&Object.keys(items).length){await putRow(newId(),clean({date,officer:v(iO),cif:v(iC),customer:v(iK),items,note:v(iN)}));n++}
+    if(v(iO)&&Object.keys(items).length){const d=clean({date,officer:v(iO),cif:v(iC),customer:v(iK),items,note:v(iN)});d.updated=new Date().toISOString();batch.push(Object.assign({id:newId()},d));n++}
   }
+  if(n){if(mode==='remote'){try{setSync(false,'Đang tải '+n+' giao dịch lên…');const j=await api({action:'bulk',rows:batch});applyRemote(j.rows)}catch(e){toast('Chưa nhập được, kiểm tra mạng rồi thử lại.');return}}
+        else{rows=rows.concat(batch);saveLocal();render()}}
   toast(n?'Đã nhập '+n+' giao dịch':'File không có dòng nào có số tiền');
 });
 
 /* boot */
 $('fMonth').value=today().slice(0,7);
-loadLocal();render();
+if(!API_URL){loadLocal();render();}
+if(API_URL){
+  mode='remote';
+  try{const c=JSON.parse(localStorage.getItem(CKEY)||'[]');if(Array.isArray(c))rows=c.map(r=>({id:r.id,...clean(r)}))}catch(e){rows=[]}
+  render();
+  $('modeNote').textContent='Dữ liệu chung: mọi người mở link và nhập đúng mã truy cập đều ghi vào cùng một sổ (Google Sheet của chủ sổ) và thấy tổng của tất cả. Trang tự cập nhật mỗi 30 giây.';
+  refreshRemote(false);
+  setInterval(()=>{if(!document.hidden&&!$('dlg').hasAttribute('open'))refreshRemote(true)},30000);
+  document.addEventListener('visibilitychange',()=>{if(!document.hidden)refreshRemote(true)});
+}else{
 $('modeNote').textContent='Dữ liệu chỉ lưu trên trình duyệt của máy đang dùng, không gửi lên mạng và không ai khác xem được. Nếu xóa lịch sử/dữ liệu trình duyệt, dùng chế độ ẩn danh hoặc đổi máy thì dữ liệu sẽ không còn, vì vậy hãy bấm Xuất Excel (CSV) định kỳ để sao lưu và Nhập CSV để khôi phục.';
 let storageOk=true;try{localStorage.setItem('__t','1');localStorage.removeItem('__t')}catch(e){storageOk=false}
 setSync(storageOk,storageOk?'Dữ liệu lưu riêng trên máy này':'Trình duyệt chặn lưu dữ liệu. Hãy xuất CSV trước khi đóng trang.');
+}
 (async()=>{if(!window.claude||!window.claude.use)return;try{downloads=await window.claude.use('downloads')}catch(e){}
 })();
 })();
