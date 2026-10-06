@@ -1,4 +1,4 @@
-<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0e2a47"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Quản lý phí"><meta name="description" content="Quản lý phí và bảo hiểm"></head><body>
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#0e2a47"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Quản lý phí"><meta name="description" content="Quản lý phí và bảo hiểm"><link rel="apple-touch-icon" href="assets/icon-180.png"><link rel="icon" type="image/png" href="assets/icon-32.png"><link rel="manifest" href="manifest.webmanifest"><meta property="og:title" content="Quản lý phí"><meta property="og:image" content="https://cubisung.github.io/assets/icon-512.png"></head><body>
 <title>Quản lý phí</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
@@ -103,6 +103,9 @@ td.r,th.r{text-align:right;white-space:nowrap}
 /* fallback modal for browsers without <dialog> support */
 dialog:not([open]){display:none}
 dialog.fb[open]{display:block;position:fixed;top:50%;left:50%;transform:translate(-50%,-50%);margin:0;z-index:100;box-shadow:0 0 0 100vmax rgba(8,18,32,.55),0 30px 80px rgba(0,0,0,.3);overflow:auto}
+.brandlogo{background:#fff;border-radius:12px;padding:6px 10px;height:64px;display:flex;align-items:center;flex:none;box-shadow:0 2px 10px rgba(0,0,0,.18)}
+.brandlogo img{height:100%;width:auto;display:block}
+@media (max-width:520px){.brandlogo{height:52px;padding:5px 8px}}
 /* ticker */
 .ticker{background:#071a2e;color:#fff;overflow:hidden;white-space:nowrap;font-size:14px;font-weight:600;padding-block:7px;border-bottom:1px solid rgba(255,255,255,.12)}
 .tk-track{display:inline-flex;gap:0;animation:tk 38s linear infinite;padding-left:100%}
@@ -205,7 +208,7 @@ label.f{display:flex;flex-direction:column;gap:5px;font-size:13px;font-weight:60
   <div class="band-in">
     <div class="topbar">
       <div class="logo">
-        <div class="mark" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="3"/><path d="M3 10h18"/><path d="M7 15h4"/></svg></div>
+        <div class="brandlogo"><img src="assets/logo.png" alt="VietinBank Chi nhánh Đắk Nông" width="139" height="60"></div>
         <div><div class="branch">VietinBank Đắk R'Lấp</div><h1>Quản lý phí</h1><p><span class="dot" id="syncDot"></span><span id="syncText">Đang kết nối…</span></p></div>
       </div>
       <div class="top-actions">
