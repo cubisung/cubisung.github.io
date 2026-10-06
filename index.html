@@ -390,8 +390,9 @@ async function api(payload){
   }
   throw new Error('auth');
 }
-const offName=ad=>{const o=officers.find(x=>x.ad===ad);return o&&o.name&&o.name!==ad?o.name:ad};
-const canEditRow=r=>mode!=='remote'||(me&&(me.role==='quanly'||r.officer===me.ad));
+const U=x=>String(x||'').toUpperCase();
+const offName=ad=>{const o=officers.find(x=>U(x.ad)===U(ad));return o&&o.name&&o.name!==ad?o.name:ad};
+const canEditRow=r=>mode!=='remote'||(me&&(me.role==='quanly'||U(r.officer)===U(me.ad)));
 function applyRemote(j){
   if(j.me)me=j.me;if(j.officers)officers=j.officers;
   rows=(j.rows||[]).map(r=>({id:r.id,...clean(r)}));cacheRemote();
@@ -400,8 +401,8 @@ function applyRemote(j){
 }
 function renderTicker(){
   if(mode!=='remote'||!me){$('ticker').hidden=true;return}
-  const t=today();const done=new Set(rows.filter(r=>r.date===t).map(r=>r.officer));
-  const miss=officers.filter(o=>!done.has(o.ad));
+  const t=today();const done=new Set(rows.filter(r=>r.date===t).map(r=>U(r.officer)));
+  const miss=officers.filter(o=>!done.has(U(o.ad)));
   const msg='<span class="sl">★ '+esc(SLOGAN)+' ★</span>'+(officers.length?(miss.length?'<span>Hôm nay ('+vnDate(t)+') chưa nhập: <b>'+miss.map(o=>esc(o.name||o.ad)).join(', ')+'</b></span>':'<span>Hôm nay tất cả cán bộ đã nhập số liệu. Cảm ơn cả nhà!</span>'):'');
   if($('tkTrack').innerHTML!==msg+msg)$('tkTrack').innerHTML=msg+msg;
   $('ticker').hidden=false;
@@ -501,7 +502,7 @@ function render(){
   $('listNote').textContent=f.length+' giao dịch';
   const acts=r=>canWrite&&canEditRow(r)?'<div style="display:flex;gap:6px;justify-content:flex-end"><button type="button" class="icon-btn" data-edit="'+esc(r.id)+'" aria-label="Sửa giao dịch của '+esc(r.customer)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9l-4-4L4 16z"/></svg></button><button type="button" class="icon-btn del" data-del="'+esc(r.id)+'" aria-label="Xóa giao dịch của '+esc(r.customer)+'"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 7h16M9 7V4h6v3M6 7l1 13h10l1-13"/></svg></button></div>':'';
   const emptyHtml='<div class="empty"><b>'+(rows.length?'Không có giao dịch khớp bộ lọc':'Chưa có giao dịch nào')+'</b>'+(rows.length?'Đổi tháng hoặc bộ lọc để xem thêm.':'Bấm “Ghi nhận phí” để ghi giao dịch đầu tiên.')+'</div>';
-  $('ledgerBody').innerHTML=f.length?f.map(r=>'<tr><td class="num" style="white-space:nowrap">'+vnDate(r.date)+'</td><td><div class="cus">'+esc(r.customer)+'</div><div class="sub">CIF '+esc(r.cif)+'</div>'+(r.note?'<div class="sub">'+esc(r.note)+'</div>':'')+'</td><td>'+esc(offName(r.officer))+(me&&r.officer===me.ad?'<span class="mine">của tôi</span>':'')+'</td><td>'+chips(r)+'</td><td class="r"><b>'+money(r.total)+'</b></td><td>'+acts(r)+'</td></tr>').join(''):'<tr><td colspan="6">'+emptyHtml+'</td></tr>';
+  $('ledgerBody').innerHTML=f.length?f.map(r=>'<tr><td class="num" style="white-space:nowrap">'+vnDate(r.date)+'</td><td><div class="cus">'+esc(r.customer)+'</div><div class="sub">CIF '+esc(r.cif)+'</div>'+(r.note?'<div class="sub">'+esc(r.note)+'</div>':'')+'</td><td>'+esc(offName(r.officer))+(me&&U(r.officer)===U(me.ad)?'<span class="mine">của tôi</span>':'')+'</td><td>'+chips(r)+'</td><td class="r"><b>'+money(r.total)+'</b></td><td>'+acts(r)+'</td></tr>').join(''):'<tr><td colspan="6">'+emptyHtml+'</td></tr>';
   $('ledgerCards').innerHTML=f.length?f.map(r=>'<article class="lc"><div class="lc-top"><div><div class="cus">'+esc(r.customer)+'</div><div class="sub">CIF '+esc(r.cif)+' · '+vnDate(r.date)+' · '+esc(offName(r.officer))+'</div></div><div class="lc-amt num">'+money(r.total)+'</div></div>'+chips(r)+(r.note?'<div class="sub">'+esc(r.note)+'</div>':'')+(canWrite?'<div class="lc-foot"><span></span>'+acts(r)+'</div>':'')+'</article>').join(''):emptyHtml;
   $('footSum').innerHTML=f.length?'<span>Đang hiển thị <b>'+f.length+'</b> giao dịch</span><span>Tổng <b>'+money(fs)+'</b></span>':'';
   ['btnAddTop','btnAddFab','btnImp'].forEach(id=>$(id).disabled=!canWrite);
