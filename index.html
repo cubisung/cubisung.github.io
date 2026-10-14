@@ -199,12 +199,12 @@ function scopeOff(){return OFF.filter(function(u){return wide()?(filterDep==='al
 var scopeLabel=function(){return wide()?(filterDep==='all'?'Toàn chi nhánh':(DEPS.filter(function(d){return d[0]===filterDep})[0]||[0,''])[1]):me.depName};
 var monthEnd=function(m){return ymd(m,dim(m))};
 var Q_START=function(){return YEAR+'-10-01'};
-function cell(ad,k){var e=(SUM[ad.toUpperCase()]||{})[k],nf=FEES.length;if(e){var phi=sumA(e.slice(0,nf)),bh=sumA(e.slice(nf));if(phi+bh>0)return{s:'ok',phi:phi,bh:bh,hh:hhArr(e)}}
+function cell(ad,k){var e=(SUM[ad.toUpperCase()]||{})[k],nf=FEES.length;if(e){var phi=sumA(e.slice(0,nf)),bh=sumA(e.slice(nf));if(phi+bh>0)return{s:'ok',phi:phi+hhArr(e),bh:bh,hh:hhArr(e)}}
  if((NIL[ad.toUpperCase()]||{})[k])return{s:'no',phi:0,bh:0,hh:0};return null}
 var hhArr=function(e){return Math.round(sumA(BHS.map(function(n,j){return (e[FEES.length+j]||0)*rateOf(n)})))};
 function cumVal(ad,m,fn){var s=SUM[ad.toUpperCase()]||{},end=monthEnd(m),t=0;for(var k in s){if(k>=Q_START()&&k<=end)t+=fn(s[k])}return t}
 var cumType=function(ad,m,i){return cumVal(ad,m,function(e){return e[i]||0})};
-var cumPhi=function(ad,m){return cumVal(ad,m,function(e){return sumA(e.slice(0,FEES.length))})};
+var cumPhi=function(ad,m){return cumVal(ad,m,function(e){return sumA(e.slice(0,FEES.length))+hhArr(e)})};
 var cumBH=function(ad,m,which){return cumVal(ad,m,function(e){return which==null?sumA(e.slice(FEES.length)):(e[FEES.length+which]||0)})};
 var cumHH=function(ad,m){return cumVal(ad,m,hhArr)};
 
@@ -241,7 +241,7 @@ function vHome(){
   var a=cumPhi(me.ad,MS),p=planOf(me.ad,MS),c=compliance(me.ad,MS),dn=cell(me.ad,t),
       miss=workdays(MS).filter(function(x){return x.k<t&&x.k>=Q_START()&&!cell(me.ad,x.k)}).length;
   return head('Xin chào, '+esc(me.n.split(' ').slice(-1)[0]),'Tiến độ phí lũy kế đến tháng '+MS+'/'+YEAR+' · '+esc(me.depName),monSel())+
-  '<div class="grid g4"><div class="card kpi"><small>Phí đã thu lũy kế</small><b>'+tr(a)+'</b><span>'+money(a)+' đ</span></div>'+
+  '<div class="grid g4"><div class="card kpi"><small>Phí đã thu lũy kế</small><b>'+tr(a)+'</b><span>'+money(a)+' đ · gồm hoa hồng BH</span></div>'+
   '<div class="card kpi"><small>Kế hoạch lũy kế T'+MS+'</small><b>'+tr(p)+'</b><span>'+(p?'Lãnh đạo phòng giao':'Chưa có kế hoạch')+'</span></div>'+
   '<div class="card kpi"><small>Hoàn thành</small><b>'+pct(a,p)+'%</b><div class="bar '+bcls(pct(a,p))+'"><i style="width:'+Math.min(100,pct(a,p))+'%"></i></div></div>'+
   '<div class="card kpi"><small>Hôm nay</small><b>'+(dn?(dn.s==='no'?'Không phát sinh':'Đã nhập'):'Chưa nhập')+'</b><span>'+(dn?'Cảm ơn bạn':'Hạn chốt '+GIO_CHOT+':00')+'</span></div></div>'+
@@ -251,15 +251,15 @@ function vHome(){
   '<p style="color:var(--muted)">'+miss+' ngày làm việc chưa nhập.</p>'+(dn?'':'<button class="btn" onclick="go(\'enter\')">Nhập ngay</button>')+'</div></div>'+tables()}
  var off=scopeOff(),A=sumA(off.map(function(u){return cumPhi(u.ad,MS)})),P=sumA(off.map(function(u){return planOf(u.ad,MS)})),dn2=off.filter(function(u){return doneToday(u.ad)}).length;
  return head('Tổng quan tiến độ',esc(scopeLabel())+' · Phí lũy kế đến T'+MS+'/'+YEAR+' · '+upTo(),depSel()+monSel())+
- '<div class="grid g4"><div class="card kpi"><small>Phí đã thu lũy kế</small><b>'+tr(A)+'</b><span>'+money(A)+' đ</span></div>'+
+ '<div class="grid g4"><div class="card kpi"><small>Phí đã thu lũy kế</small><b>'+tr(A)+'</b><span>'+money(A)+' đ · gồm hoa hồng BH</span></div>'+
  '<div class="card kpi"><small>Kế hoạch lũy kế T'+MS+'</small><b>'+tr(P)+'</b><span>'+off.length+' cán bộ</span></div>'+
  '<div class="card kpi"><small>Hoàn thành KH</small><b>'+pct(A,P)+'%</b><div class="bar '+bcls(pct(A,P))+'"><i style="width:'+Math.min(100,pct(A,P))+'%"></i></div></div>'+
  '<div class="card kpi"><small>Đã nhập hôm nay</small><b>'+dn2+'/'+off.length+'</b><span>'+pct(dn2,off.length)+'% cán bộ · chốt '+GIO_CHOT+':00</span></div></div>'+
  bhCard(off)+
  '<div class="card" style="margin-top:14px"><h3>Phí thu theo ngày · '+esc(scopeLabel())+' · tháng '+MS+'</h3>'+dayChart(off)+'<p style="color:var(--muted);margin:26px 0 0;font-size:12px">Cột vàng = hôm nay (chưa chốt)</p></div>'+tables()}
 function bhCard(list){var b=BHS.map(function(_,j){return sumA(list.map(function(u){return cumBH(u.ad,MS,j)}))}),tot=sumA(b),hh=sumA(list.map(function(u){return cumHH(u.ad,MS)}));
- return '<div class="card kpi" style="margin-top:14px;display:flex;gap:26px;flex-wrap:wrap;align-items:center"><div><small>Bảo hiểm lũy kế · theo dõi riêng</small><b>'+tr(tot)+'</b><span>Không cộng vào Phí</span></div>'+
-  '<div><small>Hoa hồng BH dự kiến</small><b style="color:var(--accent)">'+tr(hh)+'</b><span>tự tính theo loại bảo hiểm</span></div>'+
+ return '<div class="card kpi" style="margin-top:14px;display:flex;gap:26px;flex-wrap:wrap;align-items:center"><div><small>Doanh số bảo hiểm lũy kế</small><b>'+tr(tot)+'</b><span>Theo dõi riêng, không cộng vào Phí</span></div>'+
+  '<div><small>Hoa hồng BH dự kiến</small><b style="color:var(--accent)">'+tr(hh)+'</b><span>đã tính vào Phí</span></div>'+
   b.map(function(v,j){return '<div><small>'+esc(shortBH(BHS[j]))+' · '+Math.round(rateOf(BHS[j])*100)+'%</small><b style="font-size:19px">'+tr(v)+'</b></div>'}).join('')+'</div>'}
 
 function dayChart(list){
@@ -271,17 +271,17 @@ function dayChart(list){
 /* Bảng theo loại phí: cột dọc = phòng / cán bộ, cột ngang = loại phí */
 var rankPos='GDV';
 function typeTable(items,nameHead,kind){
- var rows=items.map(function(it){var t=FEES.map(function(_,i){return sumA(it.ads.map(function(ad){return cumType(ad,MS,i)}))}),phi=sumA(t),kh=sumA(it.ads.map(function(ad){return planOf(ad,MS)}));
-  return{n:it.n,sub:it.sub,me:it.me,t:t,phi:phi,kh:kh,b:BHS.map(function(_,j){return sumA(it.ads.map(function(ad){return cumBH(ad,MS,j)}))}),hh:sumA(it.ads.map(function(ad){return cumHH(ad,MS)}))}}).sort(function(a,b){return a.phi-b.phi});
+ var rows=items.map(function(it){var t=FEES.map(function(_,i){return sumA(it.ads.map(function(ad){return cumType(ad,MS,i)}))}),hhv=sumA(it.ads.map(function(ad){return cumHH(ad,MS)})),phi=sumA(t)+hhv,kh=sumA(it.ads.map(function(ad){return planOf(ad,MS)}));
+  return{n:it.n,sub:it.sub,me:it.me,t:t,phi:phi,kh:kh,b:BHS.map(function(_,j){return sumA(it.ads.map(function(ad){return cumBH(ad,MS,j)}))}),hh:hhv}}).sort(function(a,b){return a.phi-b.phi});
  var tot={t:FEES.map(function(_,i){return sumA(rows.map(function(r){return r.t[i]}))}),phi:sumA(rows.map(function(r){return r.phi})),kh:sumA(rows.map(function(r){return r.kh})),b:BHS.map(function(_,j){return sumA(rows.map(function(r){return r.b[j]}))}),hh:sumA(rows.map(function(r){return r.hh}))};
  var dash='<span style="color:var(--muted)">–</span>';
- var line=function(r,i,isTot){var p=pct(r.phi,r.kh);return '<tr class="'+(isTot?'tot':'')+'"'+(r.me?' style="outline:2px solid var(--accent);outline-offset:-2px"':'')+'><td>'+(isTot?'':i+1)+'</td><td>'+(isTot?'Tổng cộng':esc(r.n)+(r.sub?'<br><small style="color:var(--muted)">'+esc(r.sub)+'</small>':''))+'</td>'+r.t.map(function(x){return '<td class="r">'+(x?money(x):dash)+'</td>'}).join('')+'<td class="r"><b>'+money(r.phi)+'</b></td><td class="r">'+(r.kh?money(r.kh):'–')+'</td><td class="r"><span class="pct '+pcls(p)+'">'+(r.kh?p+'%':'–')+'</span></td>'+r.b.map(function(x,j){return '<td class="r'+(j===0?' sep':'')+'">'+(x?money(x):dash)+'</td>'}).join('')+'<td class="r"><b>'+(r.hh?money(r.hh):'–')+'</b></td></tr>'};
- return '<div class="scroll" style="max-height:480px"><table><thead><tr><th>#</th><th>'+nameHead+'</th>'+FEES.map(function(f){return '<th class="r">'+esc(f)+'</th>'}).join('')+'<th class="r">Tổng phí</th><th class="r">Kế hoạch lũy kế</th><th class="r">% KH</th>'+BHS.map(function(f,j){return '<th class="r'+(j===0?' sep':'')+'">'+esc(shortBH(f))+'<br>(riêng)</th>'}).join('')+'<th class="r">Hoa hồng BH<br>dự kiến</th></tr></thead><tbody>'+rows.map(function(r,i){return line(r,i,false)}).join('')+line(tot,0,true)+'</tbody></table></div>'}
+ var line=function(r,i,isTot){var p=pct(r.phi,r.kh);return '<tr class="'+(isTot?'tot':'')+'"'+(r.me?' style="outline:2px solid var(--accent);outline-offset:-2px"':'')+'><td>'+(isTot?'':i+1)+'</td><td>'+(isTot?'Tổng cộng':esc(r.n)+(r.sub?'<br><small style="color:var(--muted)">'+esc(r.sub)+'</small>':''))+'</td>'+r.t.map(function(x){return '<td class="r">'+(x?money(x):dash)+'</td>'}).join('')+'<td class="r" style="color:var(--accent)">'+(r.hh?money(r.hh):dash)+'</td><td class="r"><b>'+money(r.phi)+'</b></td><td class="r">'+(r.kh?money(r.kh):'–')+'</td><td class="r"><span class="pct '+pcls(p)+'">'+(r.kh?p+'%':'–')+'</span></td>'+r.b.map(function(x,j){return '<td class="r'+(j===0?' sep':'')+'">'+(x?money(x):dash)+'</td>'}).join('')+'</tr>'};
+ return '<div class="scroll" style="max-height:480px"><table><thead><tr><th>#</th><th>'+nameHead+'</th>'+FEES.map(function(f){return '<th class="r">'+esc(f)+'</th>'}).join('')+'<th class="r">Hoa hồng BH<br>dự kiến</th><th class="r">Tổng phí</th><th class="r">Kế hoạch lũy kế</th><th class="r">% KH</th>'+BHS.map(function(f,j){return '<th class="r'+(j===0?' sep':'')+'">'+esc(shortBH(f))+'<br>(doanh số)</th>'}).join('')+'</tr></thead><tbody>'+rows.map(function(r,i){return line(r,i,false)}).join('')+line(tot,0,true)+'</tbody></table></div>'}
 function tables(){
  var deps=DEPS.map(function(d){var L=OFF.filter(function(u){return u.dep===d[0]});return{n:d[1],sub:L.length+' cán bộ',ads:L.map(function(u){return u.ad}),me:me.dep===d[0]}});
  var ppl=OFF.filter(function(u){return u.pos===rankPos}).map(function(u){return{n:u.n,sub:u.depName,ads:[u.ad],me:u.ad===me.ad}});
  var cnt=function(p){return OFF.filter(function(u){return u.pos===p}).length};
- return '<div class="card" style="margin-top:14px"><h3>Phí các phòng theo loại phí · thấp → cao</h3><p style="color:var(--muted);margin:-8px 0 10px;font-size:12px">Lũy kế đến T'+MS+'/'+YEAR+' · đơn vị đồng · bảo hiểm tách riêng, không tính vào Tổng phí</p>'+typeTable(deps,'Phòng / PGD')+'</div>'+
+ return '<div class="card" style="margin-top:14px"><h3>Phí các phòng theo loại phí · thấp → cao</h3><p style="color:var(--muted);margin:-8px 0 10px;font-size:12px">Lũy kế đến T'+MS+'/'+YEAR+' · đơn vị đồng · Tổng phí = 6 loại phí + hoa hồng BH dự kiến · doanh số bảo hiểm tách riêng</p>'+typeTable(deps,'Phòng / PGD')+'</div>'+
  '<div class="card" style="margin-top:14px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px"><h3 style="margin:0">Phí cán bộ theo loại phí · thấp → cao</h3><div class="seg">'+['GDV','RM'].map(function(k){return '<button class="btn sm '+(rankPos===k?'':'ghost')+'" onclick="rankPos=\''+k+'\';render()">'+POS_LABEL[k]+' ('+cnt(k)+')</button>'}).join('')+'</div></div>'+typeTable(ppl,'Cán bộ')+'</div>'}
 
 /* ================= 2. NHẬP PHÍ ================= */
@@ -298,9 +298,10 @@ function vEnter(){
  '<div class="grid" style="grid-template-columns:1fr 1fr"><div><label>Ngày</label><input type="date" id="fDate" value="'+d+'" onchange="refreshNil()"></div><div><label>CIF</label><input id="fCif" inputmode="numeric" value="'+esc(r?r.cif:'')+'" placeholder="Mã CIF"></div></div>'+
  '<label>Tên khách hàng</label><input id="fCus" value="'+esc(r?r.customer:'')+'" placeholder="Họ tên khách hàng">'+
  '<label>Phí (nhập loại nào có phát sinh)</label><div class="feegrid">'+FEES.map(function(c){return inp('fee',c)}).join('')+'</div>'+
- '<p style="margin:12px 0 0">Tổng phí lần nộp: <b id="tot">0</b> đ</p>'+
+ '<p style="margin:12px 0 0">Phí (6 loại): <b id="tot">0</b> đ</p>'+
  '<label style="margin-top:16px">Bảo hiểm – doanh số (theo dõi riêng, không cộng vào Phí)</label><div class="feegrid" style="grid-template-columns:repeat(2,1fr)">'+BHS.map(function(c){return inp('bh',c)}).join('')+'</div>'+
- '<p style="margin:12px 0 0">Tổng bảo hiểm lần nộp: <b id="totbh">0</b> đ &nbsp;·&nbsp; <span style="color:var(--accent)">Hoa hồng dự kiến: <b id="tothh">0</b> đ</span></p>'+
+ '<p style="margin:12px 0 0">Doanh số bảo hiểm: <b id="totbh">0</b> đ <span style="color:var(--muted)">(không cộng vào Phí)</span> &nbsp;·&nbsp; <span style="color:var(--accent)">Hoa hồng dự kiến (tính vào Phí): <b id="tothh">0</b> đ</span></p>'+
+ '<p style="margin:10px 0 0;font-size:15px">Tổng phí lần nộp (gồm hoa hồng): <b id="totphi" style="color:var(--accent)">0</b> đ</p>'+
  '<p style="margin:2px 0 0;font-size:12px;color:var(--muted)">Hoa hồng tự tính: '+BHS.map(function(n){return Math.round(rateOf(n)*100)+'% '+esc(shortBH(n))}).join(' · ')+'</p>'+
  '<label>Ghi chú</label><input id="fNote" value="'+esc(r?r.note:'')+'" placeholder="Không bắt buộc">'+
  '<div style="display:flex;gap:8px;margin-top:14px;flex-wrap:wrap"><button class="btn" id="bSave" onclick="saveFee()">'+(editId?'Lưu thay đổi':'Lưu khoản phí')+'</button>'+(editId?'<button class="btn ghost" onclick="cancelEdit()">Hủy sửa</button>':'<button class="btn ghost" id="bNil" onclick="toggleNil()"></button>')+'</div></div>'+
@@ -308,7 +309,7 @@ function vEnter(){
  (mine.length?'<table>'+mine.map(function(x){return '<tr><td>'+x.date.split('-').reverse().join('/')+'<br><small style="color:var(--muted)">'+esc(x.customer)+'</small></td><td class="r">'+money(x.phi)+(x.bh?'<br><small style="color:var(--muted)">BH '+money(x.bh)+'</small>':'')+'</td></tr>'}).join('')+'</table><p style="margin-top:10px"><button class="btn ghost sm" onclick="go(\'book\')">Xem sổ giao dịch</button></p>':'<p style="color:var(--muted)">Chưa có khoản nào.</p>')+'</div></div>'}
 function fmtIn(el){el.value=el.value.replace(/\D/g,'').replace(/\B(?=(\d{3})+$)/g,'.');sumFee()}
 var sumOf=function(c){return sumA([].map.call(document.querySelectorAll(c),function(i){return +i.value.replace(/\./g,'')||0}))};
-function sumFee(){$('tot').textContent=money(sumOf('.fee'));$('totbh').textContent=money(sumOf('.bh'));var it={};document.querySelectorAll('.bh').forEach(function(i){it[i.dataset.k]=+i.value.replace(/\./g,'')||0});$('tothh').textContent=money(hhOfItems(it))}
+function sumFee(){$('tot').textContent=money(sumOf('.fee'));$('totbh').textContent=money(sumOf('.bh'));var it={};document.querySelectorAll('.bh').forEach(function(i){it[i.dataset.k]=+i.value.replace(/\./g,'')||0});var hv=hhOfItems(it);$('tothh').textContent=money(hv);$('totphi').textContent=money(sumOf('.fee')+hv)}
 function afterEnter(){sumFee();refreshNil()}
 function curAd(){return editRow?editRow.officer:entryAd()}
 function refreshNil(){var d=$('fDate').value,c=cell(curAd()||'',d),b=$('bNil');
@@ -346,13 +347,13 @@ function vBook(){
  var lead=me.role!=='staff'?5:3,nc=lead+FEES.length+1+BHS.length+1+2;
  return head('Sổ giao dịch',(me.role==='staff'?'Các khoản của bạn':me.role==='head'?'Cán bộ '+esc(me.depName):esc(scopeLabel()))+' · Tháng '+MS+'/'+YEAR+' · '+L.length+' khoản · '+Object.keys(cnt).length+' khách hàng (CIF)',
   depSel()+monSel()+offSel+'<input placeholder="Tìm CIF, tên KH, ghi chú" style="min-width:200px" value="'+esc(bookQ)+'" onchange="bookQ=this.value;render()">'+'<button class="btn ghost" onclick="exportBook()">Tải CSV</button>')+
- '<div class="scroll"><table><thead><tr><th>Ngày</th>'+(me.role!=='staff'?'<th>Cán bộ</th><th>Phòng</th>':'')+'<th>CIF</th><th>Khách hàng</th>'+FEES.map(function(f){return '<th class="r">'+esc(f)+'</th>'}).join('')+'<th class="r">Tổng phí</th>'+BHS.map(function(f,j){return '<th class="r'+(j===0?' sep':'')+'">'+esc(shortBH(f))+'</th>'}).join('')+'<th class="r">Hoa hồng BH<br>dự kiến</th><th>Ghi chú</th><th></th></tr></thead><tbody>'+
- (L.length?L.map(function(x){var u=depOf[x.officer.toLowerCase()]||{};return '<tr><td>'+x.date.split('-').reverse().join('/')+'</td>'+(me.role!=='staff'?'<td>'+esc(u.n||x.officer)+'</td><td>'+esc(u.depName||'')+'</td>':'')+'<td>'+esc(x.cif)+'</td><td>'+esc(x.customer)+'</td>'+FEES.map(function(c){return '<td class="r">'+(x.items[c]?money(x.items[c]):'')+'</td>'}).join('')+'<td class="r"><b>'+money(x.phi)+'</b></td>'+BHS.map(function(c,j){return '<td class="r'+(j===0?' sep':'')+'">'+(x.items[c]?money(x.items[c]):'')+'</td>'}).join('')+'<td class="r">'+(hhOfItems(x.items)?money(hhOfItems(x.items)):'')+'</td><td style="white-space:normal;max-width:200px">'+esc(x.note)+'</td><td>'+(canEdit(x)?'<button class="btn ghost sm" onclick="editFee(\''+x.id+'\')">Sửa</button> <button class="btn danger sm" onclick="delFee(\''+x.id+'\')">Xóa</button>':'')+'</td></tr>'}).join('')+
- '<tr class="tot"><td colspan="'+lead+'">Tổng cộng</td>'+tot.map(function(v){return '<td class="r">'+money(v)+'</td>'}).join('')+'<td class="r">'+money(sumA(tot))+'</td>'+tb.map(function(v,j){return '<td class="r'+(j===0?' sep':'')+'">'+money(v)+'</td>'}).join('')+'<td class="r">'+money(thh)+'</td><td colspan="2"></td></tr>':'<tr><td colspan="'+nc+'" style="color:var(--muted);padding:20px">Chưa có giao dịch nào trong tháng này.</td></tr>')+'</tbody></table></div>'}
+ '<div class="scroll"><table><thead><tr><th>Ngày</th>'+(me.role!=='staff'?'<th>Cán bộ</th><th>Phòng</th>':'')+'<th>CIF</th><th>Khách hàng</th>'+FEES.map(function(f){return '<th class="r">'+esc(f)+'</th>'}).join('')+'<th class="r">Hoa hồng BH<br>dự kiến</th><th class="r">Tổng phí</th>'+BHS.map(function(f,j){return '<th class="r'+(j===0?' sep':'')+'">'+esc(shortBH(f))+'</th>'}).join('')+'<th>Ghi chú</th><th></th></tr></thead><tbody>'+
+ (L.length?L.map(function(x){var u=depOf[x.officer.toLowerCase()]||{};return '<tr><td>'+x.date.split('-').reverse().join('/')+'</td>'+(me.role!=='staff'?'<td>'+esc(u.n||x.officer)+'</td><td>'+esc(u.depName||'')+'</td>':'')+'<td>'+esc(x.cif)+'</td><td>'+esc(x.customer)+'</td>'+FEES.map(function(c){return '<td class="r">'+(x.items[c]?money(x.items[c]):'')+'</td>'}).join('')+'<td class="r" style="color:var(--accent)">'+(hhOfItems(x.items)?money(hhOfItems(x.items)):'')+'</td><td class="r"><b>'+money(x.phi)+'</b></td>'+BHS.map(function(c,j){return '<td class="r'+(j===0?' sep':'')+'">'+(x.items[c]?money(x.items[c]):'')+'</td>'}).join('')+'<td style="white-space:normal;max-width:200px">'+esc(x.note)+'</td><td>'+(canEdit(x)?'<button class="btn ghost sm" onclick="editFee(\''+x.id+'\')">Sửa</button> <button class="btn danger sm" onclick="delFee(\''+x.id+'\')">Xóa</button>':'')+'</td></tr>'}).join('')+
+ '<tr class="tot"><td colspan="'+lead+'">Tổng cộng</td>'+tot.map(function(v){return '<td class="r">'+money(v)+'</td>'}).join('')+'<td class="r">'+money(thh)+'</td><td class="r">'+money(sumA(tot)+thh)+'</td>'+tb.map(function(v,j){return '<td class="r'+(j===0?' sep':'')+'">'+money(v)+'</td>'}).join('')+'<td colspan="2"></td></tr>':'<tr><td colspan="'+nc+'" style="color:var(--muted);padding:20px">Chưa có giao dịch nào trong tháng này.</td></tr>')+'</tbody></table></div>'}
 function scopeOffAll(){return OFF.filter(function(u){return wide()?(filterDep==='all'||u.dep===filterDep):u.dep===me.dep})}
 function exportBook(){var depOf={};U.forEach(function(u){depOf[u.ad.toLowerCase()]=u});
  var L=ROWS.filter(function(x){return x.date>=ymd(MS,1)&&x.date<=monthEnd(MS)});
- var r=[['Ngày','User AD','Cán bộ','Phòng','CIF','Khách hàng'].concat(FEES,['Tổng phí'],BHS,['Hoa hồng BH dự kiến','Ghi chú'])].concat(L.map(function(x){var u=depOf[x.officer.toLowerCase()]||{};return [x.date,x.officer,u.n||'',u.depName||'',"'"+x.cif,x.customer].concat(FEES.map(function(c){return x.items[c]||0}),[x.phi],BHS.map(function(c){return x.items[c]||0}),[hhOfItems(x.items),x.note])}));
+ var r=[['Ngày','User AD','Cán bộ','Phòng','CIF','Khách hàng'].concat(FEES,['Hoa hồng BH dự kiến','Tổng phí'],BHS,['Ghi chú'])].concat(L.map(function(x){var u=depOf[x.officer.toLowerCase()]||{};return [x.date,x.officer,u.n||'',u.depName||'',"'"+x.cif,x.customer].concat(FEES.map(function(c){return x.items[c]||0}),[hhOfItems(x.items),x.phi],BHS.map(function(c){return x.items[c]||0}),[x.note])}));
  download('so-giao-dich-T'+MS+'.csv',r.map(function(a){return a.map(csvCell).join(',')}).join('\n'))}
 
 /* ================= 4. KẾ HOẠCH ================= */
@@ -393,7 +394,7 @@ function vTrack(){
      else if(x.k===t.key&&!s&&t.hour<GIO_CHOT){c='pend';tip='Chưa nhập · chốt '+GIO_CHOT+':00'}
      else if(!s){c='miss';red++;tip='Chưa nhập'}
      else if(s.s==='no'){c='no';tip='Không phát sinh'}
-     else{c='ok';tip='Phí '+money(s.phi)+' đ'+(s.bh?' · BH '+money(s.bh)+' đ (HH dự kiến '+money(s.hh)+' đ)':'')}}
+     else{c='ok';tip='Phí '+money(s.phi)+' đ'+(s.bh?' (gồm hoa hồng BH '+money(s.hh)+' đ) · doanh số BH '+money(s.bh)+' đ':'')}}
     return '<td class="s"><span class="c '+c+'" title="'+esc(u.n)+' · '+x.d+'/'+MS+': '+tip+'" onclick="toast(this.title)"></span></td>'}).join('');
    var cp=compliance(u.ad,MS);
    body+='<tr><td class="nm">'+esc(u.n)+'<br><small style="color:var(--muted)">'+esc(u.ad)+' · '+POS_LABEL[u.pos]+'</small></td>'+cells+'<td class="t" style="color:'+(red?'var(--danger)':'var(--accent)')+'">'+red+'</td><td class="t">'+(cp==null?'—':cp+'%')+'</td></tr>'})});
@@ -424,8 +425,8 @@ function vLogin(){
 function vRep(){return head('Báo cáo','Xuất số liệu theo phạm vi của bạn',depSel()+monSel())+
  '<div class="grid g2"><div class="card"><h3>Bảng tiến độ cán bộ · lũy kế đến T'+MS+'</h3><p style="color:var(--muted)">'+esc(scopeLabel())+' · '+scopeOff().length+' cán bộ: từng loại phí, tổng phí, kế hoạch, % hoàn thành, % tuân thủ, bảo hiểm riêng.</p><button class="btn" onclick="exportCsv()">Tải CSV (mở bằng Excel)</button></div>'+
  '<div class="card"><h3>Sổ giao dịch</h3><p style="color:var(--muted)">Chi tiết từng khách hàng, từng loại phí trong tháng '+MS+'.</p><button class="btn ghost" onclick="exportBook()">Tải sổ giao dịch (CSV)</button></div></div>'}
-function exportCsv(){var r=[['Phòng','Cán bộ','User AD','Chức danh'].concat(FEES,['Tổng phí','Kế hoạch lũy kế T'+MS,'% hoàn thành','% tuân thủ'],BHS,['Hoa hồng BH dự kiến'])].concat(scopeOff().map(function(u){var a=cumPhi(u.ad,MS),p=planOf(u.ad,MS),c=compliance(u.ad,MS);
-  return [u.depName,u.n,u.ad,POS_LABEL[u.pos]].concat(FEES.map(function(_,i){return cumType(u.ad,MS,i)}),[a,p,pct(a,p),c==null?'':c],BHS.map(function(_,j){return cumBH(u.ad,MS,j)}),[cumHH(u.ad,MS)])}));
+function exportCsv(){var r=[['Phòng','Cán bộ','User AD','Chức danh'].concat(FEES,['Hoa hồng BH dự kiến','Tổng phí','Kế hoạch lũy kế T'+MS,'% hoàn thành','% tuân thủ'],BHS)].concat(scopeOff().map(function(u){var a=cumPhi(u.ad,MS),p=planOf(u.ad,MS),c=compliance(u.ad,MS);
+  return [u.depName,u.n,u.ad,POS_LABEL[u.pos]].concat(FEES.map(function(_,i){return cumType(u.ad,MS,i)}),[cumHH(u.ad,MS),a,p,pct(a,p),c==null?'':c],BHS.map(function(_,j){return cumBH(u.ad,MS,j)}))}));
  download('tien-do-T'+MS+'.csv',r.map(function(a){return a.map(csvCell).join(',')}).join('\n'))}
 
 /* ================= 8. QUẢN TRỊ ================= */
