@@ -40,7 +40,7 @@ main{padding:24px 28px 60px;min-width:0}
 .grid{display:grid;gap:14px}.g4{grid-template-columns:repeat(4,1fr)}.g2{grid-template-columns:1.4fr 1fr}
 .card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px 18px}
 .card h3{margin:0 0 12px;font-size:15px}
-.kpi small{color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
+.kpi small{display:block;color:var(--muted);font-weight:600;font-size:12px;text-transform:uppercase;letter-spacing:.04em}
 .kpi b{display:block;font-size:26px;margin:4px 0 2px}.kpi span{font-size:12px;color:var(--muted)}
 .bar{height:8px;background:var(--line);border-radius:99px;overflow:hidden}.bar i{display:block;height:100%;background:var(--accent);border-radius:99px}
 .bar.low i{background:var(--red)}.bar.mid i{background:#e5a100}
@@ -167,7 +167,7 @@ async function post(body){
  try{var r=await fetch(API_URL,{method:'POST',headers:{'Content-Type':'text/plain;charset=utf-8'},body:JSON.stringify(Object.assign({},body,{token:token}))});var j=await r.json();
   if(ok(j)){applyRemote(j);return j}
   if(j&&j.error==='auth'){logout('Phiên đăng nhập hết hạn.');return null}
-  toast(({forbidden:'Bạn không có quyền thực hiện thao tác này',plan:'Kế hoạch lũy kế phải tăng dần: T10 ≤ T11 ≤ T12'})[j&&j.error]||'Lưu không thành công');return null}
+  toast(({forbidden:'Bạn không có quyền thực hiện thao tác này',plan:'Kế hoạch lũy kế phải tăng dần: T10 ≤ T11 ≤ T12',invalid:'Thông tin chưa hợp lệ (kiểm tra vai trò, phòng, chức danh)',exists:'User AD này đã tồn tại',self:'Không thể đổi vai trò của chính mình',nouser:'Không tìm thấy tài khoản'})[j&&j.error]||'Lưu không thành công');return null}
  catch(e){toast('Không kết nối được máy chủ. Thử lại.');return null}
  finally{$('busy').classList.add('hide')}}
 function editing(){var a=document.activeElement;return a&&/INPUT|SELECT|TEXTAREA/.test(a.tagName)&&a.id!=='lad'&&a.id!=='lpin'}
@@ -416,8 +416,38 @@ function exportCsv(){var r=[['Phòng','Cán bộ','User AD','Chức danh'].conca
  download('tien-do-T'+MS+'.csv',r.map(function(a){return a.map(csvCell).join(',')}).join('\n'))}
 
 /* ================= 8. QUẢN TRỊ ================= */
-function vAdm(){return head('Quản trị tài khoản','Danh sách cán bộ, phòng, vai trò. Thêm/sửa danh sách: trang CanBo trong Google Sheet rồi chạy capNhatDanhSach.')+
- '<div class="scroll"><table><thead><tr><th>User AD</th><th>Họ tên</th><th>Phòng / Ban</th><th>Chức danh</th><th>Vai trò</th><th></th></tr></thead><tbody>'+U.map(function(u){return '<tr><td>'+esc(u.ad)+'</td><td>'+esc(u.n)+'</td><td>'+esc(u.depName)+'</td><td>'+(POS_LABEL[u.pos]||'—')+'</td><td><span class="pill '+(u.role==='staff'?'':'g')+'">'+ROLE_LABEL[u.role]+'</span></td><td><button class="btn ghost sm" onclick="resetPin(\''+esc(u.ad)+'\')">Đặt lại PIN</button></td></tr>'}).join('')+'</tbody></table></div>'}
+var admQ='',admDep='all',RAW={staff:'canbo',head:'lanhdao',gd:'bgd',admin:'quanly'};
+function vAdm(){
+ var q=admQ.toLowerCase();
+ var L=U.filter(function(u){return (admDep==='all'||(admDep==='_'?!u.dep:u.dep===admDep))&&(!q||(u.ad+' '+u.n).toLowerCase().indexOf(q)>=0)});
+ return head('Quản trị tài khoản',U.length+' tài khoản · bấm <b>Sửa</b> để đổi phòng, chức danh, vai trò',
+  '<select onchange="admDep=this.value;render()"><option value="all">Tất cả phòng</option>'+DEPS.map(function(d){return '<option value="'+d[0]+'"'+(admDep===d[0]?' selected':'')+'>'+d[1]+'</option>'}).join('')+'<option value="_"'+(admDep==='_'?' selected':'')+'>Ban giám đốc / Quản trị</option></select>'+
+  '<input placeholder="Tìm User AD hoặc tên" style="min-width:190px" value="'+esc(admQ)+'" onchange="admQ=this.value;render()">'+
+  '<button class="btn" onclick="editUser(null)">+ Thêm tài khoản</button>')+
+ '<div class="scroll"><table><thead><tr><th>User AD</th><th>Họ tên</th><th>Phòng / Ban</th><th>Chức danh</th><th>Vai trò</th><th></th></tr></thead><tbody>'+
+ L.map(function(u){return '<tr><td>'+esc(u.ad)+'</td><td>'+esc(u.n)+'</td><td>'+esc(u.depName)+'</td><td>'+(POS_LABEL[u.pos]||'—')+'</td><td><span class="pill '+(u.role==='staff'?'':'g')+'">'+ROLE_LABEL[u.role]+'</span></td><td style="white-space:nowrap"><button class="btn ghost sm" onclick="editUser(\''+esc(u.ad)+'\')">Sửa</button> <button class="btn ghost sm" onclick="resetPin(\''+esc(u.ad)+'\')">Đặt lại PIN</button></td></tr>'}).join('')+
+ (L.length?'':'<tr><td colspan="6" style="color:var(--muted);padding:20px">Không có tài khoản phù hợp.</td></tr>')+'</tbody></table></div>'}
+function editUser(ad){
+ var u=ad?U.filter(function(x){return x.ad===ad})[0]:{ad:'',n:'',dep:'',role:'staff',pos:'GDV'},isNew=!ad,self=!isNew&&u.ad.toLowerCase()===me.ad.toLowerCase();
+ var depOpts=DEPS.map(function(d){return '<option value="'+d[0]+'"'+(u.dep===d[0]?' selected':'')+'>'+d[1]+'</option>'}).join('');
+ $('dlgBody').innerHTML='<h3 style="margin:0 0 4px">'+(isNew?'Thêm tài khoản':'Sửa tài khoản')+'</h3>'+
+  '<label>User AD</label><input id="eAd" value="'+esc(u.ad)+'" '+(isNew?'placeholder="VD: NAMNV1"':'disabled')+'>'+
+  '<label>Họ và tên</label><input id="eName" value="'+esc(u.n)+'">'+
+  '<label>Vai trò</label><select id="eRole" onchange="roleUi()" '+(self?'disabled':'')+'>'+[['canbo','Cán bộ (GDV / RM) – nhập phí'],['lanhdao','Lãnh đạo phòng – nhập kế hoạch cho phòng'],['bgd','Ban giám đốc / Tổ chức – xem tất cả'],['quanly','Quản trị – toàn quyền']].map(function(r){return '<option value="'+r[0]+'"'+(RAW[u.role]===r[0]?' selected':'')+'>'+r[1]+'</option>'}).join('')+'</select>'+
+  '<div id="eDepBox"><label>Phòng / PGD</label><select id="eDep">'+depOpts+'</select></div>'+
+  '<div id="ePosBox"><label>Chức danh</label><select id="ePos"><option value="GDV"'+(u.pos==='GDV'?' selected':'')+'>Giao dịch viên (GDV)</option><option value="RM"'+(u.pos==='RM'?' selected':'')+'>RM</option></select></div>'+
+  (self?'<p style="color:var(--muted);font-size:12px">Bạn không thể đổi vai trò của chính mình (tránh mất quyền quản trị).</p>':'')+
+  (isNew?'<p style="color:var(--muted);font-size:12px">Hệ thống tự tạo mã PIN 6 số và hiện sau khi lưu.</p>':'')+
+  '<div style="margin-top:14px"><button class="btn" onclick="saveUser(\''+(isNew?'':esc(u.ad))+'\')">Lưu</button></div>';
+ $('dlg').showModal();roleUi()}
+function roleUi(){var r=$('eRole').value;$('eDepBox').style.display=(r==='canbo'||r==='lanhdao')?'block':'none';$('ePosBox').style.display=r==='canbo'?'block':'none'}
+async function saveUser(ad){
+ var isNew=!ad,r=$('eRole').value,body={action:isNew?'adduser':'setuser',ad:isNew?$('eAd').value.trim():ad,name:$('eName').value.trim(),role:r,dep:(r==='canbo'||r==='lanhdao')?$('eDep').value:'',pos:r==='canbo'?$('ePos').value:(r==='lanhdao'||r==='bgd'?'LD':'')};
+ if(!body.ad||!body.name){toast('Nhập User AD và họ tên');return}
+ if(isNew&&!/^[A-Za-z0-9._-]{2,40}$/.test(body.ad)){toast('User AD chỉ gồm chữ, số, dấu chấm, gạch');return}
+ var j=await post(body);if(!j)return;
+ if(j.newPin){$('dlgBody').innerHTML='<h3 style="margin:0 0 8px">Đã tạo tài khoản</h3><p>User <b>'+esc(j.newPinFor)+'</b></p><p style="font-size:30px;letter-spacing:4px;margin:8px 0"><b>'+esc(j.newPin)+'</b></p><p style="color:var(--muted)">Gửi riêng PIN cho người dùng.</p>'}else{$('dlg').close();toast('Đã lưu thay đổi')}
+ render()}
 async function resetPin(ad){if(!confirm('Đặt lại PIN cho '+ad+'? Người này sẽ bị đăng xuất và phải dùng PIN mới.'))return;
  var j=await post({action:'resetpin',ad:ad});if(j&&j.newPin){$('dlgBody').innerHTML='<h3 style="margin:0 0 8px">PIN mới</h3><p>User <b>'+esc(j.newPinFor)+'</b></p><p style="font-size:30px;letter-spacing:4px;margin:8px 0"><b>'+esc(j.newPin)+'</b></p><p style="color:var(--muted)">Gửi riêng cho người dùng. PIN này chỉ hiện một lần ở đây (vẫn xem được trong Google Sheet, trang CanBo).</p>';$('dlg').showModal()}}
 
