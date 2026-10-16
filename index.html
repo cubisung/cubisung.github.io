@@ -74,14 +74,6 @@ tr.tot td{font-weight:700;background:var(--surface-2)}
 .seg{display:inline-flex;gap:6px}
 #busy{position:fixed;inset:0;background:#0b121caa;display:grid;place-items:center;color:#fff;z-index:90}
 dialog{border:0;border-radius:14px;padding:22px;max-width:380px;width:92%}dialog::backdrop{background:#0008}
-.cmp th.sortable{cursor:pointer;user-select:none}.cmp th.sortable:hover{color:var(--accent)}
-.cmp tr.clk{cursor:pointer}.cmp tr.clk.open td{background:var(--surface-2)}.car{color:var(--muted);display:inline-block;width:12px}
-.pw{display:flex;align-items:center;gap:8px;justify-content:flex-end}.pw .bar{width:70px;flex:none}
-.cmp tr.dtlrow td{background:var(--surface-2);white-space:normal;padding:8px 10px}
-.dtl{display:grid;grid-template-columns:repeat(3,1fr);gap:6px}
-.dtl .ch{font-size:12px;border:1px solid var(--line);border-radius:8px;padding:5px 8px;background:var(--surface);display:flex;justify-content:space-between;gap:8px}
-.dtl .ch.hh{border-color:var(--accent);color:var(--accent)}.dtl .ch.bh2{border-style:dashed}
-@media(max-width:860px){.dtl{grid-template-columns:1fr 1fr}.pw .bar{width:44px}.cmp th,.cmp td{padding:7px 6px}}
 @media(max-width:860px){
  #app{display:block}
  aside{position:fixed;bottom:0;left:0;right:0;top:auto;height:auto;flex-direction:row;padding:6px;z-index:50}
@@ -277,25 +269,7 @@ function dayChart(list){
  return '<div class="chart">'+ds.map(function(x){return '<div class="'+(x.k===t?'today':'')+'" style="height:'+Math.max(3,x.v/mx*100)+'%" title="'+x.d+'/'+MS+': '+money(x.v)+' đ"><span>'+x.d+'</span></div>'}).join('')+'</div><div style="height:16px"></div>'}
 
 /* Bảng theo loại phí: cột dọc = phòng / cán bộ, cột ngang = loại phí */
-var rankPos='ALL',SORT={d:{k:'pct',d:1},p:{k:'pct',d:1}},EXP={};
-function setSort(t,k){var s=SORT[t];if(s.k===k)s.d=-s.d;else SORT[t]={k:k,d:1};render()}
-function toggleExp(k){k=decodeURIComponent(k);EXP[k]=!EXP[k];render()}
-/* Bảng gọn: Tên · Tổng phí lũy kế · Kế hoạch · % hoàn thành. Bấm dòng để xem chi tiết từng loại phí. */
-function compactTable(t,items,nameHead){
- var rows=items.map(function(it){
-  var tp=FEES.map(function(_,i){return sumA(it.ads.map(function(ad){return cumType(ad,MS,i)}))}),hh=sumA(it.ads.map(function(ad){return cumHH(ad,MS)})),phi=sumA(tp)+hh,kh=sumA(it.ads.map(function(ad){return planOf(ad,MS)})),b=BHS.map(function(_,j){return sumA(it.ads.map(function(ad){return cumBH(ad,MS,j)}))});
-  return{key:t+'|'+it.key,n:it.n,sub:it.sub,me:it.me,tp:tp,hh:hh,phi:phi,kh:kh,p:pct(phi,kh),b:b}});
- var s=SORT[t];rows.sort(function(x,y){var v=s.k==='n'?x.n.localeCompare(y.n,'vi'):s.k==='phi'?x.phi-y.phi:s.k==='kh'?x.kh-y.kh:x.p-y.p;return (v*s.d)||(x.phi-y.phi)});
- var tot={tp:FEES.map(function(_,i){return sumA(rows.map(function(r){return r.tp[i]}))}),hh:sumA(rows.map(function(r){return r.hh})),phi:sumA(rows.map(function(r){return r.phi})),kh:sumA(rows.map(function(r){return r.kh})),b:BHS.map(function(_,j){return sumA(rows.map(function(r){return r.b[j]}))})};
- tot.p=pct(tot.phi,tot.kh);
- var arr=function(k){return s.k===k?(s.d>0?' ▲':' ▼'):''};
- var th=function(k,l,cls){return '<th class="'+(cls||'')+' sortable" onclick="setSort(\''+t+'\',\''+k+'\')">'+l+arr(k)+'</th>'};
- var pcell=function(r){return r.kh?'<div class="pw"><span class="pct '+pcls(r.p)+'">'+r.p+'%</span><div class="bar '+bcls(r.p)+'"><i style="width:'+Math.min(100,r.p)+'%"></i></div></div>':'<span style="color:var(--muted)">–</span>'};
- var chips=function(r){return '<div class="dtl">'+FEES.map(function(f,i){return '<span class="ch">'+esc(f)+' <b>'+(r.tp[i]?money(r.tp[i]):'–')+'</b></span>'}).join('')+'<span class="ch hh">Hoa hồng BH dự kiến (trong Phí) <b>'+(r.hh?money(r.hh):'–')+'</b></span>'+BHS.map(function(f,j){return '<span class="ch bh2">Doanh số '+esc(shortBH(f))+' <b>'+(r.b[j]?money(r.b[j]):'–')+'</b></span>'}).join('')+'</div>'};
- var body=rows.map(function(r,i){var open=EXP[r.key];
-  return '<tr class="clk'+(open?' open':'')+'"'+(r.me?' style="outline:2px solid var(--accent);outline-offset:-2px"':'')+' onclick="toggleExp(\''+encodeURIComponent(r.key)+'\')"><td>'+(i+1)+'</td><td><span class="car">'+(open?'▾':'▸')+'</span> '+esc(r.n)+(r.sub?'<br><small style="color:var(--muted)">'+esc(r.sub)+'</small>':'')+'</td><td class="r"><b>'+money(r.phi)+'</b></td><td class="r">'+(r.kh?money(r.kh):'–')+'</td><td class="r">'+pcell(r)+'</td></tr>'+(open?'<tr class="dtlrow"><td></td><td colspan="4">'+chips(r)+'</td></tr>':'')}).join('');
- return '<div class="scroll" style="max-height:560px"><table class="cmp"><thead><tr><th>#</th>'+th('n',nameHead)+th('phi','Tổng phí lũy kế','r')+th('kh','Kế hoạch','r')+th('pct','% hoàn thành','r')+'</tr></thead><tbody>'+(rows.length?body:'<tr><td colspan="5" style="color:var(--muted);padding:18px">Không có cán bộ nào.</td></tr>')+
-  '<tr class="tot"><td></td><td>Tổng cộng ('+rows.length+')</td><td class="r">'+money(tot.phi)+'</td><td class="r">'+(tot.kh?money(tot.kh):'–')+'</td><td class="r">'+(tot.kh?'<span class="pct '+pcls(tot.p)+'">'+tot.p+'%</span>':'–')+'</td></tr></tbody></table></div>'}
+var rankPos='GDV';
 function typeTable(items,nameHead,kind){
  var rows=items.map(function(it){var t=FEES.map(function(_,i){return sumA(it.ads.map(function(ad){return cumType(ad,MS,i)}))}),hhv=sumA(it.ads.map(function(ad){return cumHH(ad,MS)})),phi=sumA(t)+hhv,kh=sumA(it.ads.map(function(ad){return planOf(ad,MS)}));
   return{n:it.n,sub:it.sub,me:it.me,t:t,phi:phi,kh:kh,b:BHS.map(function(_,j){return sumA(it.ads.map(function(ad){return cumBH(ad,MS,j)}))}),hh:hhv}}).sort(function(a,b){return a.phi-b.phi});
@@ -304,14 +278,11 @@ function typeTable(items,nameHead,kind){
  var line=function(r,i,isTot){var p=pct(r.phi,r.kh);return '<tr class="'+(isTot?'tot':'')+'"'+(r.me?' style="outline:2px solid var(--accent);outline-offset:-2px"':'')+'><td>'+(isTot?'':i+1)+'</td><td>'+(isTot?'Tổng cộng':esc(r.n)+(r.sub?'<br><small style="color:var(--muted)">'+esc(r.sub)+'</small>':''))+'</td>'+r.t.map(function(x){return '<td class="r">'+(x?money(x):dash)+'</td>'}).join('')+'<td class="r" style="color:var(--accent)">'+(r.hh?money(r.hh):dash)+'</td><td class="r"><b>'+money(r.phi)+'</b></td><td class="r">'+(r.kh?money(r.kh):'–')+'</td><td class="r"><span class="pct '+pcls(p)+'">'+(r.kh?p+'%':'–')+'</span></td>'+r.b.map(function(x,j){return '<td class="r'+(j===0?' sep':'')+'">'+(x?money(x):dash)+'</td>'}).join('')+'</tr>'};
  return '<div class="scroll" style="max-height:480px"><table><thead><tr><th>#</th><th>'+nameHead+'</th>'+FEES.map(function(f){return '<th class="r">'+esc(f)+'</th>'}).join('')+'<th class="r">Hoa hồng BH<br>dự kiến</th><th class="r">Tổng phí</th><th class="r">Kế hoạch lũy kế</th><th class="r">% KH</th>'+BHS.map(function(f,j){return '<th class="r'+(j===0?' sep':'')+'">'+esc(shortBH(f))+'<br>(doanh số)</th>'}).join('')+'</tr></thead><tbody>'+rows.map(function(r,i){return line(r,i,false)}).join('')+line(tot,0,true)+'</tbody></table></div>'}
 function tables(){
- var deps=DEPS.map(function(d){var L=OFF.filter(function(u){return u.dep===d[0]});return{key:d[0],n:d[1],sub:L.length+' cán bộ',ads:L.map(function(u){return u.ad}),me:(wide()?filterDep===d[0]:me.dep===d[0])}});
- var base=scopeOff(),allDeps=wide()&&filterDep==='all';
- var cnt=function(p){return p==='ALL'?base.length:base.filter(function(u){return u.pos===p}).length};
- var ppl=base.filter(function(u){return rankPos==='ALL'||u.pos===rankPos}).map(function(u){return{key:u.ad,n:u.n,sub:(allDeps?u.depName+' · ':'')+POS_LABEL[u.pos],ads:[u.ad],me:u.ad===me.ad}});
- var opts=[['ALL','Tất cả'],['GDV','Giao dịch viên'],['RM','RM']];
- return '<div class="card" style="margin-top:14px"><h3>Phí các phòng theo loại phí · thấp → cao</h3><p style="color:var(--muted);margin:-8px 0 10px;font-size:12px">Lũy kế đến T'+MS+'/'+YEAR+' · đơn vị đồng · Tổng phí = 6 loại phí + hoa hồng BH dự kiến · doanh số bảo hiểm tách riêng, không tính vào Tổng phí</p>'+typeTable(deps,'Phòng / PGD')+'</div>'+
- '<div class="card" style="margin-top:14px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px"><h3 style="margin:0">Cán bộ · '+esc(scopeLabel())+'</h3><div class="seg">'+opts.map(function(o){return '<button class="btn sm '+(rankPos===o[0]?'':'ghost')+'" onclick="rankPos=\''+o[0]+'\';render()">'+o[1]+' ('+cnt(o[0])+')</button>'}).join('')+'</div></div>'+
- (allDeps?'':'<p style="color:var(--muted);margin:-4px 0 8px;font-size:12px">Chỉ hiện cán bộ của '+esc(scopeLabel())+'.</p>')+compactTable('p',ppl,'Cán bộ')+'</div>'}
+ var deps=DEPS.map(function(d){var L=OFF.filter(function(u){return u.dep===d[0]});return{n:d[1],sub:L.length+' cán bộ',ads:L.map(function(u){return u.ad}),me:me.dep===d[0]}});
+ var ppl=OFF.filter(function(u){return u.pos===rankPos}).map(function(u){return{n:u.n,sub:u.depName,ads:[u.ad],me:u.ad===me.ad}});
+ var cnt=function(p){return OFF.filter(function(u){return u.pos===p}).length};
+ return '<div class="card" style="margin-top:14px"><h3>Phí các phòng theo loại phí · thấp → cao</h3><p style="color:var(--muted);margin:-8px 0 10px;font-size:12px">Lũy kế đến T'+MS+'/'+YEAR+' · đơn vị đồng · Tổng phí = 6 loại phí + hoa hồng BH dự kiến · doanh số bảo hiểm tách riêng</p>'+typeTable(deps,'Phòng / PGD')+'</div>'+
+ '<div class="card" style="margin-top:14px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:10px"><h3 style="margin:0">Phí cán bộ theo loại phí · thấp → cao</h3><div class="seg">'+['GDV','RM'].map(function(k){return '<button class="btn sm '+(rankPos===k?'':'ghost')+'" onclick="rankPos=\''+k+'\';render()">'+POS_LABEL[k]+' ('+cnt(k)+')</button>'}).join('')+'</div></div>'+typeTable(ppl,'Cán bộ')+'</div>'}
 
 /* ================= 2. NHẬP PHÍ ================= */
 var editId=null,editRow=null;
