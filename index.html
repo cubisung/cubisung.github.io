@@ -4,6 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
 <meta name="theme-color" content="#0e2a47">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="Theo dõi phí">
+<link rel="icon" type="image/png" href="assets/icon-32.png">
+<link rel="apple-touch-icon" href="assets/icon-180.png">
+<link rel="manifest" href="manifest.webmanifest">
 <title>Quản lý phí</title>
 <style>
 :root{--bg:#eef2f6;--surface:#fff;--surface-2:#f6f8fb;--ink:#0f1b2d;--muted:#5f6e82;--line:#e1e7ef;--band:#0e2a47;--band-2:#14385e;--band-muted:#a9bdd6;--accent:#0a8f6a;--accent-soft:#e2f4ee;--danger:#c0392b;--danger-soft:#fdecea;--warn:#b7791f;--warn-soft:#fff5dc;--ok:#19a974;--red:#e5484d}
@@ -26,6 +30,7 @@ input:focus,select:focus,textarea:focus{outline:2px solid var(--accent);border-c
 aside{background:var(--band);color:#fff;padding:18px 12px;position:sticky;top:0;height:100vh;display:flex;flex-direction:column}
 .brand{display:flex;gap:10px;align-items:center;padding:4px 10px 18px;font-weight:700;font-size:16px}
 .logo{width:34px;height:34px;border-radius:10px;background:var(--accent);display:grid;place-items:center}
+.logoimg{width:40px;height:40px;object-fit:contain;flex:none}.logoimg.big{width:92px;height:92px;display:block;margin:0 auto 10px}
 nav{overflow:auto}
 nav button{display:flex;gap:10px;align-items:center;width:100%;background:none;border:0;color:var(--band-muted);padding:11px 12px;border-radius:10px;text-align:left;font-weight:500;margin-bottom:2px}
 nav button:hover{background:#ffffff14;color:#fff}
@@ -77,9 +82,15 @@ dialog{border:0;border-radius:14px;padding:22px;max-width:380px;width:92%}dialog
 .pw{display:flex;align-items:center;gap:8px;justify-content:flex-end}.pw .bar{width:80px;flex:none}
 .ofc td.kk,.ofc th.kk{background:var(--accent-soft)}.ofc tr.tot td.kk{background:var(--accent-soft)}
 .ofc.det th.k1,.ofc.det td.k1{min-width:38px;width:38px;position:sticky;left:0;z-index:2;background:var(--surface)}
-.ofc.det th.k2,.ofc.det td.k2{min-width:170px;position:sticky;left:38px;z-index:2;background:var(--surface);border-right:2px solid var(--line)}
-.ofc.det th.k1,.ofc.det th.k2{background:var(--surface-2);z-index:3}
+.ofc.det th.k2,.ofc.det td.k2{min-width:190px;width:190px;max-width:190px;position:sticky;left:38px;z-index:2;background:var(--surface)}
+.ofc.det th.kk1,.ofc.det td.kk1{min-width:112px;width:112px;position:sticky;left:228px;z-index:2}
+.ofc.det th.kk2,.ofc.det td.kk2{min-width:112px;width:112px;position:sticky;left:340px;z-index:2}
+.ofc.det th.kk3,.ofc.det td.kk3{min-width:92px;width:92px;position:sticky;left:452px;z-index:2;border-right:3px solid var(--accent)}
+.ofc.det th.k1,.ofc.det th.k2,.ofc.det th.kk1,.ofc.det th.kk2,.ofc.det th.kk3{z-index:3}
+.ofc.det th.k1,.ofc.det th.k2{background:var(--surface-2)}
 .ofc.det tr.tot td.k1,.ofc.det tr.tot td.k2{background:var(--surface-2)}
+.ofc.det .pw{justify-content:flex-end}
+@media(max-width:860px){.ofc.det th.kk,.ofc.det td.kk{position:static}.ofc.det th.k2,.ofc.det td.k2{min-width:130px;width:130px;max-width:130px}.ofc.det th.kk3,.ofc.det td.kk3{border-right:0}}
 @media(max-width:860px){.pw .bar{width:44px}}
 tr.grp td{background:var(--accent-soft);color:var(--ink);text-align:left;padding:8px 10px;border-top:2px solid var(--accent);white-space:normal}tr.grp td b{color:var(--accent)}
 @media(max-width:860px){
@@ -96,8 +107,9 @@ tr.grp td{background:var(--accent-soft);color:var(--ink);text-align:left;padding
 <body>
 <div id="login">
  <form class="lcard" onsubmit="doLogin();return false">
-  <h1>Quản lý phí</h1>
-  <p>Đăng nhập bằng User AD và mã PIN</p>
+  <img class="logoimg big" src="assets/logo.png" alt="Logo Theo dõi phí">
+  <h1 style="text-align:center">Quản lý phí</h1>
+  <p style="text-align:center">Đăng nhập bằng User AD và mã PIN</p>
   <label>User AD</label><input id="lad" autocomplete="username" autocapitalize="characters" placeholder="VD: THAMNN">
   <label>Mã PIN</label><input id="lpin" type="password" inputmode="numeric" autocomplete="current-password" placeholder="6 chữ số">
   <button class="btn full" id="lbtn">Đăng nhập</button>
@@ -107,7 +119,7 @@ tr.grp td{background:var(--accent-soft);color:var(--ink);text-align:left;padding
 
 <div id="app" class="hide">
  <aside>
-  <div class="brand"><div class="logo">₫</div>Quản lý phí</div>
+  <div class="brand"><img class="logoimg" src="assets/logo.png" alt="Logo Theo dõi phí"> Quản lý phí</div>
   <nav id="nav"></nav>
   <div class="me"><b id="meName"></b><small id="meRole"></small><button onclick="logout()">Đăng xuất</button></div>
  </aside>
@@ -302,7 +314,7 @@ function officerTable(items,nameHead,flat){
  var sums=function(L){return{t:FEES.map(function(_,i){return sumA(L.map(function(r){return r.t[i]}))}),phi:sumA(L.map(function(r){return r.phi})),kh:sumA(L.map(function(r){return r.kh})),b:BHS.map(function(_,j){return sumA(L.map(function(r){return r.b[j]}))}),hh:sumA(L.map(function(r){return r.hh}))}};
  var pcell=function(r){return r.kh?(det?'<span class="pct '+pcls(r.p)+'">'+r.p+'%</span>':'<div class="pw"><span class="pct '+pcls(r.p)+'">'+r.p+'%</span><div class="bar '+bcls(r.p)+'"><i style="width:'+Math.min(100,r.p)+'%"></i></div></div>'):'<span style="color:var(--muted)">–</span>'};
  var line=function(r,i,isTot){
-  var h='<tr class="'+(isTot?'tot':'')+'"'+(r.me?' style="outline:2px solid var(--accent);outline-offset:-2px"':'')+'><td class="k1">'+(isTot?'':i+1)+'</td><td class="k2">'+(isTot?esc(r.n):'<b>'+esc(r.n)+'</b>'+(r.sub?'<br><small style="color:var(--muted)">'+esc(r.sub)+'</small>':''))+'</td><td class="r kk"><b>'+money(r.phi)+'</b></td><td class="r kk">'+(r.kh?money(r.kh):'–')+'</td><td class="r kk">'+pcell(r)+'</td>';
+  var h='<tr class="'+(isTot?'tot':'')+'"'+(r.me?' style="outline:2px solid var(--accent);outline-offset:-2px"':'')+'><td class="k1">'+(isTot?'':i+1)+'</td><td class="k2">'+(isTot?esc(r.n):'<b>'+esc(r.n)+'</b>'+(r.sub?'<br><small style="color:var(--muted)">'+esc(r.sub)+'</small>':''))+'</td><td class="r kk kk1"><b>'+money(r.phi)+'</b></td><td class="r kk kk2">'+(r.kh?money(r.kh):'–')+'</td><td class="r kk kk3">'+pcell(r)+'</td>';
   if(det)h+=r.t.map(function(x,j){return '<td class="r'+(j===0?' sep':'')+'">'+(x?money(x):dash)+'</td>'}).join('')+'<td class="r" style="color:var(--accent)">'+(r.hh?money(r.hh):dash)+'</td>'+r.b.map(function(x,j){return '<td class="r'+(j===0?' sep':'')+'">'+(x?money(x):dash)+'</td>'}).join('');
   return h+'</tr>'};
  var ROMAN=['I','II','III'],groups=[['RM','RM'],['GDV','GDV']],body='',gi=0;
@@ -310,7 +322,7 @@ function officerTable(items,nameHead,flat){
  else groups.forEach(function(g){var L=rows.filter(function(r){return r.grp===g[0]});if(!L.length)return;var sm=sums(L),gp=pct(sm.phi,sm.kh);
   body+='<tr class="grp"><td colspan="'+ncol+'"><b>'+ROMAN[gi++]+'. '+g[1]+'</b> · '+L.length+' cán bộ · Tổng phí <b>'+money(sm.phi)+'</b>'+(sm.kh?' · Kế hoạch '+money(sm.kh)+' · <span class="pct '+pcls(gp)+'">'+gp+'%</span>':'')+'</td></tr>'+L.map(function(r,i){return line(r,i)}).join('')});
  var tot=sums(rows);tot.n='Tổng cộng ('+rows.length+')';tot.p=pct(tot.phi,tot.kh);
- var head='<th class="k1">#</th><th class="k2">'+(nameHead||'Cán bộ')+'</th><th class="r kk">Tổng phí<br>lũy kế</th><th class="r kk">Kế hoạch<br>lũy kế</th><th class="r kk">% hoàn<br>thành</th>'+(det?FEES.map(function(f,j){return '<th class="r'+(j===0?' sep':'')+'">'+esc(f)+'</th>'}).join('')+'<th class="r">Hoa hồng BH<br>dự kiến</th>'+BHS.map(function(f,j){return '<th class="r'+(j===0?' sep':'')+'">'+esc(shortBH(f))+'<br>(doanh số)</th>'}).join(''):'');
+ var head='<th class="k1">#</th><th class="k2">'+(nameHead||'Cán bộ')+'</th><th class="r kk kk1">Tổng phí<br>lũy kế</th><th class="r kk kk2">Kế hoạch<br>lũy kế</th><th class="r kk kk3">% hoàn<br>thành</th>'+(det?FEES.map(function(f,j){return '<th class="r'+(j===0?' sep':'')+'">'+esc(f)+'</th>'}).join('')+'<th class="r">Hoa hồng BH<br>dự kiến</th>'+BHS.map(function(f,j){return '<th class="r'+(j===0?' sep':'')+'">'+esc(shortBH(f))+'<br>(doanh số)</th>'}).join(''):'');
  return '<div class="scroll" style="max-height:640px"><table class="ofc'+(det?' det':'')+'"><thead><tr>'+head+'</tr></thead><tbody>'+(rows.length?body+line(tot,0,true):'<tr><td colspan="'+ncol+'" style="color:var(--muted);padding:18px">Không có cán bộ nào.</td></tr>')+'</tbody></table></div>'}
 function tables(){
  var deps=DEPS.map(function(d){var L=OFF.filter(function(u){return u.dep===d[0]});return{key:'dep:'+d[0],n:d[1],sub:L.length+' cán bộ',ads:L.map(function(u){return u.ad}),me:me.dep===d[0]}});
