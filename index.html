@@ -315,7 +315,7 @@ function officerTable(items,nameHead,flat){
 function tables(){
  var deps=DEPS.map(function(d){var L=OFF.filter(function(u){return u.dep===d[0]});return{key:'dep:'+d[0],n:d[1],sub:L.length+' cán bộ',ads:L.map(function(u){return u.ad}),me:me.dep===d[0]}});
  var base=OFF.filter(function(u){return rankDep==='all'||u.dep===rankDep});
- var ppl=base.map(function(u){return{key:u.ad,n:u.n,sub:u.depName,grp:u.pos,ads:[u.ad],me:u.ad===me.ad}});
+ var ppl=base.map(function(u){return{key:u.ad,n:u.n,sub:(rankDep==='all'?u.depName:''),grp:u.pos,ads:[u.ad],me:u.ad===me.ad}});
  var depSel2='<select onchange="rankDep=this.value;render()" style="width:auto"><option value="all"'+(rankDep==='all'?' selected':'')+'>Tất cả các Phòng</option>'+DEPS.map(function(d){return '<option value="'+d[0]+'"'+(rankDep===d[0]?' selected':'')+'>'+esc(d[1])+'</option>'}).join('')+'</select>';
  var sw='<div class="card" style="margin-top:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap"><b>Hiển thị:</b><div class="seg"><button class="btn sm '+(viewMode==='sum'?'':'ghost')+'" onclick="viewMode=\'sum\';render()">Số liệu tổng</button><button class="btn sm '+(viewMode==='det'?'':'ghost')+'" onclick="viewMode=\'det\';render()">Chi tiết từng loại phí</button></div><span style="color:var(--muted);font-size:12px">Áp dụng cho cả bảng Phí các phòng và bảng Phí cán bộ bên dưới</span></div>';
  var note=viewMode==='det'?'6 loại phí + hoa hồng BH dự kiến (đã nằm trong Tổng phí) · doanh số bảo hiểm 4 loại (tách riêng, không nằm trong Tổng phí)':'Tổng phí = 6 loại phí + hoa hồng BH dự kiến';
