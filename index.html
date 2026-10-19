@@ -135,7 +135,7 @@ tr.grp td{background:var(--accent-soft);color:var(--ink);text-align:left;padding
 var API_URL=(function(){var d='https://script.google.com/macros/s/AKfycbxmuWSJnQ0JmY5tQ_S_D9-wJAJ7h23-PZTNQdRe_lQRrn8DOwj0AhvTr5fvFmWDhWHz/exec';
  try{var q=new URLSearchParams(location.search).get('db');if(q&&/^https:\/\/script\.google\.com\/macros\/s\/[\w-]+\/exec$/.test(q)){localStorage.setItem('qlp2-api',q);return q}var s=localStorage.getItem('qlp2-api');if(s)return s}catch(e){}return d})();
 var TKEY='qlp2-token',YEAR=2026,HOLIDAYS=[]; /* ngày lễ dạng 'yyyy-mm-dd' nếu cần loại khỏi ngày làm việc */
-var FEES=['Phí trợ lý thẻ','Phí Alias','Phí số đẹp','Phí Gói TK','Phí trả nợ trước hạn','Phí trả góp'],BHS=['Bảo hiểm VBI khoản vay','Bảo hiểm VBI ô tô KHCN','Bảo hiểm VBI ô tô KHDN','Manulife'],GIO_CHOT=16;
+var FEES=['Phí trợ lý thẻ','Phí Alias','Phí số đẹp','Phí Gói TK','Phí trả nợ trước hạn','Phí trả góp','Phí bảo lãnh (phân bổ trong tháng)','Phí khác'],BHS=['Bảo hiểm VBI khoản vay','Bảo hiểm VBI ô tô KHCN','Bảo hiểm VBI ô tô KHDN','Manulife'],GIO_CHOT=16;
 var RATES={'Bảo hiểm VBI khoản vay':0.25,'Bảo hiểm VBI ô tô KHCN':0.10,'Bảo hiểm VBI ô tô KHDN':0.05,'Manulife':0.25};
 var shortBH=function(n){return n.replace('Bảo hiểm ','')};
 var rateOf=function(n){return RATES[n]||0};
@@ -330,7 +330,7 @@ function tables(){
  var ppl=base.map(function(u){return{key:u.ad,n:u.ad,sub:(rankDep==='all'?u.depName:''),grp:u.pos,ads:[u.ad],me:u.ad===me.ad}});
  var depSel2='<select onchange="rankDep=this.value;render()" style="width:auto"><option value="all"'+(rankDep==='all'?' selected':'')+'>Tất cả các Phòng</option>'+DEPS.map(function(d){return '<option value="'+d[0]+'"'+(rankDep===d[0]?' selected':'')+'>'+esc(d[1])+'</option>'}).join('')+'</select>';
  var sw='<div class="card" style="margin-top:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap"><b>Hiển thị:</b><div class="seg"><button class="btn sm '+(viewMode==='sum'?'':'ghost')+'" onclick="viewMode=\'sum\';render()">Số liệu tổng</button><button class="btn sm '+(viewMode==='det'?'':'ghost')+'" onclick="viewMode=\'det\';render()">Chi tiết từng loại phí</button></div><span style="color:var(--muted);font-size:12px">Áp dụng cho cả bảng Phí các phòng và bảng Phí cán bộ bên dưới</span></div>';
- var note=viewMode==='det'?'6 loại phí + hoa hồng BH dự kiến (đã nằm trong Tổng phí) · doanh số bảo hiểm 4 loại (tách riêng, không nằm trong Tổng phí)':'Tổng phí = 6 loại phí + hoa hồng BH dự kiến';
+ var note=viewMode==='det'?FEES.length+' loại phí + hoa hồng BH dự kiến (đã nằm trong Tổng phí) · doanh số bảo hiểm 4 loại (tách riêng, không nằm trong Tổng phí)':'Tổng phí = '+FEES.length+' loại phí + hoa hồng BH dự kiến';
  return sw+'<div class="card" style="margin-top:14px"><h3>Phí các phòng theo loại phí · thấp → cao</h3><p style="color:var(--muted);margin:-8px 0 10px;font-size:12px">Lũy kế đến T'+MS+'/'+YEAR+' · đơn vị đồng · '+note+'</p>'+officerTable(deps,'Phòng / PGD',true)+'</div>'+
  '<div class="card" style="margin-top:14px"><div style="display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:8px;margin-bottom:6px"><h3 style="margin:0">Phí cán bộ theo loại phí · thấp → cao</h3><div class="tools">'+depSel2+'</div></div><p style="color:var(--muted);margin:0 0 10px;font-size:12px">'+base.length+' cán bộ · nhóm theo chức danh: I. RM, II. GDV · xếp từ thấp đến cao theo Tổng phí · '+note+'</p>'+officerTable(ppl,'User ID cán bộ')+'</div>'}
 
@@ -348,7 +348,7 @@ function vEnter(){
  '<div class="grid" style="grid-template-columns:1fr 1fr"><div><label>Ngày</label><input type="date" id="fDate" value="'+d+'" onchange="refreshNil()"></div><div><label>CIF</label><input id="fCif" inputmode="numeric" value="'+esc(r?r.cif:'')+'" placeholder="Mã CIF"></div></div>'+
  '<label>Tên khách hàng</label><input id="fCus" value="'+esc(r?r.customer:'')+'" placeholder="Họ tên khách hàng">'+
  '<label>Phí (nhập loại nào có phát sinh)</label><div class="feegrid">'+FEES.map(function(c){return inp('fee',c)}).join('')+'</div>'+
- '<p style="margin:12px 0 0">Phí (6 loại): <b id="tot">0</b> đ</p>'+
+ '<p style="margin:12px 0 0">Phí ('+FEES.length+' loại): <b id="tot">0</b> đ</p>'+
  '<label style="margin-top:16px">Bảo hiểm – doanh số (theo dõi riêng, không cộng vào Phí)</label><div class="feegrid" style="grid-template-columns:repeat(2,1fr)">'+BHS.map(function(c){return inp('bh',c)}).join('')+'</div>'+
  '<p style="margin:12px 0 0">Doanh số bảo hiểm: <b id="totbh">0</b> đ <span style="color:var(--muted)">(không cộng vào Phí)</span> &nbsp;·&nbsp; <span style="color:var(--accent)">Hoa hồng dự kiến (tính vào Phí): <b id="tothh">0</b> đ</span></p>'+
  '<p style="margin:10px 0 0;font-size:15px">Tổng phí lần nộp (gồm hoa hồng): <b id="totphi" style="color:var(--accent)">0</b> đ</p>'+
