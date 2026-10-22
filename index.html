@@ -149,7 +149,7 @@ var RATES={'Bảo hiểm VBI khoản vay':0.25,'Bảo hiểm VBI ô tô KHCN':0.
 var shortBH=function(n){return n.replace('Bảo hiểm ','')};
 var rateOf=function(n){return RATES[n]||0};
 var hhOfItems=function(it){return Math.round(sumA(BHS.map(function(n){return (it[n]||0)*rateOf(n)})))};
-var DEPS=[['dvkh','Phòng DVKH'],['khdn','Phòng KHDN'],['banle','Phòng Bán lẻ'],['nhanco','PGD Nhân Cơ'],['dakmil','PGD Đăk Mil'],['daklap','PGD Đăk R’lấp'],['cujut','PGD Cư Jút'],['daksong','PGD Đắk Song']];
+var DEPS=[['dvkh','50603'],['khdn','50605'],['banle','50609'],['nhanco','50630'],['dakmil','50631'],['daklap','50632'],['cujut','50633'],['daksong','50634']]; /* mã phòng thay cho tên phòng */
 var ROLE_MAP={canbo:'staff',lanhdao:'head',bgd:'gd',quanly:'admin'};
 var ROLE_LABEL={staff:'Cán bộ',head:'Lãnh đạo phòng',gd:'Ban giám đốc / Tổ chức',admin:'Quản trị'};
 var POS_LABEL={GDV:'Giao dịch viên',RM:'RM',LD:'Lãnh đạo'};
@@ -170,6 +170,7 @@ var pad=function(n){return n<10?'0'+n:''+n};
 var ymd=function(m,d){return YEAR+'-'+pad(m)+'-'+pad(d)};
 function dim(m){return new Date(YEAR,m,0).getDate()}
 function daysOf(m){var a=[];for(var d=1;d<=dim(m);d++){var w=new Date(YEAR,m-1,d).getDay(),k=ymd(m,d);a.push({d:d,w:w,k:k,off:w===0||w===6||HOLIDAYS.indexOf(k)>=0})}return a}
+function noAccent(t){return String(t||'').normalize('NFD').replace(/[̀-ͯ]/g,'').replace(/đ/g,'d').replace(/Đ/g,'D').replace(/[^A-Za-z ]/g,'').replace(/ +/g,' ').toUpperCase()}
 function genId(){return Date.now().toString(36)+Math.random().toString(36).slice(2,8)}
 function download(name,text){var b=new Blob(['﻿'+text],{type:'text/csv'});var a=document.createElement('a');a.href=URL.createObjectURL(b);a.download=name;a.click()}
 var csvCell=function(v){v=String(v==null?'':v);return /[",\n]/.test(v)?'"'+v.replace(/"/g,'""')+'"':v};
@@ -179,9 +180,9 @@ var me=null,token=null,U=[],OFF=[],SUM={},NIL={},PLANS={},ROWS=[],LOGINS=null,PH
 var tab='home',filterDep='all',MS=10,loading=false;
 function applyRemote(j){
  if(j.cfg){if(j.cfg.loaiPhi)FEES=j.cfg.loaiPhi;if(j.cfg.loaiBH)BHS=j.cfg.loaiBH;if(j.cfg.rates)RATES=j.cfg.rates;if(j.cfg.gioChot)GIO_CHOT=j.cfg.gioChot;PH=j.cfg.phong||{}}
- var pn=function(id){return PH[id]||(DEPS.filter(function(d){return d[0]===id})[0]||[0,'Ban giám đốc / Tổ chức'])[1]};
- U=j.users.map(function(u){return{n:u.name,ad:u.ad,dep:u.dep,depName:u.dep?pn(u.dep):'Ban giám đốc / Tổ chức',role:ROLE_MAP[u.role]||'staff',pos:u.pos}});
- me=U.filter(function(u){return u.ad.toLowerCase()===j.me.ad.toLowerCase()})[0]||{n:j.me.name,ad:j.me.ad,dep:j.me.dep,depName:'Quản trị hệ thống',role:ROLE_MAP[j.me.role]||'staff',pos:j.me.pos};
+ var pn=function(id){return (DEPS.filter(function(d){return d[0]===id})[0]||[0,'Ban giám đốc / Tổ chức'])[1]};
+ U=j.users.map(function(u){return{n:u.ad,full:u.name,ad:u.ad,dep:u.dep,depName:u.dep?pn(u.dep):'Ban giám đốc / Tổ chức',role:ROLE_MAP[u.role]||'staff',pos:u.pos}});
+ me=U.filter(function(u){return u.ad.toLowerCase()===j.me.ad.toLowerCase()})[0]||{n:j.me.ad,full:j.me.name,ad:j.me.ad,dep:j.me.dep,depName:'Quản trị hệ thống',role:ROLE_MAP[j.me.role]||'staff',pos:j.me.pos};
  OFF=U.filter(function(u){return u.role==='staff'&&u.dep});pushLogin();bellRefresh();
  SUM={};(j.sum||[]).forEach(function(r){(SUM[r[0].toUpperCase()]=SUM[r[0].toUpperCase()]||{})[r[1]]=r.slice(2)});
  NIL={};(j.nil||[]).forEach(function(x){(NIL[x.ad.toUpperCase()]=NIL[x.ad.toUpperCase()]||{})[x.date]=1});
@@ -269,7 +270,7 @@ function vHome(){
  if(me.role==='staff'){
   var a=cumPhi(me.ad,MS),p=planOf(me.ad,MS),c=compliance(me.ad,MS),dn=cell(me.ad,t),
       miss=workdays(MS).filter(function(x){return x.k<t&&x.k>=Q_START()&&!cell(me.ad,x.k)}).length;
-  return head('Xin chào, '+esc(me.n.split(' ').slice(-1)[0]),'Tiến độ phí lũy kế đến tháng '+MS+'/'+YEAR+' · '+esc(me.depName),monSel())+
+  return head('Xin chào, '+esc(me.ad),'Tiến độ phí lũy kế đến tháng '+MS+'/'+YEAR+' · '+esc(me.depName),monSel())+
   '<div class="grid g4"><div class="card kpi"><small>Phí đã thu lũy kế</small><b>'+tr(a)+'</b><span>'+money(a)+' đ · gồm hoa hồng BH</span></div>'+
   '<div class="card kpi"><small>Kế hoạch lũy kế T'+MS+'</small><b>'+tr(p)+'</b><span>'+(p?'Lãnh đạo phòng giao':'Chưa có kế hoạch')+'</span></div>'+
   '<div class="card kpi"><small>Hoàn thành</small><b>'+pct(a,p)+'%</b><div class="bar '+bcls(pct(a,p))+'"><i style="width:'+Math.min(100,pct(a,p))+'%"></i></div></div>'+
@@ -348,14 +349,14 @@ var editId=null,editRow=null;
 function entryAd(){return me.role==='admin'?(window.__adSel||(OFF[0]||{}).ad):me.ad}
 function vEnter(){
  var t=vnNow().key,r=editRow,d=r?r.date:t,ad=r?r.officer:entryAd(),st=cell(ad||'',d);
- var who=me.role==='admin'?'<label>Cán bộ</label><select id="adSel" onchange="window.__adSel=this.value;render()">'+OFF.map(function(u){return '<option value="'+esc(u.ad)+'"'+(u.ad===ad?' selected':'')+'>'+esc(u.n)+' ('+esc(u.ad)+')</option>'}).join('')+'</select>':'';
+ var who=me.role==='admin'?'<label>Cán bộ</label><select id="adSel" onchange="window.__adSel=this.value;render()">'+OFF.map(function(u){return '<option value="'+esc(u.ad)+'"'+(u.ad===ad?' selected':'')+'>'+esc(u.ad)+'</option>'}).join('')+'</select>':'';
  var fv=function(c){return r&&r.items[c]?money(r.items[c]):''};
  var inp=function(cls,c){return '<div'+(cls==='bh'?' style="border-style:dashed"':'')+'><label>'+esc(c)+'</label><input class="'+cls+'" data-k="'+esc(c)+'" inputmode="numeric" placeholder="0" value="'+fv(c)+'" oninput="fmtIn(this)"></div>'};
  var mine=ROWS.filter(function(x){return x.officer.toLowerCase()===(ad||'').toLowerCase()}).sort(function(a,b){return b.date<a.date?-1:b.date>a.date?1:(b.updated<a.updated?-1:1)}).slice(0,6);
  return head(editId?'Sửa khoản phí':'Nhập phí',(r?'Đang sửa':'Hôm nay')+' · '+esc((U.filter(function(u){return u.ad===ad})[0]||me).n))+
  '<div class="grid g2"><div class="card"><h3>'+(editId?'Sửa khoản phí':'Thêm khoản phí')+'</h3>'+who+
- '<div class="grid" style="grid-template-columns:1fr 1fr"><div><label>Ngày</label><input type="date" id="fDate" value="'+d+'" onchange="refreshNil()"></div><div><label>CIF</label><input id="fCif" inputmode="numeric" value="'+esc(r?r.cif:'')+'" placeholder="Mã CIF"></div></div>'+
- '<label>Tên khách hàng</label><input id="fCus" value="'+esc(r?r.customer:'')+'" placeholder="Họ tên khách hàng">'+
+ '<div class="grid" style="grid-template-columns:1fr"><div><label>Ngày</label><input type="date" id="fDate" value="'+d+'" onchange="refreshNil()"></div></div>'+
+ '<label>Họ và tên khách hàng (không dấu)</label><input id="fCus" value="'+esc(r?r.customer:'')+'" placeholder="VD: NGUYEN VAN A" oninput="this.value=noAccent(this.value)" autocapitalize="characters">'+
  '<label>Phí (nhập loại nào có phát sinh)</label><div class="feegrid">'+FEES.map(function(c){return inp('fee',c)}).join('')+'</div>'+
  '<p style="margin:12px 0 0">Phí ('+FEES.length+' loại): <b id="tot">0</b> đ</p>'+
  '<label style="margin-top:16px">Bảo hiểm – doanh số (theo dõi riêng, không cộng vào Phí)</label><div class="feegrid" style="grid-template-columns:repeat(2,1fr)">'+BHS.map(function(c){return inp('bh',c)}).join('')+'</div>'+
@@ -378,11 +379,11 @@ function refreshNil(){var d=$('fDate').value,c=cell(curAd()||'',d),b=$('bNil');
 async function toggleNil(){var d=$('fDate').value,ad=curAd(),c=cell(ad,d);
  var j=await post({action:c&&c.s==='no'?'cophat':'nophat',date:d,ad:ad});if(j){toast(c&&c.s==='no'?'Đã bỏ xác nhận':'Đã xác nhận không phát sinh');render()}}
 async function saveFee(){
- var d=$('fDate').value,cif=$('fCif').value.trim(),cus=$('fCus').value.trim(),items={};
+ var d=$('fDate').value,cus=noAccent($('fCus').value).trim(),items={};
  document.querySelectorAll('.fee,.bh').forEach(function(i){var v=+i.value.replace(/\./g,'')||0;if(v>0)items[i.dataset.k]=v});
- if(!d||!cif||!cus||!Object.keys(items).length){toast('Nhập ngày, CIF, tên khách hàng và ít nhất một khoản phí hoặc bảo hiểm');return}
- if(!/^\d+$/.test(cif)){toast('CIF chỉ gồm chữ số');return}
- var row={id:editId||genId(),date:d,officer:curAd(),cif:cif,customer:cus,items:items,note:$('fNote').value.trim()};
+ if(!d||!cus||!Object.keys(items).length){toast('Nhập ngày, họ tên khách hàng (không dấu) và ít nhất một khoản phí hoặc bảo hiểm');return}
+ if(!/^[A-Za-z ]+$/.test(cus)){toast('Họ tên khách hàng chỉ gồm chữ cái không dấu và khoảng trắng');return}
+ var row={id:editId||genId(),date:d,officer:curAd(),cif:'',customer:cus,items:items,note:$('fNote').value.trim()};
  var cs=$('bSave');cs.disabled=true;var j=await post({action:'upsert',row:row});cs.disabled=false;
  if(j){toast('Đã lưu'+(editId?' thay đổi':' khoản phí'));editId=null;editRow=null;render()}}
 function cancelEdit(){editId=null;editRow=null;render()}
@@ -398,21 +399,21 @@ function vBook(){
  var L=ROWS.filter(function(x){var u=depOf[x.officer.toLowerCase()];
    if(!inM(x))return false;if(wide()&&filterDep!=='all'&&(!u||u.dep!==filterDep))return false;
    if(bookOff!=='all'&&x.officer.toLowerCase()!==bookOff.toLowerCase())return false;
-   return !q||(x.cif+' '+x.customer+' '+x.note).toLowerCase().indexOf(q)>=0}).sort(function(a,b){return b.date<a.date?-1:b.date>a.date?1:0});
- var cnt={};L.forEach(function(x){cnt[x.cif]=1});
+   return !q||(x.customer+' '+x.note).toLowerCase().indexOf(q)>=0}).sort(function(a,b){return b.date<a.date?-1:b.date>a.date?1:0});
+ var cnt={};L.forEach(function(x){cnt[x.customer.toLowerCase()]=1});
  var canEdit=function(x){return me.role==='admin'||(me.role==='staff'&&x.officer.toLowerCase()===me.ad.toLowerCase())};
  var offSel=me.role!=='staff'?'<select onchange="bookOff=this.value;render()"><option value="all">Tất cả cán bộ</option>'+scopeOffAll().map(function(u){return '<option value="'+esc(u.ad)+'"'+(bookOff===u.ad?' selected':'')+'>'+esc(u.n)+'</option>'}).join('')+'</select>':'';
  var tot=FEES.map(function(c){return sumA(L.map(function(x){return x.items[c]||0}))}),tb=BHS.map(function(c){return sumA(L.map(function(x){return x.items[c]||0}))}),thh=sumA(L.map(function(x){return hhOfItems(x.items)}));
  var lead=me.role!=='staff'?5:3,nc=lead+FEES.length+1+BHS.length+1+2;
- return head('Sổ giao dịch',(me.role==='staff'?'Các khoản của bạn':me.role==='head'?'Cán bộ '+esc(me.depName):esc(scopeLabel()))+' · Tháng '+MS+'/'+YEAR+' · '+L.length+' khoản · '+Object.keys(cnt).length+' khách hàng (CIF)',
-  depSel()+monSel()+offSel+'<input placeholder="Tìm CIF, tên KH, ghi chú" style="min-width:200px" value="'+esc(bookQ)+'" onchange="bookQ=this.value;render()">'+'<button class="btn ghost" onclick="exportBook()">Tải CSV</button>')+
- '<div class="scroll"><table><thead><tr><th>Ngày</th>'+(me.role!=='staff'?'<th>Cán bộ</th><th>Phòng</th>':'')+'<th>CIF</th><th>Khách hàng</th>'+FEES.map(function(f){return '<th class="r">'+esc(f)+'</th>'}).join('')+'<th class="r">Hoa hồng BH<br>dự kiến</th><th class="r">Tổng phí</th>'+BHS.map(function(f,j){return '<th class="r'+(j===0?' sep':'')+'">'+esc(shortBH(f))+'</th>'}).join('')+'<th>Ghi chú</th><th></th></tr></thead><tbody>'+
- (L.length?L.map(function(x){var u=depOf[x.officer.toLowerCase()]||{};return '<tr><td>'+x.date.split('-').reverse().join('/')+'</td>'+(me.role!=='staff'?'<td>'+esc(u.n||x.officer)+'</td><td>'+esc(u.depName||'')+'</td>':'')+'<td>'+esc(x.cif)+'</td><td>'+esc(x.customer)+'</td>'+FEES.map(function(c){return '<td class="r">'+(x.items[c]?money(x.items[c]):'')+'</td>'}).join('')+'<td class="r" style="color:var(--accent)">'+(hhOfItems(x.items)?money(hhOfItems(x.items)):'')+'</td><td class="r"><b>'+money(x.phi)+'</b></td>'+BHS.map(function(c,j){return '<td class="r'+(j===0?' sep':'')+'">'+(x.items[c]?money(x.items[c]):'')+'</td>'}).join('')+'<td style="white-space:normal;max-width:200px">'+esc(x.note)+'</td><td>'+(canEdit(x)?'<button class="btn ghost sm" onclick="editFee(\''+x.id+'\')">Sửa</button> <button class="btn danger sm" onclick="delFee(\''+x.id+'\')">Xóa</button>':'')+'</td></tr>'}).join('')+
+ return head('Sổ giao dịch',(me.role==='staff'?'Các khoản của bạn':me.role==='head'?'Cán bộ '+esc(me.depName):esc(scopeLabel()))+' · Tháng '+MS+'/'+YEAR+' · '+L.length+' khoản · '+Object.keys(cnt).length+' khách hàng',
+  depSel()+monSel()+offSel+'<input placeholder="Tìm tên KH, ghi chú" style="min-width:200px" value="'+esc(bookQ)+'" onchange="bookQ=this.value;render()">'+'<button class="btn ghost" onclick="exportBook()">Tải CSV</button>')+
+ '<div class="scroll"><table><thead><tr><th>Ngày</th>'+(me.role!=='staff'?'<th>User AD</th><th>Mã phòng</th>':'')+'<th>Khách hàng</th>'+FEES.map(function(f){return '<th class="r">'+esc(f)+'</th>'}).join('')+'<th class="r">Hoa hồng BH<br>dự kiến</th><th class="r">Tổng phí</th>'+BHS.map(function(f,j){return '<th class="r'+(j===0?' sep':'')+'">'+esc(shortBH(f))+'</th>'}).join('')+'<th>Ghi chú</th><th></th></tr></thead><tbody>'+
+ (L.length?L.map(function(x){var u=depOf[x.officer.toLowerCase()]||{};return '<tr><td>'+x.date.split('-').reverse().join('/')+'</td>'+(me.role!=='staff'?'<td>'+esc(x.officer)+'</td><td>'+esc(u.depName||'')+'</td>':'')+'<td>'+esc(x.customer)+'</td>'+FEES.map(function(c){return '<td class="r">'+(x.items[c]?money(x.items[c]):'')+'</td>'}).join('')+'<td class="r" style="color:var(--accent)">'+(hhOfItems(x.items)?money(hhOfItems(x.items)):'')+'</td><td class="r"><b>'+money(x.phi)+'</b></td>'+BHS.map(function(c,j){return '<td class="r'+(j===0?' sep':'')+'">'+(x.items[c]?money(x.items[c]):'')+'</td>'}).join('')+'<td style="white-space:normal;max-width:200px">'+esc(x.note)+'</td><td>'+(canEdit(x)?'<button class="btn ghost sm" onclick="editFee(\''+x.id+'\')">Sửa</button> <button class="btn danger sm" onclick="delFee(\''+x.id+'\')">Xóa</button>':'')+'</td></tr>'}).join('')+
  '<tr class="tot"><td colspan="'+lead+'">Tổng cộng</td>'+tot.map(function(v){return '<td class="r">'+money(v)+'</td>'}).join('')+'<td class="r">'+money(thh)+'</td><td class="r">'+money(sumA(tot)+thh)+'</td>'+tb.map(function(v,j){return '<td class="r'+(j===0?' sep':'')+'">'+money(v)+'</td>'}).join('')+'<td colspan="2"></td></tr>':'<tr><td colspan="'+nc+'" style="color:var(--muted);padding:20px">Chưa có giao dịch nào trong tháng này.</td></tr>')+'</tbody></table></div>'}
 function scopeOffAll(){return OFF.filter(function(u){return wide()?(filterDep==='all'||u.dep===filterDep):u.dep===me.dep})}
 function exportBook(){var depOf={};U.forEach(function(u){depOf[u.ad.toLowerCase()]=u});
  var L=ROWS.filter(function(x){return x.date>=ymd(MS,1)&&x.date<=monthEnd(MS)});
- var r=[['Ngày','User AD','Cán bộ','Phòng','CIF','Khách hàng'].concat(FEES,['Hoa hồng BH dự kiến','Tổng phí'],BHS,['Ghi chú'])].concat(L.map(function(x){var u=depOf[x.officer.toLowerCase()]||{};return [x.date,x.officer,u.n||'',u.depName||'',"'"+x.cif,x.customer].concat(FEES.map(function(c){return x.items[c]||0}),[hhOfItems(x.items),x.phi],BHS.map(function(c){return x.items[c]||0}),[x.note])}));
+ var r=[['Ngày','User AD','Mã phòng','Khách hàng'].concat(FEES,['Hoa hồng BH dự kiến','Tổng phí'],BHS,['Ghi chú'])].concat(L.map(function(x){var u=depOf[x.officer.toLowerCase()]||{};return [x.date,x.officer,u.depName||'',x.customer].concat(FEES.map(function(c){return x.items[c]||0}),[hhOfItems(x.items),x.phi],BHS.map(function(c){return x.items[c]||0}),[x.note])}));
  download('so-giao-dich-T'+MS+'.csv',r.map(function(a){return a.map(csvCell).join(',')}).join('\n'))}
 
 /* ================= 4. KẾ HOẠCH ================= */
@@ -422,7 +423,7 @@ function getPlan(ad){var p=PLANS[ad.toUpperCase()];return p?p:(PLANS[ad.toUpperC
 function vPlan(){
  var off=scopeOff(),edit=off.some(canEditPlan),k=function(a){return a.replace(/\W/g,'_')};
  var rows=off.map(function(u){var p=getPlan(u.ad),e=canEditPlan(u);
-  return '<tr><td>'+esc(u.n)+'<br><small style="color:var(--muted)">'+esc(u.ad)+' · '+POS_LABEL[u.pos]+(wide()&&filterDep==='all'?' · '+esc(u.depName):'')+'</small></td>'+[0,1,2].map(function(i){return '<td class="r" id="c'+i+'_'+k(u.ad)+'">'+(e?'<input class="pi" inputmode="numeric" value="'+money(p[i])+'" onchange="setPlan(\''+esc(u.ad)+'\','+i+',this)">':money(p[i]))+(i>0?'<br><small style="color:var(--muted)" id="d'+i+'_'+k(u.ad)+'">+'+money(p[i]-p[i-1])+' trong tháng</small>':'')+'</td>'}).join('')+'<td class="r" id="q_'+k(u.ad)+'"><b>'+money(p[2])+'</b></td></tr>'}).join('');
+  return '<tr><td>'+esc(u.ad)+'<br><small style="color:var(--muted)">'+POS_LABEL[u.pos]+(wide()&&filterDep==='all'?' · '+esc(u.depName):'')+'</small></td>'+[0,1,2].map(function(i){return '<td class="r" id="c'+i+'_'+k(u.ad)+'">'+(e?'<input class="pi" inputmode="numeric" value="'+money(p[i])+'" onchange="setPlan(\''+esc(u.ad)+'\','+i+',this)">':money(p[i]))+(i>0?'<br><small style="color:var(--muted)" id="d'+i+'_'+k(u.ad)+'">+'+money(p[i]-p[i-1])+' trong tháng</small>':'')+'</td>'}).join('')+'<td class="r" id="q_'+k(u.ad)+'"><b>'+money(p[2])+'</b></td></tr>'}).join('');
  var tot=[0,1,2].map(function(i){return sumA(off.map(function(u){return getPlan(u.ad)[i]}))});
  return head('Kế hoạch phí quý 4/'+YEAR,esc(scopeLabel())+' · Đơn vị: VNĐ',depSel()+(edit?'<button class="btn" onclick="savePlan()">Lưu kế hoạch</button>':''))+
  (edit?'<div class="note">Lãnh đạo phòng nhập kế hoạch thay cho cả phòng, theo <b>lũy kế</b>: T11 = T10+T11, T12 = cả 3 tháng (T12 chính là kế hoạch cả quý). Ô sau không được nhỏ hơn ô trước. Bấm <b>Lưu kế hoạch</b> để ghi lại.</div>':'<div class="note">Bạn chỉ xem kế hoạch. Lãnh đạo phòng là người nhập.</div>')+
@@ -456,7 +457,7 @@ function vTrack(){
      else{c='ok';tip='Phí '+money(s.phi)+' đ'+(s.bh?' (gồm hoa hồng BH '+money(s.hh)+' đ) · doanh số BH '+money(s.bh)+' đ':'')}}
     return '<td class="s"><span class="c '+c+'" title="'+esc(u.n)+' · '+x.d+'/'+MS+': '+tip+'" onclick="toast(this.title)"></span></td>'}).join('');
    var cp=compliance(u.ad,MS);
-   body+='<tr><td class="nm">'+esc(u.n)+'<br><small style="color:var(--muted)">'+esc(u.ad)+' · '+POS_LABEL[u.pos]+'</small></td>'+cells+'<td class="t" style="color:'+(red?'var(--danger)':'var(--accent)')+'">'+red+'</td><td class="t">'+(cp==null?'—':cp+'%')+'</td></tr>'})});
+   body+='<tr><td class="nm">'+esc(u.ad)+'<br><small style="color:var(--muted)">'+POS_LABEL[u.pos]+'</small></td>'+cells+'<td class="t" style="color:'+(red?'var(--danger)':'var(--accent)')+'">'+red+'</td><td class="t">'+(cp==null?'—':cp+'%')+'</td></tr>'})});
  return head('Theo dõi nhập liệu',esc(scopeLabel())+' · Tháng '+MS+'/'+YEAR+' · không tính Thứ 7, Chủ nhật',depSel()+monSel())+
  '<div class="legend"><span><i style="background:var(--ok)"></i>Đã nhập</span><span><i style="background:#fff;border:1px solid var(--line)"></i>Không phát sinh</span><span><i style="background:var(--red)"></i>Chưa nhập</span><span><i style="border:2px dashed #e5a100;background:var(--warn-soft)"></i>Hôm nay (chưa tới giờ chốt '+GIO_CHOT+':00)</span><span><i style="background:repeating-linear-gradient(45deg,var(--surface-2),var(--surface-2) 4px,var(--line) 4px,var(--line) 5px)"></i>Nghỉ</span></div>'+
  '<div class="scroll"><table class="mx"><thead><tr><th class="nm">Cán bộ (GDV, RM)</th>'+hdr+'<th class="t" title="Số ngày chưa nhập">Đỏ</th><th class="t" title="% ngày đã nhập hoặc xác nhận">Tuân thủ</th></tr></thead><tbody>'+body+'</tbody></table></div>'}
@@ -474,7 +475,7 @@ function vLogin(){
   var cells=days.map(function(x){var c='idle',tip='Không truy cập';if(set[x.k]){c='ok';tip='Có truy cập';n++}else if(x.off)c='off';else if(x.k>t||x.k<Q_START())c='fut';
    return '<td class="s"><span class="c '+c+'" title="'+esc(u.n)+' · '+x.d+'/'+MS+': '+tip+'" onclick="toast(this.title)"></span></td>'}).join('');
   var last=LOGINS[u.ad].last;
-  return '<tr><td class="nm">'+esc(u.n)+'<br><small style="color:var(--muted)">'+esc(u.ad)+' · '+(u.role==='staff'?POS_LABEL[u.pos]:ROLE_LABEL[u.role])+'</small></td>'+cells+'<td class="t">'+n+'</td><td class="t" style="min-width:110px;font-weight:500">'+(last?last.slice(8,10)+'/'+last.slice(5,7)+' '+last.slice(11):'<span class="pill r">Chưa vào</span>')+'</td></tr>'}).join('')}).join('');
+  return '<tr><td class="nm">'+esc(u.ad)+'<br><small style="color:var(--muted)">'+(u.role==='staff'?POS_LABEL[u.pos]:ROLE_LABEL[u.role])+'</small></td>'+cells+'<td class="t">'+n+'</td><td class="t" style="min-width:110px;font-weight:500">'+(last?last.slice(8,10)+'/'+last.slice(5,7)+' '+last.slice(11):'<span class="pill r">Chưa vào</span>')+'</td></tr>'}).join('')}).join('');
  return head('Tình hình đăng nhập theo user',esc(scopeLabel())+' · Tháng '+MS+'/'+YEAR,depSel()+monSel())+
  '<div class="grid g4" style="margin-bottom:14px"><div class="card kpi"><small>Tổng số user</small><b>'+L.length+'</b></div><div class="card kpi"><small>Đã vào hôm nay</small><b>'+today+'</b><span>'+pct(today,L.length)+'%</span></div><div class="card kpi"><small>Chưa từng đăng nhập</small><b style="color:'+(never?'var(--danger)':'var(--accent)')+'">'+never+'</b></div><div class="card kpi"><small>Ghi nhận</small><span>Mỗi user mỗi ngày 1 lần khi đăng nhập hoặc mở lại ứng dụng.</span></div></div>'+
  '<div class="legend"><span><i style="background:var(--ok)"></i>Có truy cập trong ngày</span><span><i style="background:var(--surface-2);border:1px solid var(--line)"></i>Không truy cập</span><span><i style="background:repeating-linear-gradient(45deg,var(--surface-2),var(--surface-2) 4px,var(--line) 4px,var(--line) 5px)"></i>Nghỉ</span></div>'+
@@ -484,8 +485,8 @@ function vLogin(){
 function vRep(){return head('Báo cáo','Xuất số liệu theo phạm vi của bạn',depSel()+monSel())+
  '<div class="grid g2"><div class="card"><h3>Bảng tiến độ cán bộ · lũy kế đến T'+MS+'</h3><p style="color:var(--muted)">'+esc(scopeLabel())+' · '+scopeOff().length+' cán bộ: từng loại phí, tổng phí, kế hoạch, % hoàn thành, % tuân thủ, bảo hiểm riêng.</p><button class="btn" onclick="exportCsv()">Tải CSV (mở bằng Excel)</button></div>'+
  '<div class="card"><h3>Sổ giao dịch</h3><p style="color:var(--muted)">Chi tiết từng khách hàng, từng loại phí trong tháng '+MS+'.</p><button class="btn ghost" onclick="exportBook()">Tải sổ giao dịch (CSV)</button></div></div>'}
-function exportCsv(){var r=[['Phòng','Cán bộ','User AD','Chức danh'].concat(FEES,['Hoa hồng BH dự kiến','Tổng phí','Kế hoạch lũy kế T'+MS,'% hoàn thành','% tuân thủ'],BHS)].concat(scopeOff().map(function(u){var a=cumPhi(u.ad,MS),p=planOf(u.ad,MS),c=compliance(u.ad,MS);
-  return [u.depName,u.n,u.ad,POS_LABEL[u.pos]].concat(FEES.map(function(_,i){return cumType(u.ad,MS,i)}),[cumHH(u.ad,MS),a,p,pct(a,p),c==null?'':c],BHS.map(function(_,j){return cumBH(u.ad,MS,j)}))}));
+function exportCsv(){var r=[['Phòng','User AD','Chức danh'].concat(FEES,['Hoa hồng BH dự kiến','Tổng phí','Kế hoạch lũy kế T'+MS,'% hoàn thành','% tuân thủ'],BHS)].concat(scopeOff().map(function(u){var a=cumPhi(u.ad,MS),p=planOf(u.ad,MS),c=compliance(u.ad,MS);
+  return [u.depName,u.ad,POS_LABEL[u.pos]].concat(FEES.map(function(_,i){return cumType(u.ad,MS,i)}),[cumHH(u.ad,MS),a,p,pct(a,p),c==null?'':c],BHS.map(function(_,j){return cumBH(u.ad,MS,j)}))}));
  download('tien-do-T'+MS+'.csv',r.map(function(a){return a.map(csvCell).join(',')}).join('\n'))}
 
 /* ================= 8. QUẢN TRỊ ================= */
@@ -497,15 +498,15 @@ function vAdm(){
   '<select onchange="admDep=this.value;render()"><option value="all">Tất cả phòng</option>'+DEPS.map(function(d){return '<option value="'+d[0]+'"'+(admDep===d[0]?' selected':'')+'>'+d[1]+'</option>'}).join('')+'<option value="_"'+(admDep==='_'?' selected':'')+'>Ban giám đốc / Quản trị</option></select>'+
   '<input placeholder="Tìm User AD hoặc tên" style="min-width:190px" value="'+esc(admQ)+'" onchange="admQ=this.value;render()">'+
   '<button class="btn" onclick="editUser(null)">+ Thêm tài khoản</button>')+
- '<div class="scroll"><table><thead><tr><th>User AD</th><th>Họ tên</th><th>Phòng / Ban</th><th>Chức danh</th><th>Vai trò</th><th></th></tr></thead><tbody>'+
- L.map(function(u){return '<tr><td>'+esc(u.ad)+'</td><td>'+esc(u.n)+'</td><td>'+esc(u.depName)+'</td><td>'+(POS_LABEL[u.pos]||'—')+'</td><td><span class="pill '+(u.role==='staff'?'':'g')+'">'+ROLE_LABEL[u.role]+'</span></td><td style="white-space:nowrap"><button class="btn ghost sm" onclick="editUser(\''+esc(u.ad)+'\')">Sửa</button> <button class="btn ghost sm" onclick="resetPin(\''+esc(u.ad)+'\')">Đặt lại PIN</button></td></tr>'}).join('')+
+ '<div class="scroll"><table><thead><tr><th>User AD</th><th>Mã phòng / Ban</th><th>Chức danh</th><th>Vai trò</th><th></th></tr></thead><tbody>'+
+ L.map(function(u){return '<tr><td>'+esc(u.ad)+'</td><td>'+esc(u.depName)+'</td><td>'+(POS_LABEL[u.pos]||'—')+'</td><td><span class="pill '+(u.role==='staff'?'':'g')+'">'+ROLE_LABEL[u.role]+'</span></td><td style="white-space:nowrap"><button class="btn ghost sm" onclick="editUser(\''+esc(u.ad)+'\')">Sửa</button> <button class="btn ghost sm" onclick="resetPin(\''+esc(u.ad)+'\')">Đặt lại PIN</button></td></tr>'}).join('')+
  (L.length?'':'<tr><td colspan="6" style="color:var(--muted);padding:20px">Không có tài khoản phù hợp.</td></tr>')+'</tbody></table></div>'}
 function editUser(ad){
  var u=ad?U.filter(function(x){return x.ad===ad})[0]:{ad:'',n:'',dep:'',role:'staff',pos:'GDV'},isNew=!ad,self=!isNew&&u.ad.toLowerCase()===me.ad.toLowerCase();
  var depOpts=DEPS.map(function(d){return '<option value="'+d[0]+'"'+(u.dep===d[0]?' selected':'')+'>'+d[1]+'</option>'}).join('');
  $('dlgBody').innerHTML='<h3 style="margin:0 0 4px">'+(isNew?'Thêm tài khoản':'Sửa tài khoản')+'</h3>'+
   '<label>User AD</label><input id="eAd" value="'+esc(u.ad)+'" '+(isNew?'placeholder="VD: NAMNV1"':'disabled')+'>'+
-  '<label>Họ và tên</label><input id="eName" value="'+esc(u.n)+'">'+
+  '<input id="eName" type="hidden" value="'+esc(u.full||'')+'">'+
   '<label>Vai trò</label><select id="eRole" onchange="roleUi()" '+(self?'disabled':'')+'>'+[['canbo','Cán bộ (GDV / RM) – nhập phí'],['lanhdao','Lãnh đạo phòng – nhập kế hoạch cho phòng'],['bgd','Ban giám đốc / Tổ chức – xem tất cả'],['quanly','Quản trị – toàn quyền']].map(function(r){return '<option value="'+r[0]+'"'+(RAW[u.role]===r[0]?' selected':'')+'>'+r[1]+'</option>'}).join('')+'</select>'+
   '<div id="eDepBox"><label>Phòng / PGD</label><select id="eDep">'+depOpts+'</select></div>'+
   '<div id="ePosBox"><label>Chức danh</label><select id="ePos"><option value="GDV"'+(u.pos==='GDV'?' selected':'')+'>Giao dịch viên (GDV)</option><option value="RM"'+(u.pos==='RM'?' selected':'')+'>RM</option></select></div>'+
@@ -515,7 +516,7 @@ function editUser(ad){
  $('dlg').showModal();roleUi()}
 function roleUi(){var r=$('eRole').value;$('eDepBox').style.display=(r==='canbo'||r==='lanhdao')?'block':'none';$('ePosBox').style.display=r==='canbo'?'block':'none'}
 async function saveUser(ad){
- var isNew=!ad,r=$('eRole').value,body={action:isNew?'adduser':'setuser',ad:isNew?$('eAd').value.trim():ad,name:$('eName').value.trim(),role:r,dep:(r==='canbo'||r==='lanhdao')?$('eDep').value:'',pos:r==='canbo'?$('ePos').value:(r==='lanhdao'||r==='bgd'?'LD':'')};
+ var isNew=!ad,r=$('eRole').value,body={action:isNew?'adduser':'setuser',ad:isNew?$('eAd').value.trim():ad,name:$('eName').value.trim()||(isNew?$('eAd').value.trim():ad),role:r,dep:(r==='canbo'||r==='lanhdao')?$('eDep').value:'',pos:r==='canbo'?$('ePos').value:(r==='lanhdao'||r==='bgd'?'LD':'')};
  if(!body.ad||!body.name){toast('Nhập User AD và họ tên');return}
  if(isNew&&!/^[A-Za-z0-9._-]{2,40}$/.test(body.ad)){toast('User AD chỉ gồm chữ, số, dấu chấm, gạch');return}
  var j=await post(body);if(!j)return;
