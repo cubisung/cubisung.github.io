@@ -1,0 +1,1216 @@
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0e2a47"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="KPI Phòng"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style></head><body><script src="config.js"></script><script src="store-shim.js"></script><script src="data.enc.js"></script><title>KPI Q4 Phòng 2026</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
+<style>
+/* Layout: thanh trên cố định; dashboard cá nhân mở bằng dải xanh đậm ôm các ô số chính (giống trang Quản lý phí) → biểu đồ tiến độ → việc cần làm → sổ phí; các bước kế hoạch là tab ngang; bảng cuộn ngang trong khung riêng */
+:root{
+  --bg:#eef2f6; --surface:#ffffff; --surface-2:#f4f7fa; --line:#e1e7ef;
+  --ink:#0f1b2d; --ink-2:#44536a; --ink-3:#6b7a8f;
+  --accent:#0a8f6a; --accent-ink:#ffffff; --accent-soft:#e2f4ee;
+  --band:#0e2a47; --band-2:#14385e; --band-ink:#ffffff; --band-muted:#a9bdd6;
+  --good:#1d7a4c; --good-soft:#e2f3ea; --warn:#a96a00; --warn-soft:#fbf0d9; --bad:#b4322c; --bad-soft:#f9e3e1;
+  --c1:#0a8f6a; --c2:#2f6fdb; --c3:#d48a12; --c4:#7a52d1; --c5:#d6457a; --c6:#1b9aaa;
+  --f-display:"Be Vietnam Pro",system-ui,sans-serif;
+  --f-body:"Be Vietnam Pro",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;
+  --r:14px; --shadow:0 1px 2px rgba(15,27,45,.05),0 8px 24px rgba(15,27,45,.06);
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0b121c; --surface:#121c29; --surface-2:#172232; --line:#223146;
+  --ink:#e6edf6; --ink-2:#b3c0d1; --ink-3:#8e9db2;
+  --accent:#34c79a; --accent-ink:#04261b; --accent-soft:#143a30;
+  --band:#0f2238; --band-2:#16304d; --band-ink:#ffffff; --band-muted:#9fb4cf;
+  --good:#5cc690; --good-soft:#163527; --warn:#e3b04f; --warn-soft:#3a2d12; --bad:#ef7d75; --bad-soft:#3d1c1a;
+  --c1:#27a37c; --c2:#5a8ae0; --c3:#b5842a; --c4:#8f73e0; --c5:#d9638e; --c6:#1aa3b8; --shadow:none; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0b121c; --surface:#121c29; --surface-2:#172232; --line:#223146;
+  --ink:#e6edf6; --ink-2:#b3c0d1; --ink-3:#8e9db2;
+  --accent:#34c79a; --accent-ink:#04261b; --accent-soft:#143a30;
+  --band:#0f2238; --band-2:#16304d; --band-ink:#ffffff; --band-muted:#9fb4cf;
+  --good:#5cc690; --good-soft:#163527; --warn:#e3b04f; --warn-soft:#3a2d12; --bad:#ef7d75; --bad-soft:#3d1c1a;
+  --c1:#27a37c; --c2:#5a8ae0; --c3:#b5842a; --c4:#8f73e0; --c5:#d9638e; --c6:#1aa3b8; --shadow:none; color-scheme:dark}
+*{box-sizing:border-box}
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.45;-webkit-tap-highlight-color:transparent}
+body::before{content:"";position:fixed;inset:0 0 auto;height:env(safe-area-inset-top,0px);z-index:10;background:var(--surface)}
+.num,td.n,th.n{font-variant-numeric:tabular-nums}
+h1,h2,h3{font-family:var(--f-display);text-wrap:balance;margin:0;letter-spacing:-.01em}
+h1{font-size:1.5rem} h2{font-size:1.2rem} h3{font-size:1rem}
+button,input,select,textarea{font:inherit;color:inherit}
+button{cursor:pointer}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.top{position:sticky;top:env(safe-area-inset-top,0px);z-index:5;background:var(--surface);border-bottom:1px solid var(--line)}
+.top-in{max-width:1180px;margin:0 auto;padding-block:10px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.brand{font-family:var(--f-display);font-weight:600;display:flex;flex-direction:column;line-height:1.15}
+.brand small{font-family:var(--f-body);font-weight:400;color:var(--ink-3);font-size:.78rem}
+.sp{flex:1}
+.who{display:flex;align-items:center;gap:10px;font-size:.9rem;color:var(--ink-2)}
+.sync{font-size:.78rem;padding:3px 8px;border-radius:99px;background:var(--surface-2);color:var(--ink-3);white-space:nowrap}
+.sync.ok{background:var(--good-soft);color:var(--good)} .sync.err{background:var(--bad-soft);color:var(--bad)}
+main{max-width:1180px;margin:0 auto;padding-block:20px 48px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));display:flex;flex-direction:column;gap:18px}
+.btn{border:1px solid var(--line);background:var(--surface);border-radius:10px;padding:10px 16px;min-height:44px;font-weight:500}
+.btn:hover{border-color:var(--ink-3)}
+.btn.pri{background:var(--accent);color:var(--accent-ink);border-color:var(--accent)}
+.btn.ghost{background:transparent;border-color:transparent;color:var(--accent);padding-inline:8px}
+.btn.sm{min-height:34px;padding:6px 12px;font-size:.88rem}
+.btn:disabled{opacity:.5;cursor:default}
+.panel{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:18px}
+.muted{color:var(--ink-3)} .small{font-size:.85rem}
+.row{display:flex;gap:12px;flex-wrap:wrap;align-items:center}
+.pill{display:inline-block;padding:2px 9px;border-radius:99px;font-size:.78rem;font-weight:600;white-space:nowrap}
+.pill.g{background:var(--good-soft);color:var(--good)} .pill.y{background:var(--warn-soft);color:var(--warn)} .pill.r{background:var(--bad-soft);color:var(--bad)} .pill.n{background:var(--surface-2);color:var(--ink-3)} .pill.b{background:var(--accent-soft);color:var(--accent)}
+.note{background:var(--accent-soft);border-radius:10px;padding:10px 14px;font-size:.9rem}
+.warnbox{background:var(--warn-soft);color:var(--ink);border-radius:10px;padding:10px 14px;font-size:.9rem}
+/* login */
+.login{max-width:860px;margin:0 auto;width:100%;display:flex;flex-direction:column;gap:18px}
+.who-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:10px}
+.who-card{text-align:left;border:1px solid var(--line);background:var(--surface);border-radius:var(--r);padding:12px 14px;min-height:72px;display:flex;flex-direction:column;gap:2px}
+.who-card b{font-family:var(--f-display);font-weight:600}
+.who-card span{font-size:.82rem;color:var(--ink-3)}
+.who-card[aria-pressed="true"]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
+.grp-title{font-size:.75rem;text-transform:uppercase;letter-spacing:.08em;color:var(--ink-3);font-weight:600;margin-top:4px}
+.pin{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
+.pin input{font-size:1.6rem;letter-spacing:.5em;width:9ch;text-align:center;padding:8px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
+/* stepper */
+.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:6px}
+.step{border:0;background:transparent;border-radius:9px;padding:10px 8px;min-height:52px;text-align:left;display:flex;gap:10px;align-items:center;color:var(--ink-2)}
+.step i{font-style:normal;flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);font-weight:700;font-size:.85rem}
+.step[aria-current="step"]{background:var(--accent-soft);color:var(--ink)}
+.step[aria-current="step"] i{background:var(--accent);color:var(--accent-ink)}
+.step span{font-size:.88rem;font-weight:600;line-height:1.2}
+@media (max-width:640px){.step span{display:none}.step{justify-content:center}}
+/* stats */
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(170px,1fr));gap:10px}
+.stat{background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:14px 16px;display:flex;flex-direction:column;gap:2px}
+.stat label{font-size:.78rem;color:var(--ink-3);font-weight:500}
+.stat b{font-family:var(--f-display);font-size:1.7rem;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.2}
+.stat small{font-size:.8rem;color:var(--ink-3)}
+.stat.hl{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.stat.hl label,.stat.hl small{color:var(--accent-ink);opacity:.85}
+/* indicator cards */
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(250px,1fr));gap:10px}
+.ic{background:var(--surface);border:1px solid var(--line);border-left:5px solid var(--line);border-radius:10px;padding:12px 14px;display:flex;flex-direction:column;gap:6px;min-width:0}
+.ic.g{border-left-color:var(--good)} .ic.y{border-left-color:var(--warn)} .ic.r{border-left-color:var(--bad)}
+.ic .t{font-weight:600;font-size:.9rem;line-height:1.3}
+.ic .v{display:flex;justify-content:space-between;align-items:baseline;gap:8px;font-variant-numeric:tabular-nums}
+.ic .v b{font-family:var(--f-display);font-size:1.25rem}
+.bar{height:6px;border-radius:3px;background:var(--surface-2);position:relative;overflow:hidden}
+.bar>div{position:absolute;inset:0 auto 0 0;border-radius:3px;background:var(--ink-3)}
+.ic.g .bar>div{background:var(--good)} .ic.y .bar>div{background:var(--warn)} .ic.r .bar>div{background:var(--bad)}
+.legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.82rem;color:var(--ink-2)}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:2px;margin-right:6px;vertical-align:-1px;background:var(--c)}
+/* target */
+.target{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(0,1fr);gap:18px}
+@media (max-width:760px){.target{grid-template-columns:1fr}}
+.bignum{display:flex;align-items:center;gap:10px}
+.bignum input{font-family:var(--f-display);font-size:2.4rem;font-weight:600;width:5.5ch;padding:6px 10px;border:1px solid var(--line);border-radius:12px;background:var(--surface);text-align:center}
+.range{width:100%;accent-color:var(--accent);height:32px}
+.scale{position:relative;height:56px;margin-top:6px}
+.scale .track{position:absolute;left:0;right:0;top:24px;height:8px;border-radius:4px;background:var(--surface-2)}
+.scale .mk{position:absolute;top:0;transform:translateX(-50%);font-size:.72rem;color:var(--ink-2);text-align:center;white-space:nowrap}
+.scale .mk::after{content:"";display:block;width:2px;height:18px;margin:2px auto 0;background:var(--c,var(--ink-3))}
+/* table */
+.tw{overflow-x:auto;border:1px solid var(--line);border-radius:var(--r);background:var(--surface)}
+table{border-collapse:collapse;width:100%;font-size:.88rem}
+th,td{padding:9px 10px;border-bottom:1px solid var(--line);text-align:left;vertical-align:middle}
+th{font-size:.75rem;font-weight:600;color:var(--ink-3);background:var(--surface-2);white-space:nowrap;position:sticky;top:0}
+td.n,th.n{text-align:right;white-space:nowrap}
+tr:last-child td{border-bottom:0}
+tr.lvl1 td{font-weight:700;background:var(--accent-soft)} tr.lvl2 td{font-weight:600;background:var(--surface-2)}
+tr.click{cursor:pointer} tr.click:hover td{background:var(--accent-soft)}
+tfoot td{font-weight:700;background:var(--surface-2)}
+.ctn{min-width:190px;max-width:300px}
+.ctn small{display:block;color:var(--ink-3);font-weight:400}
+/* rate editor */
+.rates{display:flex;flex-direction:column;gap:8px}
+.rt{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:12px 14px;display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1.6fr) minmax(0,1.5fr);gap:14px;align-items:center}
+@media (max-width:900px){.rt{grid-template-columns:1fr}}
+.rt .facts{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:6px;font-size:.8rem}
+.rt .facts div{display:flex;flex-direction:column;min-width:0}
+.rt .facts label{color:var(--ink-3);font-size:.72rem}
+.rt .facts b{font-variant-numeric:tabular-nums;font-weight:600;overflow-wrap:anywhere}
+.sug{border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:4px 8px;font-variant-numeric:tabular-nums;font-size:.82rem;min-height:34px}
+.sug:hover{border-color:var(--accent)}
+.ed{display:flex;flex-direction:column;gap:4px}
+.ed .row{gap:8px;flex-wrap:nowrap}
+.ed input[type=number]{width:6.5em;padding:7px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);text-align:right;font-variant-numeric:tabular-nums}
+.ed input.entered{border-color:var(--accent);background:var(--accent-soft)}
+.ed .msg{font-size:.76rem;color:var(--warn);min-height:1em;text-align:right}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:9px;padding:2px;gap:2px;background:var(--surface-2);align-self:flex-start;flex-wrap:wrap}
+.seg button{border:0;background:transparent;border-radius:7px;padding:5px 10px;min-height:32px;font-size:.8rem;color:var(--ink-2)}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);font-weight:600;box-shadow:0 1px 2px rgb(0 0 0 / .12)}
+.bqbox{grid-column:1/-1;display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:16px;border-top:1px dashed var(--line);padding-top:12px}
+@media (max-width:760px){.bqbox{grid-template-columns:1fr}}
+.bqin{display:flex;flex-direction:column;gap:10px}
+.bqf{display:flex;justify-content:space-between;align-items:center;gap:10px;font-size:.86rem}
+.bqf input{width:8em;padding:7px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);text-align:right;font-variant-numeric:tabular-nums}
+.bqout{display:flex;flex-direction:column;gap:6px;background:var(--surface-2);border-radius:10px;padding:10px 12px}
+.kv{display:flex;justify-content:space-between;gap:10px;font-size:.84rem;align-items:baseline}
+.kv span{color:var(--ink-2)}
+.kv b{white-space:nowrap}
+.sticky-sum{position:sticky;bottom:max(10px,env(safe-area-inset-bottom,0px));z-index:4;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);box-shadow:0 6px 24px rgb(0 0 0 / .12);padding:10px 14px;display:flex;gap:16px;flex-wrap:wrap;align-items:center}
+.sticky-sum .k{display:flex;flex-direction:column;font-size:.75rem;color:var(--ink-3)}
+.sticky-sum .k b{font-family:var(--f-display);font-size:1.15rem;color:var(--ink);font-variant-numeric:tabular-nums}
+textarea{width:100%;min-height:96px;padding:10px;border:1px solid var(--line);border-radius:10px;background:var(--surface);resize:vertical}
+.kt{font-size:.8rem;white-space:nowrap}
+.tabs{display:flex;gap:6px;flex-wrap:wrap}
+.tab{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:7px 14px;min-height:38px;font-size:.88rem}
+.tab[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.explain{font-size:.86rem;color:var(--ink-2);border-left:3px solid var(--accent);padding:4px 0 4px 12px}
+.tin{width:7.5em;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);text-align:right;font-variant-numeric:tabular-nums}
+.tin.entered{border-color:var(--accent);background:var(--accent-soft)}
+.divider{border-top:1px solid var(--line)}
+.sec-h{display:flex;justify-content:space-between;align-items:flex-end;gap:12px;flex-wrap:wrap}
+
+/* điện thoại: bảng → thẻ (nhãn cột lấy từ tiêu đề bảng), thanh trên gọn */
+@media (max-width:640px){
+  .top-in{padding-block:8px;gap:8px;flex-wrap:nowrap}
+  .brand{min-width:0;white-space:nowrap}
+  .brand small{display:none}
+  .who .btn.sm{white-space:nowrap}
+  .who .btn.sm{min-height:36px;padding:4px 10px;font-size:.82rem}
+  .top .sp{display:none}
+  .brand{font-size:.95rem}
+  #whoName{display:none}
+  .sync{font-size:.72rem;max-width:38vw;overflow:hidden;text-overflow:ellipsis;margin-left:auto}
+  main{padding-block:14px 40px;gap:14px}
+  .tw{overflow:visible;border:0;background:transparent}
+  .tw table.cf,.tw table.cf tbody,.tw table.cf tfoot{display:block}
+  .tw table.cf thead{display:none}
+  .tw table.cf tr{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px 12px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:8px}
+  .tw table.cf td{display:flex;flex-direction:column;align-items:flex-start;gap:2px;padding:0;border:0;text-align:left!important;white-space:normal;min-width:0}
+  .tw table.cf td::before{content:attr(data-l);font-size:.7rem;font-weight:600;color:var(--ink-3);text-transform:none}
+  .tw table.cf td:first-child{grid-column:1/-1;font-size:.95rem}
+  .tw table.cf td:first-child::before{display:none}
+  .tw table.cf td[data-l=""]::before{display:none}
+  .tw table.cf td:empty{display:none}
+  .tw table.cf tr.lvl1,.tw table.cf tr.lvl2{border-color:var(--accent)}
+  .tw table.cf tfoot tr{background:var(--surface-2)}
+  .tw table.cf .tin{width:100%}
+  .tw table.cf td:has(.tin){align-items:stretch}
+  .ctn{min-width:0;max-width:none}
+  .sticky-sum{gap:10px}
+  .stat b{font-size:1.4rem}
+}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;animation:none!important}}
+</style>
+
+<header class="top"><div class="top-in">
+  <div class="brand">KPI Quý 4/2026 <small id="kyLbl">Số liệu đến 30/09/2026</small></div>
+  <div class="sp"></div>
+  <span class="sync" id="sync">Đang kết nối kho dữ liệu…</span>
+  <div class="who" id="whoBox" hidden><span id="whoName"></span><button class="btn sm" id="logout">Đăng xuất</button></div>
+</div></header>
+<main id="app"><div class="panel">Đang tải…</div></main>
+
+<script>
+let SEED = null;
+// ===== KPI ENGINE – bám đúng công thức mục 5 & file Excel =====
+const KPI = (function () {
+  const N = v => (typeof v === 'number' && isFinite(v) ? v : 0);
+  const isNum = v => typeof v === 'number' && isFinite(v);
+  const clamp = (x, a, b) => Math.max(a, Math.min(b, x));
+  let D = null, CT = null, BY = null;
+
+  function init(data) {
+    D = data; CT = data.chi_tieu.slice().sort((a, b) => a.stt - b.stt);
+    BY = {}; data.can_bo.forEach(c => (BY[c.ma] = c));
+  }
+  const weights = ma => D.trong_so_theo_vi_tri[BY[ma].vi_tri] || {};
+  const w = (ma, ct) => { const v = weights(ma)[ct]; return isNum(v) && v !== 0 ? v : null; };
+  const isBinaryLike = c => c.loai === 'binary' || c.ma === 'dmst';
+  const PERSONAL = ['THUANNH', 'PHONGTDM', 'THANHDT7', 'TRAMNDN', 'HUYENNN2', 'BAUCT', 'QUYNNHTT'];
+  const GROUPS = ['HUYENHLL', 'NAM.DOHOAI'];
+  const groupOf = ma => GROUPS.find(g => GROUP_RULE[g].members.includes(ma)) || null;
+
+  // ---- Một dòng chỉ tiêu: %HT, điểm, dự kiến từ số đóng GAP J ----
+  function row(c, wt, E, F, J, V) {
+    const cap = c.ty_le_toi_da, r = { ct: c, w: wt, cap, E, F, J, V };
+    if (c.loai === 'inverse') {
+      r.G = (F == null || E == null) ? null : (E <= 0 ? cap : F / E);
+      r.K = (F == null || (E == null && J == null)) ? null : (N(E) + N(J) <= 0 ? cap : F / (N(E) + N(J)));
+      r.Wp = (F == null || (E == null && V == null)) ? null : (N(E) + N(V) <= 0 ? cap : F / (N(E) + N(V)));
+      r.gap = (F == null || E == null) ? null : Math.max(0, E - F);
+    } else {
+      r.G = (!F || E == null) ? null : E / F;
+      r.K = !F ? null : (E == null && N(J) === 0 ? null : (N(E) + N(J)) / F);
+      r.Wp = !F ? null : (E == null && N(V) === 0 ? null : (N(E) + N(V)) / F);
+      r.gap = !F ? null : Math.max(0, F - N(E));
+    }
+    const sc = p => (wt == null || p == null) ? null : wt * Math.max(0, Math.min(cap, p));
+    r.H = sc(r.G); r.L = sc(r.K); r.X = sc(r.Wp);
+    return r;
+  }
+  function totals(rows) {
+    let t = { H: 0, L: 0, X: 0, wData: 0, wPlan: 0, max: 0, wTotal: 0 };
+    rows.forEach(r => {
+      if (r.w == null) return;
+      t.wTotal += r.w; t.max += r.w * r.cap;
+      t.H += N(r.H); t.L += N(r.L); t.X += N(r.X);
+      if (r.G != null) t.wData += r.w;
+      if (r.K != null) t.wPlan += r.w;
+    });
+    return t;
+  }
+
+  // ---- Số đóng GAP của cán bộ (cột J) từ tỷ lệ đã nhập ----
+  function personalJ(ma, ctMa, rates) {
+    const c = CT.find(x => x.ma === ctMa), s = BY[ma].so_lieu[ctMa] || {};
+    const E = s.thuc_hien, F = s.ke_hoach_nam, rate = rates ? rates[ctMa] : null;
+    if (rate == null || !F) {
+      if (c.loai === 'flow' || c.loai === 'bq') return E == null ? null : Math.max(0, E) / 3;
+      if (c.loai === 'level') return 0;
+      return null; // binary / inverse
+    }
+    return Math.min(c.ty_le_toi_da, Math.max(0, rate)) * F - N(E);
+  }
+
+  // plans: { MA: { rates: {ct: p}, ... } }
+  function evalPersonal(ma, plans) {
+    const rates = plans && plans[ma] ? plans[ma].rates : null;
+    const dx = D.de_xuat[ma] || {};
+    const rows = CT.map(c => {
+      const s = BY[ma].so_lieu[c.ma] || {};
+      const J = personalJ(ma, c.ma, rates);
+      // cán bộ chỉ theo dõi (THAODTV) chưa có đề xuất của Phòng → đề xuất = kế hoạch/giữ tốc độ
+      const V = isNum(dx[c.ma]) ? dx[c.ma] : (TRACK_ONLY.includes(ma) ? J : null);
+      return row(c, w(ma, c.ma), s.thuc_hien, s.ke_hoach_nam, J, V);
+    });
+    return { ma, rows, t: totals(rows) };
+  }
+
+  // ---- Cách cộng nhóm/Phòng ----
+  // 'moi' (từ 29/10): HUYENHLL: NV, CASA = tổng tất cả CB; NII nhập thủ công; còn lại = BAUCT + QUYNNHTT + THAODTV.
+  //                   NAM.DOHOAI: tất cả = PHONGTDM + THANHDT7 + TRAMNDN. Phòng: TH/KH giữ số tổng của file;
+  //                   dự kiến = Σ kế hoạch tất cả CB + phần còn lại của Phòng theo tốc độ 9 tháng.
+  // 'excel': đúng file Excel gốc (dùng để đối chiếu ca kiểm thử mục 9).
+  let RULE = 'moi';
+  const TRACK_ONLY = ['THAODTV'];
+  const ALLCB = () => [...PERSONAL, ...TRACK_ONLY.filter(m => BY[m])];
+  const GROUP_RULE = {
+    HUYENHLL: { members: ['BAUCT', 'QUYNNHTT', 'THAODTV'], all: ['nv', 'casa'], manual: ['nii'] },
+    'NAM.DOHOAI': { members: ['PHONGTDM', 'THANHDT7', 'TRAMNDN'], all: [], manual: [] }
+  };
+  const sumOrNull = arr => arr.every(v => v == null) ? null : arr.reduce((a, v) => a + N(v), 0);
+  const getEval = (m, plans, cache) => cache[m] || (cache[m] = evalPersonal(m, plans));
+  // ghi đè số liệu (THAODTV tự nhập, NII thủ công HUYENHLL, số mới nhất…)
+  function setSoLieu(ma, ct, vals) {
+    if (!BY[ma]) BY[ma] = { ma, ho_ten: ma, vi_tri: null, cap: 'Cán bộ theo dõi', so_lieu: {} };
+    const s = BY[ma].so_lieu[ct] = { ...(BY[ma].so_lieu[ct] || {}) };
+    ['thuc_hien', 'ke_hoach_nam'].forEach(k => { if (k in vals) s[k] = isNum(vals[k]) ? vals[k] : null; });
+  }
+
+  function evalGroup(g, plans, cache) {
+    if (RULE === 'moi') return evalGroupMoi(g, plans, cache);
+    const mem = BY[g].thanh_vien_co_bang_rieng || [];
+    const ev = mem.map(m => cache[m] || (cache[m] = evalPersonal(m, plans)));
+    const bs = (D.bo_sung_nhom || {})[g] || {};
+    const rows = CT.map((c, i) => {
+      const s = BY[g].so_lieu[c.ma] || {};
+      let J = null, V = null;
+      if (c.cong_len_nhom) {
+        J = ev.reduce((a, e) => a + N(e.rows[i].J), 0) + N(bs[c.ma]);
+        V = ev.reduce((a, e) => a + N(e.rows[i].V), 0) + N(bs[c.ma]);
+      }
+      const r = row(c, w(g, c.ma), s.thuc_hien, s.ke_hoach_nam, J, V);
+      r.Jcb = c.cong_len_nhom ? J - N(bs[c.ma]) : null; r.bs = bs[c.ma];
+      return r;
+    });
+    return { ma: g, rows, t: totals(rows) };
+  }
+
+  function evalGroupMoi(g, plans, cache) {
+    const R = GROUP_RULE[g], rows = CT.map((c, i) => {
+      const s = BY[g].so_lieu[c.ma] || {};
+      let E = s.thuc_hien, F = s.ke_hoach_nam, J = null, V = null, src = 'file';
+      if (c.cong_len_nhom && R.manual.includes(c.ma)) {
+        J = personalJ(g, c.ma, plans && plans[g] ? plans[g].rates : null);
+        V = E == null ? null : 1.3 * Math.max(0, E) / 3; src = 'manual';
+      } else if (c.cong_len_nhom) {
+        const mem = R.all.includes(c.ma) ? ALLCB() : R.members.filter(m => BY[m]);
+        const ev = mem.map(m => getEval(m, plans, cache).rows[i]);
+        E = sumOrNull(ev.map(r => r.E)); F = sumOrNull(ev.map(r => r.F));
+        J = ev.reduce((a, r) => a + N(r.J), 0); V = ev.reduce((a, r) => a + N(r.V), 0);
+        src = R.all.includes(c.ma) ? 'all' : 'members';
+      }
+      const r = row(c, w(g, c.ma), E, F, J, V); r.src = src; return r;
+    });
+    return { ma: g, rows, t: totals(rows) };
+  }
+
+  function evalPhong(plans, cache) {
+    cache = cache || {};
+    if (RULE === 'moi') {
+      const tt = D.phong_so_truc_tiep || {}, cbs = ALLCB();
+      const rows = CT.map((c, i) => {
+        const s = BY.THAMNN.so_lieu[c.ma] || {}, d = tt[c.ma] || {};
+        const E = (s.thuc_hien == null && d.thuc_hien == null) ? null : N(s.thuc_hien) + N(d.thuc_hien);
+        const F = (s.ke_hoach_nam == null && d.ke_hoach_nam == null) ? null : N(s.ke_hoach_nam) + N(d.ke_hoach_nam);
+        let J = null, V = null, rest = null;
+        if (c.cong_len_nhom) {
+          const ev = cbs.map(m => getEval(m, plans, cache).rows[i]);
+          const restE = N(E) - ev.reduce((a, r) => a + N(r.E), 0);
+          rest = (c.loai === 'flow' || c.loai === 'bq') ? Math.max(0, restE) / 3 : 0; // phần còn lại (LĐ, CB không lập bảng, số trực tiếp)
+          J = ev.reduce((a, r) => a + N(r.J), 0) + rest;
+          V = ev.reduce((a, r) => a + N(r.V), 0) + rest;
+        }
+        const r = row(c, w('THAMNN', c.ma), E, F, J, V); r.bs = rest; return r;
+      });
+      return { ma: 'THAMNN', rows, t: totals(rows) };
+    }
+    const parts = ['HUYENHLL', 'NAM.DOHOAI', 'THUANNH', 'HUYENNN2'];
+    const ev = parts.map(p => cache[p] || (cache[p] = GROUPS.includes(p) ? evalGroup(p, plans, cache) : evalPersonal(p, plans)));
+    const tt = D.phong_so_truc_tiep || {}, bs = D.bo_sung_phong || {};
+    const rows = CT.map((c, i) => {
+      // Thực hiện/KH Phòng = cộng từ nhóm/CB (so_lieu THAMNN) + số trực tiếp
+      const s = BY.THAMNN.so_lieu[c.ma] || {}, d = tt[c.ma] || {};
+      const E = (s.thuc_hien == null && d.thuc_hien == null) ? null : N(s.thuc_hien) + N(d.thuc_hien);
+      const F = (s.ke_hoach_nam == null && d.ke_hoach_nam == null) ? null : N(s.ke_hoach_nam) + N(d.ke_hoach_nam);
+      let J = null, V = null;
+      if (c.cong_len_nhom) {
+        J = ev.reduce((a, e) => a + N(e.rows[i].J), 0) + N(bs[c.ma]);
+        V = ev.reduce((a, e) => a + N(e.rows[i].V), 0) + N(bs[c.ma]);
+      }
+      return row(c, w('THAMNN', c.ma), E, F, J, V);
+    });
+    return { ma: 'THAMNN', rows, t: totals(rows) };
+  }
+
+  // Bảng tổng hợp 10 dòng
+  function summary(plans) {
+    const cache = {};
+    const ph = evalPhong(plans, cache);
+    const order = ['THAMNN', 'HUYENHLL', 'NAM.DOHOAI', ...PERSONAL];
+    const list = order.map(m => m === 'THAMNN' ? ph : (cache[m] || (cache[m] = GROUPS.includes(m) ? evalGroup(m, plans, cache) : evalPersonal(m, plans))));
+    return { list, cache };
+  }
+
+  // ---- Màn hình cá nhân: Gợi ý A, B, tỷ lệ áp dụng ----
+  function suggestA(c, r) {
+    if (r.w == null) return null;
+    if (isBinaryLike(c)) return r.F == null ? null : 1;
+    if (r.G == null) return null;
+    if (c.loai === 'flow' || c.loai === 'bq') return Math.min(c.ty_le_toi_da, Math.max(0, r.G * 4 / 3));
+    if (c.loai === 'level') return Math.min(c.ty_le_toi_da, Math.max(0, r.G));
+    return Math.min(c.ty_le_toi_da, Math.max(0, r.G));
+  }
+
+  function plan(ma, target, rates) {
+    const base = evalPersonal(ma, null);
+    rates = rates || {};
+    const rs = base.rows.map(r => {
+      const c = r.ct, pA = suggestA(c, r), p = pA == null ? 0 : pA;
+      const o = { ct: c, w: r.w, cap: r.cap, E: r.E, F: r.F, G: r.G, H: r.H, pA, p };
+      if (r.w != null) {
+        o.hA = r.w * Math.max(0, Math.min(r.cap, 1) - p);
+        o.hB = r.w * (r.cap - Math.max(p, 1));
+      } else { o.hA = 0; o.hB = 0; }
+      return o;
+    });
+    const SA = rs.reduce((a, o) => a + (o.w == null ? 0 : o.w * o.p), 0);
+    const HA = rs.reduce((a, o) => a + o.hA, 0), HB = rs.reduce((a, o) => a + o.hB, 0);
+    const maxScore = rs.reduce((a, o) => a + (o.w == null ? 0 : o.w * o.cap), 0);
+    const hasT = isNum(target);
+    const thieu = hasT ? target - SA : 0;
+    const kA = HA === 0 ? 0 : clamp(thieu / HA, 0, 1);
+    const kB = HB === 0 ? 0 : clamp((thieu - kA * HA) / HB, 0, 1);
+    let SB = 0, SX = 0;
+    rs.forEach(o => {
+      const c = o.ct;
+      o.pB = (o.w == null || !hasT) ? null : o.p + kA * Math.max(0, Math.min(o.cap, 1) - o.p) + kB * (o.cap - Math.max(o.p, 1));
+      if (o.pB != null) SB += o.w * Math.max(0, Math.min(o.cap, o.pB));
+      // tỷ lệ áp dụng
+      const inp = rates[c.ma];
+      o.entered = isNum(inp);
+      o.clamped = o.entered && (inp > o.cap || inp < 0);
+      if (o.w == null) o.S = null;
+      else if (o.entered) o.S = Math.min(o.cap, Math.max(0, inp));
+      else if (isBinaryLike(c)) o.S = o.G == null ? null : Math.min(o.cap, Math.max(0, o.G));
+      else o.S = o.pA;
+      o.T = (o.S == null || o.F == null) ? null : o.S * o.F;
+      o.U = o.T == null ? null : o.T - N(o.E);
+      o.X = (o.w == null || o.S == null) ? null : o.w * Math.max(0, Math.min(o.cap, o.S));
+      o.Y = o.X == null ? null : o.X - N(o.H);
+      o.todo = null; o.todoUnit = '';
+      if (o.U != null) {
+        if (c.loai === 'flow') { o.todo = Math.max(0, o.U) / 3; o.todoUnit = c.dvt.toLowerCase() + '/tháng (bình quân Q4)'; }
+        else if (c.loai === 'bq') { o.todo = 4 * o.U; o.todoUnit = 'tỷ: số dư BQ Q4 cao hơn BQ 9 tháng'; }
+        else if (c.ma === 'dmst') { o.todo = Math.max(0, o.U); o.todoUnit = 'sáng kiến đăng ký trên SMP'; }
+        else if (c.loai === 'level') { o.todo = Math.max(0, o.U); o.todoUnit = (c.ma === 'tdqt' ? 'thẻ/KH' : 'KH') + ' tăng thêm đến 31/12'; }
+        else if (c.loai === 'binary') { o.todo = o.S >= 1 ? 1 : 0; o.todoUnit = 'đảm bảo đạt (1 = đạt)'; }
+      }
+      o.kt = feasibility(o);
+      if (o.X != null) SX += o.X;
+    });
+    let status = '';
+    if (!hasT) status = 'Hãy nhập mục tiêu điểm KPI năm 2026 để nhận Gợi ý B.';
+    else if (target > maxScore) status = `Mục tiêu vượt điểm tối đa có thể đạt (${fmt(maxScore, 1)} điểm). Hãy điều chỉnh mục tiêu.`;
+    else if (SX >= target - 1e-9) status = 'Kế hoạch đã đạt mục tiêu';
+    else status = `Còn thiếu ${fmt(target - SX, 1)} điểm – nâng tỷ lệ ở chỉ tiêu có Gợi ý B cao hơn tỷ lệ đang chọn`;
+    return { ma, rows: rs, SA, SB: hasT ? SB : null, SX, maxScore, H: base.t.H, wData: base.t.wData, kA, kB, target: hasT ? target : null, status, base };
+  }
+
+  function feasibility(o) {
+    const c = o.ct;
+    if (o.w == null) return '';
+    if (isBinaryLike(c)) return o.S == null ? '' : (N(o.E) >= N(o.T) ? 'Đã đạt – duy trì' : 'Cần đảm bảo hoàn thành');
+    if (o.U == null) return '';
+    if (o.U <= 0) return N(o.G) >= 1 ? 'Đã đạt – duy trì' : 'Giữ nguyên – chưa đạt KH';
+    if (c.loai === 'level') {
+      if (o.U <= 0.1 * o.F) return 'Trong tầm tay (GAP ≤ 10% KH)';
+      if (o.U <= 0.3 * o.F) return 'Cần tăng tốc (GAP ≤ 30% KH)';
+      return 'Thách thức lớn (GAP > 30% KH)';
+    }
+    if (N(o.E) <= 0) return 'Thách thức lớn (đang âm/0)';
+    if (o.U <= o.E / 3) return 'Trong tầm tay (≤ tốc độ 9 tháng)';
+    if (o.U <= 2 * o.E / 3) return 'Cần tăng tốc (≤ 2× tốc độ)';
+    return 'Thách thức lớn (> 2× tốc độ)';
+  }
+
+  // ---- Quy đổi số tuyệt đối → tỷ lệ HT dự kiến ----
+  // abs = số dự kiến tăng thêm đến 31/12 (dòng: phát sinh Q4; bình quân: Delta BQ năm tăng thêm; số lượng: KH tăng thêm)
+  function rateFromAbs(ma, ctMa, abs) {
+    const s = BY[ma].so_lieu[ctMa] || {};
+    if (!isNum(abs) || !s.ke_hoach_nam) return null;
+    return (N(s.thuc_hien) + abs) / s.ke_hoach_nam;
+  }
+  const absFromRate = (ma, ctMa, p) => { const s = BY[ma].so_lieu[ctMa] || {}; return (!isNum(p) || !s.ke_hoach_nam) ? null : p * s.ke_hoach_nam - N(s.thuc_hien); };
+  // Dự phóng BQ năm = (BQ đến T10 × 10 + Dư cuối T10 + Dư cuối T11) / 12; Delta = BQ năm dự kiến − nền BQ đến 31/10/2025
+  function projectBQ(ma, ctMa, inp) {
+    const s = BY[ma].so_lieu[ctMa] || {}, nen = ((D.nen_bq || {})[ma] || {})[ctMa];
+    const ok = inp && isNum(inp.bq10) && isNum(inp.c10) && isNum(inp.c11);
+    const bqNam = ok ? (inp.bq10 * 10 + inp.c10 + inp.c11) / 12 : null;
+    const delta = (bqNam != null && isNum(nen)) ? bqNam - nen : null;
+    const rate = (delta != null && s.ke_hoach_nam) ? delta / s.ke_hoach_nam : null;
+    return { nen: isNum(nen) ? nen : null, bqNam, delta, rate, tang: delta == null ? null : delta - N(s.thuc_hien) };
+  }
+
+  // ---- Theo dõi thực hiện: số mới nhất tại cuối tháng m (10, 11, 12) ----
+  // base: [{ct, w, cap, E (30/9), F, T (kết quả cần đạt theo kế hoạch)}]; vals: {ct: số thực hiện mới nhất}
+  function track(base, vals, m) {
+    const left = 12 - m;
+    const rows = base.map(b => {
+      const c = b.ct, o = { ...b, Em: isNum(vals[c.ma]) ? vals[c.ma] : null };
+      const Eu = o.Em != null ? o.Em : b.E; // chưa nhập: dùng số 30/9
+      o.Eu = Eu;
+      if (!b.F) return o;
+      const sc = p => b.w == null || p == null ? null : b.w * Math.max(0, Math.min(b.cap, p));
+      o.Gm = Eu == null ? null : Eu / b.F; o.Hm = sc(o.Gm);
+      o.gap100 = Math.max(0, b.F - N(Eu));
+      o.gapPlan = isNum(b.T) ? b.T - N(Eu) : null;
+      // giữ tốc độ mới: dòng/bình quân ×12/m; số lượng, đạt/không đạt giữ nguyên
+      const mm = o.Em != null ? m : 9; // chưa có số mới: giữ tốc độ 9 tháng
+      o.pPace = Eu == null ? null : ((c.loai === 'flow' || c.loai === 'bq') ? Math.max(0, Eu) * 12 / mm : Eu) / b.F;
+      o.Xpace = sc(o.pPace);
+      o.Xplan = isNum(b.T) ? sc(b.T / b.F) : null;
+      if (left > 0 && isNum(o.gapPlan)) {
+        if (c.loai === 'flow') { o.todo = Math.max(0, o.gapPlan) / left; o.todoUnit = c.dvt.toLowerCase() + '/tháng'; }
+        else if (c.loai === 'bq') { o.todo = 12 * o.gapPlan / left; o.todoUnit = 'tỷ: số dư BQ ' + (left === 1 ? 'tháng 12' : 'các tháng còn lại') + ' cao hơn BQ lũy kế'; }
+        else if (c.loai === 'level') { o.todo = Math.max(0, o.gapPlan); o.todoUnit = 'tăng thêm đến 31/12'; }
+      }
+      // tiến độ đóng GAP Q4 so với kế hoạch: (Em − E30/9) / (T − E30/9)
+      if (o.Em != null && isNum(b.T) && isNum(b.E) && b.T - b.E > 1e-9) o.progress = (o.Em - b.E) / (b.T - b.E);
+      return o;
+    });
+    const sum = k => rows.reduce((a, o) => a + (o.w == null ? 0 : N(o[k])), 0);
+    return { rows, m, left, Hm: sum('Hm'), Xpace: sum('Xpace'), Xplan: sum('Xplan'), nEntered: rows.filter(o => o.w != null && o.Em != null).length };
+  }
+
+  function fmt(x, d = 2) {
+    if (!isNum(x)) return '–';
+    return x.toLocaleString('vi-VN', { minimumFractionDigits: d, maximumFractionDigits: d });
+  }
+
+  return { setRule: r => { RULE = r; }, get RULE() { return RULE; }, setSoLieu, track, TRACK_ONLY, GROUP_RULE, ALLCB, init, rateFromAbs, absFromRate, projectBQ, evalPersonal, evalGroup, evalPhong, summary, plan, fmt, PERSONAL, GROUPS, groupOf, get CT() { return CT; }, get BY() { return BY; }, isNum, N };
+})();
+
+
+</script>
+<script>
+window.__startApp = function(){
+KPI.init(SEED);
+const $ = s => document.querySelector(s);
+const app = $('#app');
+const f = KPI.fmt, N = KPI.N, isNum = KPI.isNum;
+const pct = (x, d = 1) => isNum(x) ? f(x * 100, d) + '%' : '–';
+const esc = s => String(s ?? '').replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const BY = KPI.BY, CT = KPI.CT;
+const LEADERS = { 'HUYENHLL': 'Lãnh đạo nhóm', 'NAM.DOHOAI': 'Lãnh đạo nhóm', 'THAMNN': 'Lãnh đạo Phòng' };
+const STATUS = { nhap: ['Đang lập', 'y'], da_gui: ['Đã gửi duyệt', 'b'], da_duyet: ['Đã duyệt', 'g'] };
+const dvt = c => c.dvt === 'Đạt=1' ? '' : c.dvt.toLowerCase();
+const fnum = (c, x) => { if (!isNum(x)) return '–'; const d = c.dvt === 'Tỷ đồng' ? 2 : (c.dvt === 'Triệu đồng' ? 1 : 0); return f(x, d); };
+const shortName = c => c.ten.replace(/\s*\(.*?\)\s*/g, ' ').replace('bình quân tăng trưởng trong năm', 'BQ tăng trưởng').trim();
+
+/* ---------- state ---------- */
+const S = { me: null, plans: {}, pins: {}, solieu: {}, track: {}, trkKy: {}, db: null, step: 1, draft: null, view: 'sum', detail: null, sumMode: 'plan', saving: null };
+const KY = { 10: '31/10/2026', 11: '30/11/2026', 12: '31/12/2026' };
+const TRACK_ONLY = KPI.TRACK_ONLY;
+// đang gõ trong ô nhập → không vẽ lại cả trang khi có cập nhật từ kho chung
+const isEditingNow = () => { const a = document.activeElement; return !!a && (a.tagName === 'INPUT' || a.tagName === 'TEXTAREA') && a.id !== 'pinIn' && a.id !== 'pinIn2'; };
+/* số liệu nhập tay dùng chung: THAODTV tự nhập; Thu thuần lãi nhóm HUYENHLL */
+const SEED_SL = JSON.parse(JSON.stringify(Object.fromEntries(SEED.can_bo.map(c => [c.ma, c.so_lieu]))));
+function applySoLieu() {
+  Object.keys(S.solieu).forEach(ma => {
+    if (!BY[ma]) return;
+    const v = (S.solieu[ma] || {}).values || {};
+    Object.keys(v).forEach(ct => KPI.setSoLieu(ma, ct, v[ct]));
+  });
+}
+async function saveDoc(path, body) {
+  if (!S.db) { setSync('Chưa kết nối kho chung – số liệu chỉ tạm trong phiên này', 'err'); return true; }
+  try { await S.db.doc(path).set(JSON.parse(JSON.stringify(body))); setSync('Đã lưu ' + new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }), 'ok'); return true; }
+  catch (e) { setSync('Lưu chưa được (' + (e.code || 'lỗi') + ') – thử lại', 'err'); return false; }
+}
+const timers = {};
+const debounce = (key, fn, ms = 700) => { clearTimeout(timers[key]); setSync('Đang lưu…'); timers[key] = setTimeout(fn, ms); };
+try { const t = sessionStorage.getItem('kpi_me'); if (t && BY[t]) S.pendingMe = t; } catch (e) {}
+
+/* ---------- shared store ---------- */
+const setSync = (txt, cls) => { const el = $('#sync'); el.textContent = txt; el.className = 'sync ' + (cls || ''); };
+async function connect() {
+  let db = null;
+  try { db = await (window.claude && window.claude.use ? window.claude.use('db') : null); } catch (e) { db = null; }
+  if (!db) { setSync('Chưa kết nối kho chung – kế hoạch chỉ tạm trong phiên này', 'err'); render(); return; }
+  S.db = db;
+  db.collection('plans').onSnapshot(snap => {
+    const p = {}; snap.docs.forEach(d => { if (d.exists) p[d.id] = d.data(); });
+    S.plans = p; S.loaded = true;
+    if (window.KPI_LOCAL_MODE && window.KPI_LOCAL_MODE()) setSync('Lưu trên máy này – chưa nối kho chung', 'err'); else setSync('Đã đồng bộ kho chung của Phòng', 'ok');
+    if (S.me && S.draft && p[S.me]) S.draft.status = p[S.me].status || S.draft.status;
+    const editing = isEditingNow() || (S.me && KPI.PERSONAL.includes(S.me) && S.view !== 'sum' && (S.step === 2 || S.step === 3));
+    if (!S.initRendered || !editing) { S.initRendered = true; render(); }
+  }, e => setSync('Mất kết nối kho chung (' + e.code + ')', 'err'));
+  db.collection('so_lieu').onSnapshot(snap => {
+    const p = {}; snap.docs.forEach(d => { if (d.exists) p[d.id] = d.data(); });
+    S.solieu = p; applySoLieu();
+    if (!isEditingNow()) render();
+  }, () => {});
+  db.collection('thuc_hien').onSnapshot(snap => {
+    const p = {}; snap.docs.forEach(d => { if (d.exists) p[d.id] = d.data(); });
+    S.track = p;
+    if (!isEditingNow()) render();
+  }, () => {});
+  db.collection('pins').onSnapshot(snap => { const p = {}; snap.docs.forEach(d => { if (d.exists) p[d.id] = d.data(); }); S.pins = p; S.pinsLoaded = true; if (!S.me) render(); }, () => {});
+}
+async function hash(s) {
+  try { const b = await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s)); return [...new Uint8Array(b)].map(x => x.toString(16).padStart(2, '0')).join(''); }
+  catch (e) { let h = 5381; for (const ch of s) h = (h * 33 ^ ch.charCodeAt(0)) >>> 0; return 'd' + h.toString(16); }
+}
+let saveTimer = null;
+function queueSave() {
+  S.dirty = true; setSync('Đang lưu…');
+  clearTimeout(saveTimer); saveTimer = setTimeout(savePlan, 700);
+}
+async function savePlan(extra) {
+  clearTimeout(saveTimer);
+  const d = S.draft, ma = S.me;
+  const body = { rates: d.rates, mode: d.mode, abs: d.abs, bq: d.bq, target: isNum(d.target) ? d.target : null, note: d.note || '', status: d.status || 'nhap', updatedAt: new Date().toISOString(), ...(extra || {}) };
+  if (!S.db) { S.plans[ma] = { ...(S.plans[ma] || {}), ...body }; S.dirty = false; setSync('Chưa kết nối kho chung – kế hoạch chỉ tạm trong phiên này', 'err'); return; }
+  try {
+    // ghi cả tài liệu (giữ nhận xét/duyệt của lãnh đạo) để tỷ lệ đã xóa không còn sót lại
+    await S.db.doc('plans/' + ma).set(JSON.parse(JSON.stringify({ ...(S.plans[ma] || {}), ...body })));
+    S.dirty = false; setSync('Đã lưu ' + new Date().toLocaleTimeString('vi-VN', { hour: '2-digit', minute: '2-digit' }), 'ok');
+  } catch (e) { setSync('Lưu chưa được (' + (e.code || 'lỗi') + ') – thử lại', 'err'); }
+}
+async function reviewPlan(ma, status, comment) {
+  const body = { status, nhan_xet: comment || '', duyet_boi: S.me, duyet_luc: new Date().toISOString() };
+  if (!S.db) { S.plans[ma] = { ...(S.plans[ma] || {}), ...body }; render(); return; }
+  try { await S.db.doc('plans/' + ma).update(body); } catch (e) { setSync('Chưa ghi được nhận xét (' + (e.code || 'lỗi') + ')', 'err'); }
+}
+
+/* plans dạng engine dùng (chỉ tỷ lệ đã nhập) */
+const enginePlans = (override) => { const o = {}; Object.keys(S.plans).forEach(k => o[k] = { rates: S.plans[k].rates || {} }); if (override) Object.assign(o, override); return o; };
+const mkDraft = ma => { const p = S.plans[ma] || {}; const bq = {}; Object.keys(p.bq || {}).forEach(k => bq[k] = { ...p.bq[k] }); return { rates: { ...(p.rates || {}) }, mode: { ...(p.mode || {}) }, abs: { ...(p.abs || {}) }, bq, target: isNum(p.target) ? p.target : null, note: p.note || '', status: p.status || 'nhap' }; };
+/* tỷ lệ HT từ chế độ nhập: 'pct' (tỷ lệ), 'abs' (số tuyệt đối tăng thêm), 'bq' (dự phóng số dư – Dư nợ, Nguồn vốn) */
+function syncRate(ct) {
+  const d = S.draft, m = d.mode[ct] || 'pct';
+  if (m === 'pct') return;
+  const r = m === 'abs' ? KPI.rateFromAbs(S.me, ct, d.abs[ct]) : KPI.projectBQ(S.me, ct, d.bq[ct]).rate;
+  if (isNum(r)) d.rates[ct] = r; else delete d.rates[ct];
+}
+const ABS_UNIT = c => c.loai === 'flow' ? c.dvt.toLowerCase() + ' phát sinh thêm trong Q4' : c.loai === 'bq' ? 'tỷ Delta BQ năm tăng thêm' : (c.ma === 'tdqt' ? 'KH có thẻ' : 'KH') + ' tăng thêm đến 31/12';
+const BQ_NAME = { duno: 'Dư nợ', nv: 'Nguồn vốn' };
+
+/* ---------- render router ---------- */
+function render() {
+  $('#whoBox').hidden = !S.me;
+  if (S.me) $('#whoName').textContent = S.me + ' · ' + (BY[S.me].ho_ten.includes('–') ? 'Lãnh đạo Phòng' : BY[S.me].ho_ten);
+  if (!S.me) return renderLogin();
+  if (TRACK_ONLY.includes(S.me)) return renderTrackOnly();
+  if (KPI.PERSONAL.includes(S.me) && S.view !== 'sum') return renderPersonal();
+  return renderLeader();
+}
+
+/* ---------- login ---------- */
+let loginSel = null, pinMode = null;
+function renderLogin() {
+  const card = m => { const b = BY[m]; return `<button class="who-card" data-m="${m}" aria-pressed="${loginSel === m}"><b>${m}</b><span>${esc(m === 'THAMNN' ? 'Tổng Phòng' : b.ho_ten)}</span><span>${esc(m === 'THAMNN' ? 'Lãnh đạo Phòng' : (LEADERS[m] || b.vi_tri))}</span></button>`; };
+  let pinHtml = '';
+  if (loginSel) {
+    const hasPin = S.pins[loginSel] && S.pins[loginSel].h;
+    if (!S.db) pinHtml = `<div class="warnbox">Không kết nối được kho chung nên bỏ qua mã PIN. Kế hoạch nhập lúc này sẽ không được lưu cho cả Phòng.</div><button class="btn pri" id="enter">Vào làm việc với mã ${loginSel}</button>`;
+    else if (!S.pinsLoaded) pinHtml = `<p class="muted">Đang tải…</p>`;
+    else pinHtml = `<div class="pin"><label for="pinIn"><b>${hasPin ? 'Nhập mã PIN 4 số của ' + loginSel : 'Lần đầu đăng nhập: đặt mã PIN 4 số cho ' + loginSel}</b></label>
+      <input id="pinIn" type="password" inputmode="numeric" maxlength="4" autocomplete="off" pattern="[0-9]*">
+      ${hasPin ? '' : '<label for="pinIn2" class="small muted">Nhập lại mã PIN</label><input id="pinIn2" type="password" inputmode="numeric" maxlength="4" autocomplete="off">'}
+      <div class="row"><button class="btn pri" id="enter">${hasPin ? 'Đăng nhập' : 'Đặt PIN và đăng nhập'}</button><span id="pinMsg" class="small" style="color:var(--bad)"></span></div>
+      ${hasPin ? '<p class="small muted">Quên PIN: nhờ lãnh đạo Phòng (THAMNN) đặt lại trong màn hình tổng hợp.</p>' : ''}</div>`;
+  }
+  app.innerHTML = `<section class="login">
+    <div><h1>Kế hoạch KPI cá nhân & Phòng</h1><p class="muted">Chọn mã cán bộ của bạn để xem kết quả đến 30/9, đặt mục tiêu điểm năm 2026 và lập kế hoạch Quý 4.</p></div>
+    <div class="panel" style="display:flex;flex-direction:column;gap:12px">
+      <div class="grp-title">Cán bộ</div><div class="who-grid">${KPI.PERSONAL.map(card).join('')}${TRACK_ONLY.map(m => `<button class="who-card" data-m="${m}" aria-pressed="${loginSel === m}"><b>${m}</b><span>Nhóm HUYENHLL</span><span>Theo dõi chỉ tiêu – không chấm KPI riêng</span></button>`).join('')}</div>
+      <div class="grp-title">Lãnh đạo</div><div class="who-grid">${['THAMNN', 'HUYENHLL', 'NAM.DOHOAI'].map(card).join('')}</div>
+    </div>
+    ${loginSel ? `<div class="panel">${pinHtml}</div>` : ''}
+  </section>`;
+  app.querySelectorAll('.who-card').forEach(b => b.onclick = () => { loginSel = b.dataset.m; renderLogin(); const p = $('#pinIn'); if (p) p.focus(); });
+  const go = $('#enter');
+  if (go) go.onclick = async () => {
+    if (!S.db) return login(loginSel);
+    const p1 = ($('#pinIn').value || '').trim(), msg = $('#pinMsg');
+    if (!/^\d{4}$/.test(p1)) { msg.textContent = 'Mã PIN gồm đúng 4 chữ số.'; return; }
+    const h = await hash('kpi|' + loginSel + '|' + p1), cur = S.pins[loginSel];
+    if (cur && cur.h) { if (cur.h !== h) { msg.textContent = 'Mã PIN chưa đúng.'; return; } return login(loginSel); }
+    if (($('#pinIn2').value || '').trim() !== p1) { msg.textContent = 'Hai lần nhập PIN chưa khớp.'; return; }
+    try { await S.db.doc('pins/' + loginSel).set({ h, at: new Date().toISOString() }); login(loginSel); }
+    catch (e) { msg.textContent = 'Chưa lưu được PIN (' + (e.code || 'lỗi') + '). Bạn cần quyền Contributor trở lên với trang này.'; }
+  };
+  app.querySelectorAll('.pin input').forEach(i => i.onkeydown = e => { if (e.key === 'Enter') go.click(); });
+}
+function login(ma) {
+  S.me = ma; S.step = 1; S.draft = mkDraft(ma); S.dirty = false;
+  S.view = KPI.PERSONAL.includes(ma) ? 'me' : 'sum'; S.detail = null;
+  try { sessionStorage.setItem('kpi_me', ma); } catch (e) {}
+  render(); scrollTo(0, 0);
+}
+$('#logout').onclick = () => { if (S.dirty) savePlan(); S.me = null; loginSel = null; try { sessionStorage.removeItem('kpi_me'); } catch (e) {} render(); };
+
+/* ---------- personal ---------- */
+const colorOf = g => !isNum(g) ? 'n' : (g < 0.5 ? 'r' : (g < 1 ? 'y' : 'g'));
+function renderPersonal() {
+  const ma = S.me, d = S.draft, P = KPI.plan(ma, d.target, d.rates);
+  const stepNames = ['Tổng quan', 'Đặt mục tiêu', 'Chọn tỷ lệ HT', 'Kết quả kế hoạch', 'Theo dõi thực hiện'];
+  const st = STATUS[(S.plans[ma] || {}).status || 'nhap'];
+  let body = '';
+  if (S.step === 1) body = stepOverview(P);
+  if (S.step === 2) body = stepTarget(P);
+  if (S.step === 3) body = stepRates(P);
+  if (S.step === 4) body = stepResult(P);
+  if (S.step === 5) body = trackBlock(S.me, true);
+  app.innerHTML = `
+    <div class="sec-h"><div><h1>Kế hoạch KPI của tôi</h1><div class="muted small">${esc(BY[ma].ho_ten)} · ${esc(BY[ma].vi_tri)}${KPI.groupOf(ma) ? ' · Nhóm ' + KPI.groupOf(ma) : ''}</div></div>
+      <div class="row"><span class="pill ${S.plans[ma] ? st[1] : 'n'}">${S.plans[ma] ? st[0] : 'Chưa lập kế hoạch'}</span>
+      <button class="btn sm" id="toSum">Bảng xếp hạng Phòng</button></div></div>
+    <nav class="steps" aria-label="Các bước">${stepNames.map((n, i) => `<button class="step" data-s="${i + 1}" ${S.step === i + 1 ? 'aria-current="step"' : ''}><i>${i + 1}</i><span>${n}</span></button>`).join('')}</nav>
+    ${body}
+    <div class="row" style="justify-content:space-between">
+      <button class="btn" id="prev" ${S.step === 1 ? 'disabled' : ''}>← Quay lại</button>
+      ${S.step < 5 ? `<button class="btn pri" id="next">Tiếp: ${stepNames[S.step]} →</button>` : ''}
+    </div>`;
+  app.querySelectorAll('.step').forEach(b => b.onclick = () => go(+b.dataset.s));
+  $('#prev').onclick = () => go(S.step - 1);
+  if ($('#next')) $('#next').onclick = () => go(S.step + 1);
+  $('#toSum').onclick = () => { S.view = 'sum'; render(); };
+  bindStep(P);
+}
+function go(s) { S.step = Math.max(1, Math.min(5, s)); render(); scrollTo({ top: 0 }); }
+
+function stepOverview(P) {
+  const rows = P.rows.filter(o => o.w != null);
+  const rank = rankOf(S.me);
+  return `<div class="stats">
+    <div class="stat hl"><label>Điểm KPI đến 30/9</label><b>${f(P.H)}</b><small>trên ${f(P.wData, 0)} trọng số đã có số liệu</small></div>
+    <div class="stat"><label>Trọng số chưa có số liệu</label><b>${f(100 - P.wData, 0)}</b><small>chỉ tiêu chưa được chấm</small></div>
+    <div class="stat"><label>Điểm tối đa có thể đạt</label><b>${f(P.maxScore, 1)}</b><small>Σ trọng số × tỷ lệ tối đa</small></div>
+    <div class="stat"><label>Xếp hạng 30/9 trong 7 cán bộ</label><b>${rank}</b><small>theo điểm KPI đến 30/9</small></div>
+  </div>
+  <div class="sec-h"><h2>Kết quả từng chỉ tiêu được giao</h2><div class="legend"><span style="--c:var(--bad)">&lt; 50% KH</span><span style="--c:var(--warn)">50–100% KH</span><span style="--c:var(--good)">≥ 100% KH</span><span style="--c:var(--line)">Chưa có số liệu</span></div></div>
+  <div class="cards">${rows.map(o => { const c = colorOf(o.G); return `<div class="ic ${c}">
+     <div class="t">${esc(shortName(o.ct))}</div>
+     <div class="v"><b>${pct(o.G)}</b><span class="small muted">Điểm ${o.H == null ? '<span class="pill n">chưa có số liệu</span>' : '<b style="font-size:1rem">' + f(o.H) + '</b> / ' + f(o.w * o.cap, 1)}</span></div>
+     <div class="bar"><div style="width:${Math.max(0, Math.min(100, N(o.G) / o.cap * 100))}%"></div></div>
+     <div class="small muted num">${fnum(o.ct, o.E)} / ${fnum(o.ct, o.F)} ${dvt(o.ct)} · TS ${o.w} · trần ${pct(o.cap, 0)}</div></div>`; }).join('')}</div>`;
+}
+function rankOf(ma) {
+  const arr = KPI.PERSONAL.map(m => ({ m, h: KPI.evalPersonal(m).t.H })).sort((a, b) => b.h - a.h);
+  return (arr.findIndex(x => x.m === ma) + 1) + '/7';
+}
+function stepTarget(P) {
+  const t = P.target;
+  const mk = (v, lbl, c) => `<div class="mk" style="left:${Math.min(100, v / 150 * 100)}%;--c:${c}">${lbl}<br><b class="num">${f(v, 1)}</b></div>`;
+  return `<div class="target">
+    <div class="panel" style="display:flex;flex-direction:column;gap:14px">
+      <h2>Mục tiêu điểm KPI năm 2026 của bạn</h2>
+      <div class="bignum"><input id="tgt" type="number" inputmode="decimal" min="0" max="150" step="0.5" value="${isNum(t) ? t : ''}" placeholder="—"><span class="muted">điểm<br>(0–150)</span></div>
+      <input class="range" id="tgtR" type="range" min="0" max="150" step="0.5" value="${isNum(t) ? t : P.SA.toFixed(1)}" aria-label="Kéo để chọn mục tiêu">
+      <div class="row"><button class="btn sm" data-t="${(Math.ceil(P.SA * 2) / 2)}">Bằng Gợi ý A</button><button class="btn sm" data-t="70">70</button><button class="btn sm" data-t="80">80</button><button class="btn sm" data-t="90">90</button><button class="btn sm" data-t="100">100</button></div>
+      <div id="tgtMsg">${tgtMsg(P)}</div>
+    </div>
+    <div class="panel" style="display:flex;flex-direction:column;gap:12px">
+      <h3>Tham chiếu</h3>
+      <div class="stats" style="grid-template-columns:1fr 1fr">
+        <div class="stat"><label>Điểm 30/9</label><b>${f(P.H)}</b></div>
+        <div class="stat"><label>Theo Gợi ý A (giữ tốc độ)</label><b>${f(P.SA)}</b></div>
+        <div class="stat"><label>Theo Gợi ý B</label><b id="sbv">${P.SB == null ? '–' : f(P.SB)}</b></div>
+        <div class="stat"><label>Điểm tối đa</label><b>${f(P.maxScore, 1)}</b></div>
+      </div>
+      <div class="scale"><div class="track"></div>${mk(P.H, '30/9', 'var(--ink-3)')}${mk(P.SA, 'Gợi ý A', 'var(--accent)')}${isNum(t) ? mk(t, 'Mục tiêu', 'var(--good)') : ''}</div>
+      <p class="explain">Gợi ý A giả định bạn giữ đúng tốc độ 9 tháng đầu năm. Gợi ý B chia phần điểm còn thiếu: kéo đều các chỉ tiêu lên 100% kế hoạch trước, sau đó mới vượt lên trần.</p>
+    </div></div>`;
+}
+const tgtMsg = P => !isNum(P.target) ? '<p class="muted small">Nhập mục tiêu để nhận Gợi ý B ở bước 3.</p>'
+  : P.target > P.maxScore ? `<div class="warnbox">Mục tiêu vượt điểm tối đa có thể đạt (${f(P.maxScore, 1)} điểm). Hãy điều chỉnh mục tiêu.</div>`
+  : `<div class="note">Cần thêm <b>${f(P.target - P.SA)}</b> điểm so với giữ tốc độ${P.target <= P.SA ? ' – giữ tốc độ là đạt mục tiêu' : ''}.</div>`;
+
+function stepRates(P) {
+  const rows = P.rows.filter(o => o.w != null);
+  return `<div class="sec-h"><div><h2>Chọn tỷ lệ hoàn thành dự kiến</h2><p class="muted small">Chạm Gợi ý A/B để dùng ngay, hoặc tự nhập theo <b>Tỷ lệ %</b> hay <b>Số tăng thêm</b> (hệ thống tự quy ra tỷ lệ). Dư nợ và Nguồn vốn có thêm <b>Dự phóng số dư</b>. Chỉ tiêu để trống tạm tính theo giữ tốc độ; phần vượt tỷ lệ tối đa không được tính điểm.</p></div>
+    <div class="row"><button class="btn sm" id="allA">Áp dụng Gợi ý A cho tất cả</button><button class="btn sm" id="allB" ${P.SB == null ? 'disabled title="Nhập mục tiêu ở bước 2"' : ''}>Áp dụng Gợi ý B cho tất cả</button><button class="btn sm ghost" id="clr">Xóa tỷ lệ đã nhập</button></div></div>
+  ${P.SB == null ? '<div class="warnbox">Chưa có mục tiêu điểm nên chưa có Gợi ý B. <button class="btn ghost sm" id="goT">Đặt mục tiêu</button></div>' : ''}
+  <div class="rates">${rows.map(o => {
+    const c = o.ct, cur = o.entered ? S.draft.rates[c.ma] : null, shown = o.S;
+    const mode = S.draft.mode[c.ma] || 'pct', canAbs = ['flow', 'bq', 'level'].includes(c.loai) && c.ma !== 'dmst', canBQ = !!BQ_NAME[c.ma];
+    const seg = canAbs ? `<div class="seg" role="group" aria-label="Cách nhập">
+        <button data-mode="pct" aria-pressed="${mode === 'pct'}">Tỷ lệ %</button><button data-mode="abs" aria-pressed="${mode === 'abs'}">Số tăng thêm</button>${canBQ ? `<button data-mode="bq" aria-pressed="${mode === 'bq'}">Dự phóng số dư</button>` : ''}</div>` : '';
+    let panel = '';
+    if (mode === 'pct') panel = `<div class="row"><input type="range" class="range" min="0" max="${o.cap * 100}" step="0.5" value="${isNum(shown) ? shown * 100 : 0}" aria-label="Tỷ lệ HT ${esc(shortName(c))}" style="flex:1;min-width:0">
+          <input type="number" inputmode="decimal" step="0.1" min="0" data-pct class="${o.entered ? 'entered' : ''}" value="${o.entered ? +(cur * 100).toFixed(2) : ''}" placeholder="${isNum(shown) ? (shown * 100).toFixed(1) : '–'}" aria-label="Nhập tỷ lệ %"><span>%</span></div>`;
+    if (mode === 'abs') { const a = S.draft.abs[c.ma], ph = KPI.absFromRate(S.me, c.ma, shown);
+      panel = `<div class="row"><input type="number" inputmode="decimal" step="any" data-abs class="${isNum(a) ? 'entered' : ''}" value="${isNum(a) ? a : ''}" placeholder="${isNum(ph) ? +ph.toFixed(c.dvt === 'Tỷ đồng' ? 2 : 1) : ''}" aria-label="Số dự kiến tăng thêm" style="width:8.5em"><span class="small muted" style="white-space:normal">${esc(ABS_UNIT(c))}</span></div>
+        <div class="small">→ Tỷ lệ HT dự kiến <b class="num" data-rate>${pct(cur)}</b></div>`; }
+    if (mode === 'bq') panel = `<div class="small">→ Tỷ lệ HT dự kiến <b class="num" data-rate>${pct(cur)}</b> <span class="muted">(theo dự phóng bên dưới)</span></div>`;
+    return `<div class="rt" data-ct="${c.ma}">
+      <div><div style="font-weight:600;line-height:1.3">${esc(shortName(c))}</div><div class="small muted">${esc(c.dvt)} · TS ${o.w} · trần ${pct(o.cap, 0)}</div></div>
+      <div class="facts"><div><label>Thực hiện</label><b>${fnum(c, o.E)}</b></div><div><label>KH năm</label><b>${fnum(c, o.F)}</b></div><div><label>%HT 30/9</label><b>${pct(o.G)}</b></div>
+        <div><label>Gợi ý</label><span class="row" style="gap:4px;flex-wrap:wrap"><button class="sug" data-v="${o.pA ?? ''}" ${o.pA == null ? 'disabled' : ''}>A ${pct(o.pA)}</button><button class="sug" data-v="${o.pB ?? ''}" ${o.pB == null ? 'disabled' : ''}>B ${pct(o.pB)}</button></span></div></div>
+      <div class="ed">${seg}${panel}
+        <div class="row small" style="justify-content:space-between"><span class="muted">Điểm dự kiến <b class="num" data-x>${f(o.X)}</b> / ${f(o.w * o.cap, 1)}</span><span class="msg">${rateMsg(o, mode)}</span></div>
+      </div>${mode === 'bq' ? bqBox(c, o) : ''}</div>`; }).join('')}</div>
+  <div class="sticky-sum" id="sumBar">${sumBar(P)}</div>`;
+}
+function rateMsg(o, mode) {
+  const raw = S.draft.rates[o.ct.ma];
+  if (!isNum(raw)) return mode === 'pct' ? 'đang tạm tính' : 'chưa đủ số – đang tạm tính theo giữ tốc độ';
+  if (raw > o.cap + 1e-9) return (mode === 'pct' ? 'Đã chặn về ' : 'Vượt trần – chỉ tính ') + pct(o.cap, 0);
+  if (raw < 0) return 'Tỷ lệ âm – tính 0 điểm';
+  return '';
+}
+function bqBox(c, o) {
+  const v = S.draft.bq[c.ma] || {}, pr = KPI.projectBQ(S.me, c.ma, v), nm = BQ_NAME[c.ma];
+  const inp = (k, lbl) => `<label class="bqf"><span>${lbl}</span><span class="row" style="gap:6px;flex-wrap:nowrap"><input type="number" inputmode="decimal" step="any" data-bq="${k}" value="${isNum(v[k]) ? v[k] : ''}" placeholder="${k === 'bq10' && isNum(pr.nen) && isNum(o.E) ? +(pr.nen + o.E).toFixed(2) : '0,00'}"><span class="small muted">tỷ</span></span></label>`;
+  return `<div class="bqbox">
+    <div class="bqin">${inp('bq10', `${nm} bình quân năm đến tháng 10/2026 dự kiến đạt`)}${inp('c10', `Số dư ${nm.toLowerCase()} dự kiến cuối tháng 10/2026`)}${inp('c11', `Số dư ${nm.toLowerCase()} dự kiến cuối tháng 11/2026`)}</div>
+    <div class="bqout" data-bqout>${bqOut(c, o, pr)}</div></div>`;
+}
+function bqOut(c, o, pr) {
+  const line = (k, v, strong) => `<div class="kv"><span>${k}</span><b class="num"${strong ? ' style="font-size:1.05rem"' : ''}>${v}</b></div>`;
+  return `${line(`BQ năm 2026 dự kiến = (BQ đến T10 × 10 + cuối T10 + cuối T11) / 12`, isNum(pr.bqNam) ? f(pr.bqNam) + ' tỷ' : '–')}
+    ${line('Nền: BQ đến 31/10/2025', isNum(pr.nen) ? f(pr.nen) + ' tỷ' : '<span class="pill y">chưa có số nền</span>')}
+    ${isNum(pr.nen) && isNum(o.E) ? line('Tham khảo: nền + Delta 30/9 (giữ nguyên Delta)', f(pr.nen + o.E) + ' tỷ') : ''}
+    ${line('Delta tăng trưởng BQ năm dự kiến', isNum(pr.delta) ? f(pr.delta) + ' tỷ' : '–', true)}
+    ${line(`So với Delta BQ 9 tháng (${fnum(c, o.E)} tỷ)`, isNum(pr.tang) ? (pr.tang >= 0 ? '+' : '') + f(pr.tang) + ' tỷ' : '–')}
+    ${!isNum(pr.nen) ? '<div class="warnbox small">Chưa có số Dư BQ đến 31/10/2025 của bạn trong bảng tổng hợp 9 tháng – liên hệ người cập nhật số liệu. Số bạn nhập vẫn được lưu và sẽ tự tính khi có số nền.</div>' : ''}`;
+}
+const sumBar = P => `<div class="k">Gợi ý A<b>${f(P.SA)}</b></div><div class="k">Gợi ý B<b>${P.SB == null ? '–' : f(P.SB)}</b></div>
+  <div class="k">Theo tỷ lệ chọn<b>${f(P.SX)}</b></div><div class="k">Mục tiêu<b>${isNum(P.target) ? f(P.target, 1) : '–'}</b></div>
+  <div class="sp"></div><span class="pill ${!isNum(P.target) ? 'n' : P.SX >= P.target - 1e-9 ? 'g' : 'y'}" style="white-space:normal">${esc(P.status)}</span>`;
+
+function stepResult(P) {
+  const rows = P.rows.filter(o => o.w != null);
+  const before = KPI.summary(enginePlans({ [S.me]: { rates: (S.plans[S.me] || {}).rates || {} } })).list[0].t.L;
+  const keep = KPI.summary(enginePlans({ [S.me]: { rates: {} } })).list[0].t.L;
+  const after = KPI.summary(enginePlans({ [S.me]: { rates: S.draft.rates } })).list[0].t.L;
+  const gap = isNum(P.target) ? P.SX - P.target : null;
+  const pl = S.plans[S.me] || {};
+  const ktCls = s => /Đã đạt|tầm tay/.test(s) ? 'g' : /tăng tốc|Cần đảm bảo|Giữ nguyên/.test(s) ? 'y' : /Thách thức/.test(s) ? 'r' : 'n';
+  return `<div class="stats">
+    <div class="stat hl"><label>Tổng điểm KPI dự kiến</label><b>${f(P.SX)}</b><small>theo tỷ lệ đã chọn</small></div>
+    <div class="stat"><label>Mục tiêu</label><b>${isNum(P.target) ? f(P.target, 1) : '–'}</b><small>${gap == null ? 'chưa đặt' : (gap >= 0 ? 'vượt ' : 'thiếu ') + f(Math.abs(gap)) + ' điểm'}</small></div>
+    <div class="stat"><label>Tăng so với 30/9</label><b>+${f(P.SX - P.H)}</b><small>từ ${f(P.H)} điểm</small></div>
+    <div class="stat"><label>KPI Phòng dự kiến</label><b>${f(after)}</b><small>nếu bạn giữ tốc độ: ${f(keep)}${Math.abs(before - after) > 0.004 && S.dirty ? ' · bản đã lưu: ' + f(before) : ''}</small></div>
+  </div>
+  <div class="row"><span class="pill ${!isNum(P.target) ? 'n' : gap >= -1e-9 ? 'g' : 'y'}" style="white-space:normal">${esc(P.status)}</span></div>
+  <div class="tw"><table><thead><tr><th>Chỉ tiêu</th><th class="n">Tỷ lệ áp dụng</th><th class="n">Kết quả cần đạt</th><th class="n">GAP thêm Q4</th><th>Việc cần làm Q4</th><th class="n">Điểm dự kiến</th><th class="n">+ so 30/9</th><th>Mức độ khả thi</th></tr></thead><tbody>
+  ${rows.map(o => { const c = o.ct; return `<tr><td class="ctn">${esc(shortName(c))}<small>${esc(c.dvt)}</small></td><td class="n">${pct(o.S)}${o.entered ? '' : ' <span class="pill n">tạm</span>'}</td>
+    <td class="n">${fnum(c, o.T)}</td><td class="n">${fnum(c, o.U)}</td><td>${todo(o)}</td><td class="n"><b>${f(o.X)}</b></td><td class="n">${isNum(o.Y) ? f(o.Y) : '–'}</td>
+    <td>${o.kt ? `<span class="pill ${ktCls(o.kt)} kt">${esc(o.kt)}</span>` : ''}</td></tr>`; }).join('')}
+  </tbody><tfoot><tr><td>Tổng</td><td></td><td></td><td></td><td></td><td class="n">${f(P.SX)}</td><td class="n">${f(P.SX - P.H)}</td><td></td></tr></tfoot></table></div>
+  <p class="explain">Chỉ tiêu bình quân năm: BQ năm = (9 × BQ 9 tháng + 3 × BQ Quý 4) / 12, nên muốn Delta BQ năm tăng thêm X tỷ thì số dư BQ Quý 4 phải cao hơn BQ 9 tháng 4X tỷ. Tiền về ngày 1/10 có giá trị gấp 3 lần tiền về ngày 1/12.</p>
+  <div class="panel" style="display:flex;flex-direction:column;gap:10px">
+    <label for="note"><h3>Ghi chú hành động / khách hàng mục tiêu</h3></label>
+    <textarea id="note" placeholder="Ví dụ: tiếp cận 5 KH doanh nghiệp chi lương, chuyển CASA về trước 15/11…">${esc(S.draft.note)}</textarea>
+    ${pl.nhan_xet ? `<div class="note"><b>Nhận xét của ${esc(pl.duyet_boi || 'lãnh đạo')}:</b> ${esc(pl.nhan_xet)}</div>` : ''}
+    <div class="row"><button class="btn pri" id="send">${pl.status === 'da_gui' ? 'Đã gửi – gửi lại bản mới' : 'Lưu & gửi lãnh đạo nhóm duyệt'}</button><button class="btn" id="saveNow">Lưu</button>
+    <span class="small muted">Kế hoạch tự lưu khi bạn thay đổi và hiển thị cho lãnh đạo nhóm/Phòng.</span></div>
+  </div>`;
+}
+function todo(o) {
+  if (!isNum(o.todo)) return '–';
+  const c = o.ct;
+  if (c.loai === 'binary') return o.todo ? 'Đảm bảo đạt' : '–';
+  if (c.loai === 'bq' && S.draft.mode[c.ma] === 'bq') { const v = S.draft.bq[c.ma] || {}, pr = KPI.projectBQ(S.me, c.ma, v);
+    if (isNum(pr.bqNam)) return `BQ đến T10 <b class="num">${f(v.bq10)}</b>, cuối T10 <b class="num">${f(v.c10)}</b>, cuối T11 <b class="num">${f(v.c11)}</b> tỷ <span class="small muted">→ BQ năm ${f(pr.bqNam)} tỷ${isNum(pr.delta) ? ', Delta ' + f(pr.delta) + ' tỷ' : ' (chờ số nền 31/10/2025)'}</span>`; }
+  if (c.loai === 'bq') return `<b class="num">${f(o.todo, 2)}</b> <span class="small muted">${o.todo < 0 ? 'tỷ (đã dư so với tỷ lệ chọn)' : 'tỷ – số dư BQ Q4 cao hơn BQ 9 tháng'}</span>`;
+  return `<b class="num">${fnum(c, o.todo)}</b> <span class="small muted">${esc(o.todoUnit)}</span>`;
+}
+function bindStep(P) {
+  if (S.step === 2) {
+    const setT = v => { S.draft.target = v === '' || v == null ? null : Math.max(0, Math.min(150, +v)); queueSave(); const P2 = KPI.plan(S.me, S.draft.target, S.draft.rates); $('#tgtMsg').innerHTML = tgtMsg(P2); $('#sbv').textContent = P2.SB == null ? '–' : f(P2.SB); };
+    $('#tgt').oninput = e => { setT(e.target.value); if (e.target.value !== '') $('#tgtR').value = e.target.value; };
+    $('#tgt').onchange = () => render();
+    $('#tgtR').oninput = e => { $('#tgt').value = e.target.value; setT(e.target.value); };
+    $('#tgtR').onchange = () => render();
+    app.querySelectorAll('[data-t]').forEach(b => b.onclick = () => { setT(b.dataset.t); render(); });
+  }
+  if (S.step === 3) {
+    const refresh = () => { const P2 = KPI.plan(S.me, S.draft.target, S.draft.rates); $('#sumBar').innerHTML = sumBar(P2); P2.rows.forEach(o => { const el = app.querySelector(`.rt[data-ct="${o.ct.ma}"] [data-x]`); if (el) el.textContent = f(o.X); }); return P2; };
+    app.querySelectorAll('.rt').forEach(r => {
+      const ct = r.dataset.ct, rng = r.querySelector('input[type=range]'), num = r.querySelector('input[data-pct]'), absIn = r.querySelector('input[data-abs]'), msg = r.querySelector('.msg'), c = CT.find(x => x.ma === ct);
+      const mode = () => S.draft.mode[ct] || 'pct';
+      const after = () => {
+        const P2 = refresh(), o = P2.rows.find(x => x.ct.ma === ct);
+        msg.textContent = rateMsg(o, mode());
+        const rt = r.querySelector('[data-rate]'); if (rt) rt.textContent = pct(S.draft.rates[ct]);
+        if (rng && isNum(o.S)) rng.value = o.S * 100;
+        if (num && !o.entered) num.placeholder = isNum(o.S) ? (o.S * 100).toFixed(1) : '–';
+        const bo = r.querySelector('[data-bqout]'); if (bo) bo.innerHTML = bqOut(c, o, KPI.projectBQ(S.me, ct, S.draft.bq[ct]));
+        queueSave();
+      };
+      const setPct = (v, fromNum) => {
+        S.draft.mode[ct] = 'pct';
+        if (v === '' || v == null || isNaN(v)) { delete S.draft.rates[ct]; if (num) num.classList.remove('entered'); }
+        else { S.draft.rates[ct] = Math.round(v * 1e6) / 1e8; if (num) { num.classList.add('entered'); if (!fromNum) num.value = +(+v).toFixed(2); } }
+        after();
+      };
+      if (rng) rng.oninput = () => setPct(+rng.value);
+      if (num) num.oninput = () => setPct(num.value === '' ? '' : +num.value, true);
+      if (absIn) absIn.oninput = () => {
+        if (absIn.value === '') { delete S.draft.abs[ct]; absIn.classList.remove('entered'); } else { S.draft.abs[ct] = +absIn.value; absIn.classList.add('entered'); }
+        syncRate(ct); after();
+      };
+      r.querySelectorAll('input[data-bq]').forEach(i => i.oninput = () => {
+        const b = S.draft.bq[ct] || (S.draft.bq[ct] = {});
+        if (i.value === '') delete b[i.dataset.bq]; else b[i.dataset.bq] = +i.value;
+        syncRate(ct); after();
+      });
+      r.querySelectorAll('.seg button').forEach(b => b.onclick = () => {
+        const m = b.dataset.mode; if (m === mode()) return;
+        S.draft.mode[ct] = m;
+        if (m === 'pct') { /* giữ tỷ lệ đang có */ }
+        else if (m === 'abs' && !isNum(S.draft.abs[ct]) && isNum(S.draft.rates[ct])) S.draft.abs[ct] = +KPI.absFromRate(S.me, ct, S.draft.rates[ct]).toFixed(3);
+        syncRate(ct); queueSave(); render();
+      });
+      r.querySelectorAll('.sug').forEach(b => b.onclick = () => { if (b.dataset.v === '') return; const was = mode(); setPct(+b.dataset.v * 100); if (was !== 'pct') render(); });
+    });
+    const applyAll = k => { P.rows.forEach(o => { if (o.w == null) return; const v = o[k]; if (isNum(v)) { S.draft.rates[o.ct.ma] = v; S.draft.mode[o.ct.ma] = 'pct'; } }); queueSave(); render(); };
+    $('#allA').onclick = () => applyAll('pA');
+    $('#allB').onclick = () => applyAll('pB');
+    $('#clr').onclick = () => { S.draft.rates = {}; S.draft.mode = {}; S.draft.abs = {}; queueSave(); render(); };
+    if ($('#goT')) $('#goT').onclick = () => go(2);
+  }
+  if (S.step === 4) {
+    $('#note').oninput = e => { S.draft.note = e.target.value; queueSave(); };
+    $('#saveNow').onclick = () => savePlan();
+    $('#send').onclick = async () => { S.draft.status = 'da_gui'; await savePlan({ status: 'da_gui', guiLuc: new Date().toISOString() }); render(); };
+  }
+  if (S.step === 5) bindTrack(S.me);
+}
+
+/* ---------- Theo dõi thực hiện gần nhất ---------- */
+// kế hoạch làm mốc: cán bộ = tỷ lệ đã chọn (Kết quả cần đạt); Phòng/nhóm/THAODTV = Thực hiện + số đóng GAP dự kiến
+function trackBase(ma) {
+  if (KPI.PERSONAL.includes(ma)) {
+    const pl = ma === S.me && S.draft ? S.draft : (S.plans[ma] || {});
+    return KPI.plan(ma, pl.target, pl.rates || {}).rows.filter(o => o.w != null && o.F).map(o => ({ ct: o.ct, w: o.w, cap: o.cap, E: o.E, F: o.F, T: o.T }));
+  }
+  const sum = KPI.summary(enginePlans());
+  const e = ma === 'THAMNN' ? sum.list[0] : sum.cache[ma];
+  const keep = r => TRACK_ONLY.includes(ma) ? (r.ct.cong_len_nhom && r.F) : (r.w != null && r.F);
+  return e.rows.filter(keep).map(r => ({ ct: r.ct, w: TRACK_ONLY.includes(ma) ? null : r.w, cap: r.cap, E: r.E, F: r.F, T: r.K != null ? r.K * r.F : null }));
+}
+const trkKyOf = ma => S.trkKy[ma] || (S.track[ma] || {}).latest || 10;
+const trkVals = (ma, m) => { const d = S.trkDraft && S.trkDraft[ma] && S.trkDraft[ma][m]; return d || (((S.track[ma] || {}).ky || {})[m] || {}).values || {}; };
+const canTrack = ma => S.me === ma || S.me === 'THAMNN';
+function trackCells(o) {
+  const c = o.ct, hasW = o.w != null;
+  const prog = isNum(o.progress) ? `<span class="pill ${o.progress >= 1 ? 'g' : o.progress >= 0.34 ? 'b' : o.progress >= 0 ? 'y' : 'r'}">${pct(o.progress, 0)}</span>` : '–';
+  const todo = !isNum(o.todo) ? (isNum(o.gapPlan) && o.gapPlan <= 0 ? '<span class="pill g">Đã đạt kế hoạch</span>' : '–')
+    : (c.loai === 'bq' && o.todo <= 0 ? '<span class="pill g">Đã đạt kế hoạch</span>' : `<b class="num">${fnum(c, o.todo)}</b> <span class="small muted">${esc(o.todoUnit)}</span>`);
+  return {
+    g: `<span class="pill ${colorOf(o.Gm)}">${pct(o.Gm)}</span>`,
+    h: hasW ? (o.Hm == null ? '–' : f(o.Hm)) : '',
+    t: fnum(c, o.T), p: prog,
+    gap: isNum(o.gapPlan) ? (o.gapPlan <= 0 ? '0' : fnum(c, o.gapPlan)) : '–',
+    todo,
+    pace: hasW ? (o.Xpace == null ? '–' : f(o.Xpace)) : pct(o.pPace)
+  };
+}
+function trackStats(tr, hasW, m) {
+  const tot = tr.rows.filter(o => hasW ? o.w != null : true).length;
+  if (!hasW) return `<div class="stats"><div class="stat hl"><label>Đã cập nhật đến ${KY[m]}</label><b>${tr.rows.filter(o => o.Em != null).length}/${tot}</b><small>chỉ tiêu có số mới</small></div>
+    <div class="stat"><label>Đã đạt kế hoạch</label><b>${tr.rows.filter(o => isNum(o.gapPlan) && o.gapPlan <= 0).length}/${tot}</b><small>chỉ tiêu</small></div></div>`;
+  return `<div class="stats">
+    <div class="stat hl"><label>Điểm KPI theo số đến ${KY[m]}</label><b>${f(tr.Hm)}</b><small>${tr.nEntered}/${tot} chỉ tiêu đã có số mới; còn lại dùng số 30/9</small></div>
+    <div class="stat"><label>Dự kiến cuối năm nếu giữ tốc độ mới</label><b>${f(tr.Xpace)}</b><small>dòng, bình quân × 12/${m}</small></div>
+    <div class="stat"><label>Điểm nếu đạt đúng kế hoạch</label><b>${f(tr.Xplan)}</b><small>theo kế hoạch đã lập</small></div>
+    <div class="stat"><label>Thời gian còn lại</label><b>${tr.left}</b><small>tháng đến 31/12</small></div></div>`;
+}
+function trackBlock(ma, forceEdit) {
+  const m = trkKyOf(ma), base = trackBase(ma), tr = KPI.track(base, trkVals(ma, m), m);
+  const hasW = base.some(b => b.w != null), ed = forceEdit || canTrack(ma), doc = S.track[ma] || {};
+  return `<section class="trk" data-trk="${ma}" style="display:flex;flex-direction:column;gap:14px">
+    <div class="sec-h"><div><h2>Theo dõi thực hiện${ma === 'THAMNN' ? ' của Phòng' : TRACK_ONLY.includes(ma) || ma === S.me ? '' : ' – ' + ma}</h2>
+      <p class="muted small">${ed ? 'Nhập số Thực hiện lũy kế mới nhất (cùng cách tính với số 30/9). ' : ''}Hệ thống tính lại %HT, điểm, GAP còn lại so với kế hoạch và việc cần làm cho các tháng còn lại.${doc.updatedAt ? ` Cập nhật gần nhất ${new Date(doc.updatedAt).toLocaleString('vi-VN')} bởi ${esc(doc.by || '')}.` : ''}</p></div>
+      <div class="tabs" role="tablist">${[10, 11, 12].map(k => `<button class="tab" role="tab" data-ky="${k}" aria-selected="${k === m}">Đến ${KY[k]}</button>`).join('')}</div></div>
+    <div data-stats>${trackStats(tr, hasW, m)}</div>
+    <div class="tw"><table><thead><tr><th>Chỉ tiêu</th><th class="n">TH 30/9</th><th class="n">TH đến ${KY[m].slice(0, 5)}</th><th class="n">%HT</th>${hasW ? '<th class="n">Điểm</th>' : ''}<th class="n">KH cần đạt 31/12</th><th class="n">Tiến độ đóng GAP Q4</th><th class="n">GAP còn lại</th><th>Việc cần làm còn lại</th><th class="n">${hasW ? 'Điểm nếu giữ tốc độ' : '%HT nếu giữ tốc độ'}</th></tr></thead><tbody>
+    ${tr.rows.map(o => { const c = o.ct, k = trackCells(o); return `<tr data-ct="${c.ma}"><td class="ctn">${esc(shortName(c))}<small>${esc(c.dvt)}</small></td><td class="n">${fnum(c, o.E)}</td>
+      <td class="n">${ed ? `<input type="number" inputmode="decimal" step="any" class="tin${isNum(o.Em) ? ' entered' : ''}" data-tin="${c.ma}" value="${isNum(o.Em) ? o.Em : ''}" placeholder="${isNum(o.E) ? +o.E.toFixed(3) : ''}" aria-label="Thực hiện mới nhất ${esc(shortName(c))}">` : fnum(c, o.Em)}</td>
+      <td class="n" data-k="g">${k.g}</td>${hasW ? `<td class="n" data-k="h">${k.h}</td>` : ''}<td class="n" data-k="t">${k.t}</td><td class="n" data-k="p">${k.p}</td><td class="n" data-k="gap">${k.gap}</td><td data-k="todo">${k.todo}</td><td class="n" data-k="pace">${k.pace}</td></tr>`; }).join('')}
+    </tbody></table></div>
+    <p class="explain">Tiến độ đóng GAP Q4 = (Thực hiện mới − Thực hiện 30/9) / (KH cần đạt − Thực hiện 30/9). Chỉ tiêu bình quân: BQ năm = (m × BQ lũy kế + (12 − m) × BQ các tháng còn lại) / 12, nên số dư BQ các tháng còn lại phải cao hơn BQ lũy kế 12 × GAP / (12 − m).</p>
+  </section>`;
+}
+function bindTrack(ma) {
+  const box = app.querySelector(`[data-trk="${CSS.escape(ma)}"]`); if (!box) return;
+  const m = trkKyOf(ma);
+  box.querySelectorAll('[data-ky]').forEach(b => b.onclick = () => { S.trkKy[ma] = +b.dataset.ky; render(); });
+  const recompute = () => {
+    const base = trackBase(ma), tr = KPI.track(base, trkVals(ma, m), m), hasW = base.some(b => b.w != null);
+    box.querySelector('[data-stats]').innerHTML = trackStats(tr, hasW, m);
+    tr.rows.forEach(o => { const tr2 = box.querySelector(`tr[data-ct="${o.ct.ma}"]`); if (!tr2) return; const k = trackCells(o); tr2.querySelectorAll('[data-k]').forEach(td => td.innerHTML = k[td.dataset.k]); });
+  };
+  box.querySelectorAll('[data-tin]').forEach(i => i.oninput = () => {
+    S.trkDraft = S.trkDraft || {}; S.trkDraft[ma] = S.trkDraft[ma] || {};
+    const cur = S.trkDraft[ma][m] || (S.trkDraft[ma][m] = { ...trkVals(ma, m) });
+    if (i.value === '') { delete cur[i.dataset.tin]; i.classList.remove('entered'); } else { cur[i.dataset.tin] = +i.value; i.classList.add('entered'); }
+    recompute();
+    debounce('trk' + ma, async () => {
+      const doc = S.track[ma] || {}, ky = { ...(doc.ky || {}) };
+      ky[m] = { values: S.trkDraft[ma][m], updatedAt: new Date().toISOString(), by: S.me };
+      const body = { latest: Math.max(m, ...Object.keys(ky).filter(k => Object.keys(ky[k].values || {}).length).map(Number)), ky, updatedAt: new Date().toISOString(), by: S.me };
+      S.track[ma] = body;
+      await saveDoc('thuc_hien/' + ma, body);
+    });
+  });
+}
+
+/* ---------- leader / Phòng ---------- */
+function renderLeader() {
+  const me = S.me, isPhong = me === 'THAMNN', isLead = !!LEADERS[me];
+  const plans = enginePlans();
+  const cur = KPI.summary(plans), keep = KPI.summary({});
+  const keepMap = {}; keep.list.forEach(e => keepMap[e.ma] = e);
+  let list = cur.list;
+  if (!isLead) list = list.filter(e => e.ma === 'THAMNN' || KPI.PERSONAL.includes(e.ma)); // CB xem xếp hạng
+  if (isLead && !isPhong) list = list.filter(e => e.ma === me || (BY[me].thanh_vien_co_bang_rieng || []).includes(e.ma));
+  const persRank = KPI.PERSONAL.map(m => ({ m, v: cur.cache[m].t.L })).sort((a, b) => b.v - a.v).map(x => x.m);
+  const rank30 = KPI.PERSONAL.map(m => ({ m, v: cur.cache[m].t.H })).sort((a, b) => b.v - a.v).map(x => x.m);
+  const ph = cur.list[0], phKeep = keepMap.THAMNN;
+  const lvl = m => m === 'THAMNN' ? 'lvl1' : (KPI.GROUPS.includes(m) ? 'lvl2' : '');
+  const anon = !isLead; // cán bộ: ẩn danh
+  const label = (e, i) => anon ? (e.ma === S.me ? `<b>${e.ma} (bạn)</b>` : (e.ma === 'THAMNN' ? 'Phòng (THAMNN)' : 'Cán bộ ' + String.fromCharCode(65 + i))) : `<b>${e.ma}</b><small>${esc(e.ma === 'THAMNN' ? 'Tổng Phòng' : BY[e.ma].ho_ten)}</small>`;
+  const stCell = m => { if (!KPI.PERSONAL.includes(m)) return ''; const p = S.plans[m]; if (!p) return '<span class="pill n">Chưa lập</span>'; const s = STATUS[p.status || 'nhap']; return `<span class="pill ${s[1]}">${s[0]}</span>`; };
+  let idx = 0;
+  const rowsHtml = list.map(e => {
+    const k = keepMap[e.ma], rP = KPI.PERSONAL.includes(e.ma);
+    const lab = label(e, e.ma === 'THAMNN' || e.ma === S.me ? 0 : idx++);
+    return `<tr class="${lvl(e.ma)} ${isLead ? 'click' : ''}" data-m="${e.ma}"><td class="ctn">${lab}</td>
+      <td class="n">${f(e.t.H)}</td><td class="n">${f(e.t.wData, 0)}</td><td class="n">${f(e.t.wTotal - e.t.wData, 0)}</td>
+      <td class="n">${f(k.t.L)}</td><td class="n"><b>${f(e.t.L)}</b>${Math.abs(e.t.L - k.t.L) > 0.004 ? ` <span class="small" style="color:${e.t.L > k.t.L ? 'var(--good)' : 'var(--bad)'}">${e.t.L > k.t.L ? '+' : ''}${f(e.t.L - k.t.L)}</span>` : ''}</td>
+      <td class="n">${f(e.t.X)}</td><td class="n">${f(e.t.max, 1)}</td>
+      <td class="n">${rP ? (rank30.indexOf(e.ma) + 1) + ' → ' + (persRank.indexOf(e.ma) + 1) : ''}</td>
+      ${isLead ? `<td class="n">${latestCell(e.ma)}</td><td>${stCell(e.ma)}</td>` : ''}</tr>`;
+  }).join('');
+  const nPlans = KPI.PERSONAL.filter(m => S.plans[m]).length, nSent = KPI.PERSONAL.filter(m => S.plans[m] && S.plans[m].status !== 'nhap' && S.plans[m].status).length;
+  app.innerHTML = `
+    <div class="sec-h"><div><h1>${isPhong ? 'Tổng hợp KPI Phòng' : isLead ? 'KPI nhóm ' + me : 'Bảng xếp hạng Phòng'}</h1>
+      <p class="muted small">${anon ? 'Tên cán bộ khác được ẩn. ' : ''}Điểm dự kiến cộng từ kế hoạch các cán bộ đã lưu; ai chưa lập thì tạm tính theo giữ tốc độ 9 tháng.</p></div>
+      <div class="row">${KPI.PERSONAL.includes(me) ? '<button class="btn pri sm" id="back">← Về kế hoạch của tôi</button>' : ''}${isPhong ? '<button class="btn sm" id="runTest">Đối chiếu ca kiểm thử mục 9</button>' : ''}</div></div>
+    ${isLead ? `<div class="stats">
+      <div class="stat hl"><label>KPI ${isPhong ? 'Phòng' : 'nhóm'} dự kiến</label><b>${f((isPhong ? ph : cur.cache[me]).t.L)}</b><small>theo kế hoạch đã lưu</small></div>
+      <div class="stat"><label>Điểm đến 30/9</label><b>${f((isPhong ? ph : cur.cache[me]).t.H)}</b><small>${f((isPhong ? ph : cur.cache[me]).t.wData, 0)} trọng số có số liệu</small></div>
+      <div class="stat"><label>Nếu giữ tốc độ</label><b>${f((isPhong ? phKeep : keepMap[me]).t.L)}</b><small>chưa ai nhập tỷ lệ</small></div>
+      <div class="stat"><label>Nếu đạt đề xuất tối ưu</label><b>${f((isPhong ? ph : cur.cache[me]).t.X)}</b><small>kịch bản Phòng đặt</small></div>
+      <div class="stat"><label>Kế hoạch cán bộ</label><b>${nPlans}/7</b><small>${nSent} đã gửi hoặc đã duyệt</small></div>
+    </div>` : ''}
+    <div id="testOut"></div>
+    <div class="tw"><table><thead><tr><th>Đơn vị / cán bộ</th><th class="n">Điểm 30/9</th><th class="n">TS có số liệu</th><th class="n">TS chưa có số liệu</th><th class="n">Giữ tốc độ</th><th class="n">Dự kiến theo KH</th><th class="n">Nếu đạt đề xuất</th><th class="n">Điểm tối đa</th><th class="n">Hạng CB<br>30/9 → dự kiến</th>${isLead ? '<th class="n">Điểm theo số<br>mới nhất</th><th>Kế hoạch</th>' : ''}</tr></thead>
+    <tbody>${rowsHtml}</tbody></table></div>
+    ${isLead ? '<p class="small muted">Chạm vào một dòng để xem chi tiết từng chỉ tiêu, theo dõi thực hiện, ghi chú và duyệt kế hoạch.</p>' : ''}
+    ${me === 'HUYENHLL' || isPhong ? extraLeader(cur) : ''}
+    <div id="detail"></div>`;
+  if ($('#back')) $('#back').onclick = () => { S.view = 'me'; render(); };
+  if ($('#runTest')) $('#runTest').onclick = runTests;
+  bindExtraLeader();
+  if (isLead) app.querySelectorAll('tr.click, [data-open]').forEach(tr => tr.onclick = () => { S.detail = tr.dataset.m || tr.dataset.open; renderDetail(cur); $('#detail').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+  if (S.detail && isLead && (list.some(e => e.ma === S.detail) || TRACK_ONLY.includes(S.detail))) renderDetail(cur);
+}
+function renderDetail(cur) {
+  const m = S.detail, e = m === 'THAMNN' ? cur.list[0] : cur.cache[m];
+  const P = KPI.PERSONAL.includes(m), pl = S.plans[m] || {}, TO = TRACK_ONLY.includes(m);
+  const canReview = P && (S.me === 'THAMNN' || KPI.groupOf(m) === S.me);
+  const rows = e.rows.filter(r => r.w != null || (r.F && r.ct.cong_len_nhom));
+  const grp = KPI.GROUPS.includes(m) || m === 'THAMNN';
+  $('#detail').innerHTML = `<div class="panel" style="display:flex;flex-direction:column;gap:14px">
+    <div class="sec-h"><div><h2>${m} – chi tiết chỉ tiêu</h2><div class="small muted">${esc(m === 'THAMNN' ? 'Tổng Phòng theo số liệu tổng hợp; dự kiến = kế hoạch tất cả cán bộ + phần còn lại (lãnh đạo, CB không lập bảng, số trực tiếp Phòng) theo tốc độ 9 tháng' : TO ? 'Cán bộ nhóm HUYENHLL – theo dõi chỉ tiêu, không chấm KPI riêng' : BY[m].ho_ten + ' · ' + BY[m].vi_tri)}</div></div><button class="btn sm" id="closeD">Đóng</button></div>
+    ${P ? `<div class="row small"><span>Mục tiêu: <b>${isNum(pl.target) ? f(pl.target, 1) : 'chưa đặt'}</b></span><span>Điểm theo tỷ lệ chọn: <b>${f(KPI.plan(m, pl.target, pl.rates || {}).SX)}</b></span>${stTxt(pl)}</div>` : ''}
+    <div class="tw"><table><thead><tr><th>Chỉ tiêu</th><th class="n">TS</th><th class="n">Thực hiện</th><th class="n">KH năm</th><th class="n">%HT</th><th class="n">Điểm 30/9</th><th class="n">Đóng GAP dự kiến</th><th class="n">%HT dự kiến</th><th class="n">Điểm dự kiến</th><th class="n">GAP còn lại</th><th class="n">Điểm đề xuất</th></tr></thead><tbody>
+    ${rows.map(r => { const c = r.ct; return `<tr><td class="ctn">${esc(shortName(c))}<small>${esc(c.dvt)}</small></td><td class="n">${r.w ?? '–'}</td><td class="n">${fnum(c, r.E)}</td><td class="n">${fnum(c, r.F)}</td><td class="n"><span class="pill ${colorOf(r.G)}">${pct(r.G)}</span></td><td class="n">${r.H == null ? '–' : f(r.H)}</td>
+      <td class="n">${fnum(c, r.J)}${srcNote(m, r)}</td><td class="n">${pct(r.K)}</td><td class="n"><b>${r.L == null ? '–' : f(r.L)}</b></td><td class="n">${r.F ? fnum(c, Math.max(0, r.F - N(r.E) - N(r.J))) : '–'}</td><td class="n">${r.X == null ? '–' : f(r.X)}</td></tr>`; }).join('')}
+    </tbody><tfoot><tr><td>Tổng</td><td class="n">${f(e.t.wTotal, 0)}</td><td></td><td></td><td></td><td class="n">${f(e.t.H)}</td><td></td><td></td><td class="n">${f(e.t.L)}</td><td></td><td class="n">${f(e.t.X)}</td></tr></tfoot></table></div>
+    ${P && pl.note ? `<div class="note"><b>Ghi chú của cán bộ:</b> ${esc(pl.note)}</div>` : ''}
+    ${canReview && S.plans[m] ? `<div style="display:flex;flex-direction:column;gap:8px"><label for="cmt"><b>Nhận xét của lãnh đạo</b></label><textarea id="cmt">${esc(pl.nhan_xet || '')}</textarea>
+      <div class="row"><button class="btn pri" id="ok">Duyệt kế hoạch</button><button class="btn" id="rev">Trả lại để điều chỉnh</button></div></div>` : ''}
+    ${canReview && !S.plans[m] ? '<p class="muted small">Cán bộ chưa lập kế hoạch – điểm dự kiến đang tạm tính theo giữ tốc độ.</p>' : ''}
+    ${P || TO || m === 'THAMNN' ? `<div class="divider"></div>${trackBlock(m)}` : '<p class="small muted">Số mới nhất của nhóm được theo dõi qua từng cán bộ trong nhóm.</p>'}
+    ${S.me === 'THAMNN' && (P || TO) && S.pins[m] ? `<div class="row small"><span class="muted">Cán bộ quên mã PIN?</span><button class="btn sm" id="rstPin">Đặt lại PIN của ${m}</button></div>` : ''}
+  </div>`;
+  $('#closeD').onclick = () => { S.detail = null; $('#detail').innerHTML = ''; };
+  bindTrack(m);
+  if ($('#ok')) $('#ok').onclick = () => reviewPlan(m, 'da_duyet', $('#cmt').value);
+  if ($('#rev')) $('#rev').onclick = () => reviewPlan(m, 'nhap', $('#cmt').value);
+  if ($('#rstPin')) $('#rstPin').onclick = async () => { try { await S.db.doc('pins/' + m).delete(); $('#rstPin').replaceWith(Object.assign(document.createElement('span'), { textContent: 'Đã xóa PIN – lần đăng nhập tới ' + m + ' sẽ đặt PIN mới.' })); } catch (e) { setSync('Chưa đặt lại được PIN', 'err'); } };
+}
+function latestCell(ma) {
+  const d = S.track[ma]; if (!d || !d.latest || KPI.GROUPS.includes(ma)) return '<span class="muted">–</span>';
+  const tr = KPI.track(trackBase(ma), ((d.ky || {})[d.latest] || {}).values || {}, d.latest);
+  return `<b>${f(tr.Hm)}</b><small class="muted" style="display:block">đến ${KY[d.latest].slice(0, 5)}</small>`;
+}
+function srcNote(m, r) {
+  const note = t => `<small class="muted" style="display:block">${t}</small>`;
+  if (m === 'THAMNN' && isNum(r.bs) && r.bs) return note('gồm phần còn lại ' + fnum(r.ct, r.bs));
+  if (r.src === 'all') return note('tổng tất cả CB');
+  if (r.src === 'members') return note(KPI.GROUP_RULE[m].members.join(' + '));
+  if (r.src === 'manual') return note('nhập thủ công');
+  return '';
+}
+function extraLeader(cur) {
+  const hu = cur.cache.HUYENHLL, nii = hu.rows.find(r => r.ct.ma === 'nii'), c = nii.ct, pl = S.plans.HUYENHLL || {}, a = (pl.abs || {}).nii;
+  const td = S.solieu.THAODTV, nTd = Object.values((td || {}).values || {}).filter(v => isNum(v.ke_hoach_nam)).length;
+  return `<div class="cards" style="grid-template-columns:repeat(auto-fit,minmax(300px,1fr))">
+    <div class="panel" style="display:flex;flex-direction:column;gap:10px">
+      <div class="sec-h"><h3>Thu thuần lãi nhóm HUYENHLL – nhập thủ công</h3><span class="pill b">TS ${nii.w}</span></div>
+      <p class="small muted">Không tự cộng từ cán bộ. Mặc định lấy số file 30/9; sửa khi có số chính xác.</p>
+      <div class="bqin">
+        <label class="bqf"><span>Thực hiện 30/9 (triệu đồng)</span><input type="number" step="any" id="niiE" value="${isNum(nii.E) ? +nii.E.toFixed(3) : ''}"></label>
+        <label class="bqf"><span>Kế hoạch năm (triệu đồng)</span><input type="number" step="any" id="niiF" value="${isNum(nii.F) ? +nii.F.toFixed(3) : ''}"></label>
+        <label class="bqf"><span>Dự kiến phát sinh thêm Q4 (triệu đồng)</span><input type="number" step="any" id="niiA" value="${isNum(a) ? a : ''}" placeholder="${isNum(nii.E) ? +(Math.max(0, nii.E) / 3).toFixed(1) + ' (giữ tốc độ)' : ''}"></label>
+      </div>
+      <div class="row small"><span>%HT 30/9 <b>${pct(nii.G)}</b></span><span>%HT dự kiến <b>${pct(nii.K)}</b></span><span>Điểm dự kiến <b>${f(nii.L)}</b> / ${f(nii.w * nii.cap, 1)}</span></div>
+      <div class="row"><button class="btn pri sm" id="niiSave">Lưu thu thuần lãi nhóm</button><span class="small muted" id="niiMsg"></span></div>
+    </div>
+    <div class="panel" style="display:flex;flex-direction:column;gap:10px">
+      <div class="sec-h"><h3>THAODTV – cán bộ theo dõi chỉ tiêu</h3><span class="pill ${nTd ? 'g' : 'n'}">${nTd ? nTd + ' chỉ tiêu đã nhập' : 'Chưa nhập số liệu'}</span></div>
+      <p class="small muted">Không chấm KPI riêng. Số của THAODTV được cộng vào nhóm HUYENHLL (Nguồn vốn, CASA cộng vào tổng tất cả CB) và vào kế hoạch Phòng.</p>
+      <div class="row"><button class="btn sm" data-open="THAODTV">Xem chỉ tiêu & theo dõi của THAODTV</button></div>
+    </div></div>`;
+}
+function bindExtraLeader() {
+  const b = $('#niiSave'); if (!b) return;
+  b.onclick = async () => {
+    const num = id => { const v = $(id).value; return v === '' ? null : +v; };
+    const E = num('#niiE'), F = num('#niiF'), A = num('#niiA');
+    if (!isNum(F) || F <= 0) { $('#niiMsg').textContent = 'Cần nhập Kế hoạch năm lớn hơn 0.'; return; }
+    S.solieu.HUYENHLL = { values: { nii: { thuc_hien: E, ke_hoach_nam: F } }, updatedAt: new Date().toISOString(), by: S.me };
+    KPI.setSoLieu('HUYENHLL', 'nii', { thuc_hien: E, ke_hoach_nam: F });
+    const pl = JSON.parse(JSON.stringify(S.plans.HUYENHLL || {})); pl.rates = pl.rates || {}; pl.abs = pl.abs || {}; pl.mode = pl.mode || {};
+    if (isNum(A)) { pl.abs.nii = A; pl.mode.nii = 'abs'; pl.rates.nii = KPI.rateFromAbs('HUYENHLL', 'nii', A); } else { delete pl.abs.nii; delete pl.rates.nii; delete pl.mode.nii; }
+    pl.updatedAt = new Date().toISOString(); S.plans.HUYENHLL = pl;
+    await saveDoc('so_lieu/HUYENHLL', S.solieu.HUYENHLL); await saveDoc('plans/HUYENHLL', pl);
+    render();
+  };
+}
+
+/* ---------- THAODTV: cán bộ theo dõi chỉ tiêu, không chấm KPI ---------- */
+function renderTrackOnly() {
+  const ma = S.me, rowsCT = CT.filter(c => c.cong_len_nhom && c.loai !== 'binary');
+  app.innerHTML = `
+    <div class="sec-h"><div><h1>Chỉ tiêu của tôi</h1><div class="muted small">${ma} · Nhóm HUYENHLL · không chấm KPI riêng – số liệu được cộng vào KPI nhóm HUYENHLL và Phòng</div></div></div>
+    <div class="note small">Ba bước: <b>1.</b> nhập Thực hiện 30/9 và Kế hoạch năm các chỉ tiêu được giao, đúng như file cập nhật kết quả 9 tháng (chỉ tiêu không được giao để trống) → <b>2.</b> nhập số dự kiến tăng thêm trong Q4 → <b>3.</b> hằng tháng nhập số thực hiện mới nhất để theo dõi.</div>
+    <section class="panel" style="display:flex;flex-direction:column;gap:10px"><h2>1. Số liệu 9 tháng được giao</h2>
+      <div class="tw"><table><thead><tr><th>Chỉ tiêu</th><th>ĐVT</th><th class="n">Thực hiện 30/9</th><th class="n">Kế hoạch năm</th><th class="n">%HT 30/9</th></tr></thead><tbody>
+      ${rowsCT.map(c => { const s = BY[ma].so_lieu[c.ma] || {}; return `<tr data-ct="${c.ma}"><td class="ctn">${esc(shortName(c))}</td><td class="small muted">${esc(c.dvt)}</td>
+        <td class="n"><input type="number" step="any" inputmode="decimal" class="tin${isNum(s.thuc_hien) ? ' entered' : ''}" data-sl="thuc_hien" value="${isNum(s.thuc_hien) ? s.thuc_hien : ''}" aria-label="Thực hiện ${esc(shortName(c))}"></td>
+        <td class="n"><input type="number" step="any" inputmode="decimal" class="tin${isNum(s.ke_hoach_nam) ? ' entered' : ''}" data-sl="ke_hoach_nam" value="${isNum(s.ke_hoach_nam) ? s.ke_hoach_nam : ''}" aria-label="Kế hoạch năm ${esc(shortName(c))}"></td>
+        <td class="n" data-g>${tdPct(ma, c)}</td></tr>`; }).join('')}
+      </tbody></table></div></section>
+    <section class="panel" id="tdPlan" style="display:flex;flex-direction:column;gap:10px">${tdPlanHtml(ma)}</section>
+    <div id="tdTrack">${trackBlock(ma, true)}</div>`;
+  app.querySelectorAll('[data-sl]').forEach(i => i.oninput = () => {
+    const ct = i.closest('tr').dataset.ct, v = i.value === '' ? null : +i.value;
+    KPI.setSoLieu(ma, ct, { [i.dataset.sl]: v }); i.classList.toggle('entered', v != null);
+    i.closest('tr').querySelector('[data-g]').innerHTML = tdPct(ma, CT.find(c => c.ma === ct));
+    // tỷ lệ đã quy từ số tăng thêm phụ thuộc KH → tính lại
+    Object.keys(S.draft.abs || {}).forEach(k => { const r = KPI.rateFromAbs(ma, k, S.draft.abs[k]); if (isNum(r)) S.draft.rates[k] = r; else delete S.draft.rates[k]; });
+    refreshTd(ma);
+    debounce('sl' + ma, async () => {
+      const values = {}; Object.entries(BY[ma].so_lieu).forEach(([k, s]) => { if (isNum(s.thuc_hien) || isNum(s.ke_hoach_nam)) values[k] = { thuc_hien: s.thuc_hien ?? null, ke_hoach_nam: s.ke_hoach_nam ?? null }; });
+      S.solieu[ma] = { values, updatedAt: new Date().toISOString(), by: S.me };
+      await saveDoc('so_lieu/' + ma, S.solieu[ma]); savePlan();
+    });
+  });
+  bindTdPlan(ma); bindTrack(ma);
+}
+const tdPct = (ma, c) => { const s = BY[ma].so_lieu[c.ma] || {}; return s.ke_hoach_nam ? `<span class="pill ${colorOf(N(s.thuc_hien) / s.ke_hoach_nam)}">${pct(N(s.thuc_hien) / s.ke_hoach_nam)}</span>` : '<span class="muted small">không giao</span>'; };
+function tdPlanHtml(ma) {
+  const rows = CT.filter(c => c.cong_len_nhom && c.loai !== 'binary' && (BY[ma].so_lieu[c.ma] || {}).ke_hoach_nam);
+  if (!rows.length) return '<h2>2. Kế hoạch Q4</h2><p class="muted small">Nhập Kế hoạch năm ở bước 1 để lập kế hoạch Q4.</p>';
+  const ev = KPI.evalPersonal(ma, { [ma]: { rates: S.draft.rates } });
+  return `<h2>2. Kế hoạch Q4</h2><p class="small muted">Nhập số dự kiến tăng thêm đến 31/12 (để trống: tạm tính theo tốc độ 9 tháng).</p>
+    <div class="tw"><table><thead><tr><th>Chỉ tiêu</th><th class="n">Dự kiến tăng thêm</th><th>Đơn vị</th><th class="n">Kết quả cần đạt</th><th class="n">%HT dự kiến</th></tr></thead><tbody>
+    ${rows.map(c => { const r = ev.rows.find(x => x.ct.ma === c.ma), a = S.draft.abs[c.ma]; return `<tr data-ct="${c.ma}"><td class="ctn">${esc(shortName(c))}</td>
+      <td class="n"><input type="number" step="any" inputmode="decimal" class="tin${isNum(a) ? ' entered' : ''}" data-tabs value="${isNum(a) ? a : ''}" placeholder="${isNum(r.J) ? +r.J.toFixed(2) : ''}" aria-label="Dự kiến tăng thêm ${esc(shortName(c))}"></td>
+      <td class="small muted">${esc(ABS_UNIT(c))}</td><td class="n" data-t>${fnum(c, N(r.E) + N(r.J))}</td><td class="n" data-k>${pct(r.K)}</td></tr>`; }).join('')}
+    </tbody></table></div>`;
+}
+function bindTdPlan(ma) {
+  app.querySelectorAll('[data-tabs]').forEach(i => i.oninput = () => {
+    const ct = i.closest('tr').dataset.ct;
+    if (i.value === '') { delete S.draft.abs[ct]; delete S.draft.rates[ct]; delete S.draft.mode[ct]; i.classList.remove('entered'); }
+    else { S.draft.abs[ct] = +i.value; S.draft.mode[ct] = 'abs'; const r = KPI.rateFromAbs(ma, ct, +i.value); if (isNum(r)) S.draft.rates[ct] = r; i.classList.add('entered'); }
+    const r = KPI.evalPersonal(ma, { [ma]: { rates: S.draft.rates } }).rows.find(x => x.ct.ma === ct);
+    i.closest('tr').querySelector('[data-t]').textContent = fnum(r.ct, N(r.E) + N(r.J)); i.closest('tr').querySelector('[data-k]').textContent = pct(r.K);
+    queueSave(); $('#tdTrack').innerHTML = trackBlock(ma, true); bindTrack(ma);
+  });
+}
+function refreshTd(ma) { $('#tdPlan').innerHTML = tdPlanHtml(ma); bindTdPlan(ma); $('#tdTrack').innerHTML = trackBlock(ma, true); bindTrack(ma); }
+
+const stTxt = pl => { const s = STATUS[pl.status || 'nhap']; return pl.updatedAt ? `<span class="pill ${s[1]}">${s[0]}</span><span class="muted">cập nhật ${new Date(pl.updatedAt).toLocaleString('vi-VN')}</span>` : '<span class="pill n">Chưa lập</span>'; };
+
+/* ---------- ca kiểm thử mục 9 (chạy trong trình duyệt) ---------- */
+function runTests() {
+  const T = SEED.kiem_thu, exp = T.tong_hop;
+  // đối chiếu theo đúng cách cộng của file Excel gốc (mục 9), trên số liệu gốc
+  const keepNii = { ...BY.HUYENHLL.so_lieu.nii }; KPI.setSoLieu('HUYENHLL', 'nii', SEED_SL.HUYENHLL.nii); KPI.setRule('excel');
+  const s = KPI.summary({}); let ok = 0, tot = 0; const bad = [];
+  const ck = (n, g, x, tol = 0.006) => { tot++; if (Math.abs(g - x) <= tol) ok++; else bad.push(n + ': ' + f(g) + ' ≠ ' + f(x)); };
+  s.list.forEach(e => { const x = exp[e.ma]; ck(e.ma + ' điểm 30/9', e.t.H, x[0]); ck(e.ma + ' TS', e.t.wData, x[1], 0); ck(e.ma + ' giữ tốc độ', e.t.L, x[2]); ck(e.ma + ' đề xuất', e.t.X, x[3]); });
+  const rates = { casa: .3, manu: .5, phibv: 2.5 }, p = KPI.plan('THUANNH', 80, rates), r = m => p.rows.find(o => o.ct.ma === m);
+  ck('Gợi ý A', p.SA, T.thuannh.A); ck('Gợi ý B', p.SB, T.thuannh.B); ck('Tỷ lệ chọn', p.SX, T.thuannh.chon);
+  T.thuannh.goi_y_b.forEach(([m, v]) => ck('B ' + m, r(m).pB * 100, v, .06));
+  ck('CASA GAP', r('casa').U, T.thuannh.casa_gap); ck('CASA BQ Q4', r('casa').todo, T.thuannh.casa_bq);
+  ck('KPI Phòng sau KH THUANNH', KPI.summary({ THUANNH: { rates } }).list[0].t.L, T.thuannh.phong_sau);
+  KPI.setRule('moi'); KPI.setSoLieu('HUYENHLL', 'nii', keepNii);
+  const sm = KPI.summary({}).list[0]; ck('Cách cộng mới: Phòng 30/9', sm.t.H, exp.THAMNN[0]); ck('Cách cộng mới: Phòng giữ tốc độ', sm.t.L, exp.THAMNN[2], .05);
+  $('#testOut').innerHTML = `<div class="${bad.length ? 'warnbox' : 'note'}"><b>${ok}/${tot} phép kiểm khớp</b> với mục 9 (10 dòng tổng hợp × 4 chỉ số, ca THUANNH mục tiêu 80: Gợi ý A/B, tỷ lệ chọn, 7 tỷ lệ Gợi ý B, CASA, KPI Phòng sau kế hoạch) theo cách cộng của file Excel gốc, và số Phòng theo cách cộng nhóm mới. Chạy trên số liệu gốc, không ảnh hưởng kế hoạch đã lưu.${bad.length ? '<br>' + bad.map(esc).join('<br>') : ''}</div>`;
+}
+
+
+/* điện thoại: gắn nhãn cột cho từng ô để bảng hiển thị dạng thẻ */
+function cardify(root) {
+  (root || document).querySelectorAll('.tw table').forEach(t => {
+    const ths = [...t.querySelectorAll('thead th')].map(th => th.textContent.replace(/\s+/g, ' ').trim());
+    if (!ths.length) return;
+    t.classList.add('cf');
+    t.querySelectorAll('tbody tr, tfoot tr').forEach(tr => { let i = 0; [...tr.children].forEach(td => { const span = +td.getAttribute('colspan') || 1; if (!td.hasAttribute('data-l')) td.setAttribute('data-l', ths[i] || ''); i += span; }); });
+  });
+}
+new MutationObserver(() => cardify(app)).observe(app, { childList: true, subtree: true });
+addEventListener('beforeunload', () => { if (S.dirty) savePlan(); });
+if (S.pendingMe) { S.me = S.pendingMe; S.draft = mkDraft(S.me); S.view = KPI.PERSONAL.includes(S.me) ? 'me' : 'sum'; }
+render();
+connect();
+};
+</script>
+<script src="boot.js"></script></body></html>
