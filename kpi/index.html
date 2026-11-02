@@ -1,4 +1,4 @@
-<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0e2a47"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="KPI Phòng"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style></head><body><script src="config.js?v=202610300153"></script><script src="store-shim.js?v=202610300153"></script><script src="data.enc.js?v=202610300153"></script><title>KPI Q4 Phòng 2026</title>
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0e2a47"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="KPI Phòng"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style></head><body><script src="config.js?v=202611020323"></script><script src="store-shim.js?v=202611020323"></script><script src="data.enc.js?v=202611020323"></script><title>KPI Q4 Phòng 2026</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
@@ -71,7 +71,7 @@ main{max-width:1180px;margin:0 auto;padding-block:20px 48px;padding-left:max(16p
 .pin{display:flex;flex-direction:column;gap:12px;align-items:flex-start}
 .pin input{font-size:1.6rem;letter-spacing:.5em;width:9ch;text-align:center;padding:8px;border:1px solid var(--line);border-radius:10px;background:var(--surface)}
 /* stepper */
-.steps{display:grid;grid-template-columns:repeat(5,1fr);gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:6px}
+.steps{display:grid;grid-template-columns:repeat(6,1fr);gap:6px;background:var(--surface);border:1px solid var(--line);border-radius:var(--r);padding:6px}
 .step{border:0;background:transparent;border-radius:9px;padding:10px 8px;min-height:52px;text-align:left;display:flex;gap:10px;align-items:center;color:var(--ink-2)}
 .step i{font-style:normal;flex:none;width:28px;height:28px;border-radius:50%;display:grid;place-items:center;background:var(--surface-2);font-weight:700;font-size:.85rem}
 .step[aria-current="step"]{background:var(--accent-soft);color:var(--ink)}
@@ -156,6 +156,63 @@ textarea{width:100%;min-height:96px;padding:10px;border:1px solid var(--line);bo
 .tab{border:1px solid var(--line);background:var(--surface);border-radius:99px;padding:7px 14px;min-height:38px;font-size:.88rem}
 .tab[aria-selected="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
 .explain{font-size:.86rem;color:var(--ink-2);border-left:3px solid var(--accent);padding:4px 0 4px 12px}
+/* Bảng theo dõi: dải xanh đậm + thẻ chỉ tiêu (như trang Quản lý phí) */
+.dash{display:flex;flex-direction:column;gap:14px}
+.band{background:linear-gradient(160deg,var(--band) 0%,var(--band-2) 100%);color:var(--band-ink);border-radius:18px;padding:18px}
+.band-in{display:flex;flex-direction:column;gap:16px}
+.kpis{display:grid;grid-template-columns:1.3fr 1fr 1fr 1fr;gap:10px}
+.kpi{border-radius:14px;padding:14px 16px;background:rgba(255,255,255,.07);border:1px solid rgba(255,255,255,.12);min-width:0}
+.kpi span{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--band-muted);font-weight:600}
+.kpi b{display:block;font-size:1.8rem;font-weight:700;margin-top:2px;font-variant-numeric:tabular-nums}
+.kpi small{display:block;font-size:.8rem;color:var(--band-muted)}
+.kpi.hero{background:var(--accent);border-color:transparent;color:var(--accent-ink)}
+.kpi.hero span,.kpi.hero small{color:var(--accent-ink);opacity:.85}
+@media (max-width:800px){.kpis{grid-template-columns:1fr 1fr}.kpi.hero{grid-column:1/-1}}
+.btn.ghost-b{background:transparent;color:var(--band-ink);border-color:rgba(255,255,255,.3)}
+.btn.ghost-b:hover{border-color:var(--band-ink)}
+.chips-st{gap:6px}
+.legend-m{display:flex;flex-wrap:wrap;gap:4px 12px;align-items:center;font-size:.78rem;color:var(--ink-2);margin-left:auto}
+.legend-m i{display:inline-block;margin-right:-6px}
+.lg-fill{width:16px;height:8px;border-radius:4px;background:var(--accent)}
+.lg-309{width:2px;height:12px;background:var(--ink-3)}
+.lg-mile{width:0;height:0;border-left:5px solid transparent;border-right:5px solid transparent;border-top:7px solid var(--ink)}
+.lg-target{width:10px;height:10px;border-radius:50%;background:var(--surface);border:2.5px solid var(--ink)}
+.lg-kh{width:0;height:12px;border-left:2px dashed var(--ink-3)}
+.dcards{display:grid;grid-template-columns:repeat(auto-fill,minmax(310px,1fr));gap:12px}
+.dc{background:var(--surface);border:1px solid var(--line);border-top:4px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0;box-shadow:var(--shadow)}
+.dc.st-r{border-top-color:var(--bad)} .dc.st-y{border-top-color:var(--warn)} .dc.st-g{border-top-color:var(--good)}
+.dc header{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.dc header b{display:block;line-height:1.3}
+.dc header small{color:var(--ink-3);font-size:.78rem}
+.dc-nums{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.dc-nums label{display:block;font-size:.7rem;color:var(--ink-3)}
+.dc-nums b{font-size:1.15rem;font-variant-numeric:tabular-nums;overflow-wrap:anywhere}
+.meter{position:relative;height:22px;margin:4px 0}
+.m-track{position:absolute;left:0;right:0;top:7px;height:8px;border-radius:4px;background:var(--surface-2);border:1px solid var(--line)}
+.m-fill{position:absolute;top:7px;height:8px;border-radius:4px;background:var(--accent)}
+.m-fill.s-r{background:var(--bad)} .m-fill.s-y{background:var(--warn)} .m-fill.s-n{background:var(--ink-3)}
+.meter i{position:absolute;transform:translateX(-50%)}
+.m-309{top:3px;width:2px;height:16px;background:var(--ink-3)}
+.m-kh{top:0;height:22px;border-left:2px dashed var(--ink-3);width:0}
+.m-mile{top:-4px;width:0;height:0;border-left:6px solid transparent;border-right:6px solid transparent;border-top:8px solid var(--ink)}
+.m-target{top:4px;width:14px;height:14px;border-radius:50%;background:var(--surface);border:3px solid var(--ink)}
+.dc-todo{font-size:.88rem;color:var(--ink-2)}
+.spark{width:100%;height:auto;display:block}
+.spark text{fill:var(--ink-3);font-size:10px;font-family:var(--f-body)}
+.spark .sp-end{fill:var(--ink-2);font-weight:600}
+.spark .sp-end.act{fill:var(--ink)}
+.spark .sp-base{stroke:var(--line);stroke-width:1}
+.spark .sp-plan{stroke:var(--ink-3);stroke-width:2;stroke-dasharray:5 4;fill:none}
+.spark .sp-act{stroke:var(--accent);stroke-width:2.5;fill:none;stroke-linejoin:round}
+.spark .sp-dot{fill:var(--accent);stroke:var(--surface);stroke-width:2}
+.dc footer{display:flex;justify-content:space-between;gap:8px;flex-wrap:wrap;font-size:.8rem;color:var(--ink-3);border-top:1px solid var(--line);padding-top:8px}
+.dc footer b{color:var(--ink)}
+.pick{display:inline-flex;align-items:center;gap:6px;font-size:.8rem;cursor:pointer;white-space:nowrap}
+.pick input{width:20px;height:20px;accent-color:var(--accent);margin:0}
+table.bulk td{vertical-align:top}
+table.bulk .tin{width:9em}
+.bkcap{display:block;font-size:.72rem;color:var(--ink-3);margin-top:3px;white-space:nowrap}
+.bkcap.bad{color:var(--bad)}
 .tin{width:7.5em;padding:6px 8px;border:1px solid var(--line);border-radius:8px;background:var(--surface);text-align:right;font-variant-numeric:tabular-nums}
 .tin.entered{border-color:var(--accent);background:var(--accent-soft)}
 .divider{border-top:1px solid var(--line)}
@@ -164,7 +221,8 @@ textarea{width:100%;min-height:96px;padding:10px;border:1px solid var(--line);bo
 /* điện thoại: bảng → thẻ (nhãn cột lấy từ tiêu đề bảng), thanh trên gọn */
 @media (max-width:640px){
   .top-in{padding-block:8px;gap:8px;flex-wrap:nowrap}
-  .brand{min-width:0;white-space:nowrap}
+  .brand{min-width:0;white-space:nowrap;flex-shrink:0}
+  .sync{min-width:0}
   .brand small{display:none}
   .who .btn.sm{white-space:nowrap}
   .who .btn.sm{min-height:36px;padding:4px 10px;font-size:.82rem}
@@ -603,7 +661,7 @@ function queueSave() {
 async function savePlan(extra) {
   clearTimeout(saveTimer);
   const d = S.draft, ma = S.me;
-  const body = { rates: d.rates, mode: d.mode, abs: d.abs, bq: d.bq, target: isNum(d.target) ? d.target : null, note: d.note || '', status: d.status || 'nhap', updatedAt: new Date().toISOString(), ...(extra || {}) };
+  const body = { rates: d.rates, mode: d.mode, abs: d.abs, bq: d.bq, theo_doi: d.theo_doi, target: isNum(d.target) ? d.target : null, note: d.note || '', status: d.status || 'nhap', updatedAt: new Date().toISOString(), ...(extra || {}) };
   if (!S.db) { S.plans[ma] = { ...(S.plans[ma] || {}), ...body }; S.dirty = false; setSync('Chưa kết nối kho chung – kế hoạch chỉ tạm trong phiên này', 'err'); return; }
   try {
     // ghi cả tài liệu (giữ nhận xét/duyệt của lãnh đạo) để tỷ lệ đã xóa không còn sót lại
@@ -619,7 +677,7 @@ async function reviewPlan(ma, status, comment) {
 
 /* plans dạng engine dùng (chỉ tỷ lệ đã nhập) */
 const enginePlans = (override) => { const o = {}; Object.keys(S.plans).forEach(k => o[k] = { rates: S.plans[k].rates || {} }); if (override) Object.assign(o, override); return o; };
-const mkDraft = ma => { const p = S.plans[ma] || {}; const bq = {}; Object.keys(p.bq || {}).forEach(k => bq[k] = { ...p.bq[k] }); return { rates: { ...(p.rates || {}) }, mode: { ...(p.mode || {}) }, abs: { ...(p.abs || {}) }, bq, target: isNum(p.target) ? p.target : null, note: p.note || '', status: p.status || 'nhap' }; };
+const mkDraft = ma => { const p = S.plans[ma] || {}; const bq = {}; Object.keys(p.bq || {}).forEach(k => bq[k] = { ...p.bq[k] }); return { rates: { ...(p.rates || {}) }, mode: { ...(p.mode || {}) }, abs: { ...(p.abs || {}) }, bq, target: isNum(p.target) ? p.target : null, note: p.note || '', status: p.status || 'nhap', theo_doi: Array.isArray(p.theo_doi) ? p.theo_doi.slice() : null }; };
 /* tỷ lệ HT từ chế độ nhập: 'pct' (tỷ lệ), 'abs' (số tuyệt đối tăng thêm), 'bq' (dự phóng số dư – Dư nợ, Nguồn vốn) */
 function syncRate(ct) {
   const d = S.draft, m = d.mode[ct] || 'pct';
@@ -636,6 +694,7 @@ function render() {
   if (S.me) $('#whoName').textContent = S.me + ' · ' + (BY[S.me].ho_ten.includes('–') ? 'Lãnh đạo Phòng' : BY[S.me].ho_ten);
   if (!S.me) return renderLogin();
   if (TRACK_ONLY.includes(S.me)) return renderTrackOnly();
+  if (S.me === 'THAMNN' && S.view === 'bulk') return renderBulk();
   if (KPI.PERSONAL.includes(S.me) && S.view !== 'sum') return renderPersonal();
   return renderLeader();
 }
@@ -678,7 +737,8 @@ function renderLogin() {
   app.querySelectorAll('.pin input').forEach(i => i.onkeydown = e => { if (e.key === 'Enter') go.click(); });
 }
 function login(ma) {
-  S.me = ma; S.step = 1; S.draft = mkDraft(ma); S.dirty = false;
+  // đã lập kế hoạch → mở thẳng Bảng theo dõi
+  S.me = ma; S.step = S.plans[ma] && isNum(S.plans[ma].target) ? 6 : 1; S.draft = mkDraft(ma); S.dirty = false;
   S.view = KPI.PERSONAL.includes(ma) ? 'me' : 'sum'; S.detail = null;
   try { sessionStorage.setItem('kpi_me', ma); } catch (e) {}
   render(); scrollTo(0, 0);
@@ -689,7 +749,7 @@ $('#logout').onclick = () => { if (S.dirty) savePlan(); S.me = null; loginSel = 
 const colorOf = g => !isNum(g) ? 'n' : (g < 0.5 ? 'r' : (g < 1 ? 'y' : 'g'));
 function renderPersonal() {
   const ma = S.me, d = S.draft, P = KPI.plan(ma, d.target, d.rates);
-  const stepNames = ['Tổng quan', 'Đặt mục tiêu', 'Chọn tỷ lệ HT', 'Kết quả kế hoạch', 'Theo dõi thực hiện'];
+  const stepNames = ['Tổng quan', 'Đặt mục tiêu', 'Chọn tỷ lệ HT', 'Kết quả kế hoạch', 'Theo dõi thực hiện', 'Bảng theo dõi'];
   const st = STATUS[(S.plans[ma] || {}).status || 'nhap'];
   let body = '';
   if (S.step === 1) body = stepOverview(P);
@@ -697,6 +757,7 @@ function renderPersonal() {
   if (S.step === 3) body = stepRates(P);
   if (S.step === 4) body = stepResult(P);
   if (S.step === 5) body = trackBlock(S.me, true);
+  if (S.step === 6) body = dashBlock(S.me);
   app.innerHTML = `
     <div class="sec-h"><div><h1>Kế hoạch KPI của tôi</h1><div class="muted small">${esc(BY[ma].ho_ten)} · ${esc(BY[ma].vi_tri)}${KPI.groupOf(ma) ? ' · Nhóm ' + KPI.groupOf(ma) : ''}</div></div>
       <div class="row"><span class="pill ${S.plans[ma] ? st[1] : 'n'}">${S.plans[ma] ? st[0] : 'Chưa lập kế hoạch'}</span>
@@ -705,7 +766,7 @@ function renderPersonal() {
     ${body}
     <div class="row" style="justify-content:space-between">
       <button class="btn" id="prev" ${S.step === 1 ? 'disabled' : ''}>← Quay lại</button>
-      ${S.step < 5 ? `<button class="btn pri" id="next">Tiếp: ${stepNames[S.step]} →</button>` : ''}
+      ${S.step < 6 ? `<button class="btn pri" id="next">Tiếp: ${stepNames[S.step]} →</button>` : ''}
     </div>`;
   app.querySelectorAll('.step').forEach(b => b.onclick = () => go(+b.dataset.s));
   $('#prev').onclick = () => go(S.step - 1);
@@ -713,7 +774,7 @@ function renderPersonal() {
   $('#toSum').onclick = () => { S.view = 'sum'; render(); };
   bindStep(P);
 }
-function go(s) { S.step = Math.max(1, Math.min(5, s)); render(); scrollTo({ top: 0 }); }
+function go(s) { S.step = Math.max(1, Math.min(6, s)); render(); scrollTo({ top: 0 }); }
 
 function stepOverview(P) {
   const rows = P.rows.filter(o => o.w != null);
@@ -914,6 +975,7 @@ function bindStep(P) {
     $('#send').onclick = async () => { S.draft.status = 'da_gui'; await savePlan({ status: 'da_gui', guiLuc: new Date().toISOString() }); render(); };
   }
   if (S.step === 5) bindTrack(S.me);
+  if (S.step === 6) bindDash(S.me);
 }
 
 /* ---------- Theo dõi thực hiện gần nhất ---------- */
@@ -957,14 +1019,15 @@ function trackStats(tr, hasW, m) {
 }
 function trackBlock(ma, forceEdit) {
   const m = trkKyOf(ma), base = trackBase(ma), tr = KPI.track(base, trkVals(ma, m), m);
-  const hasW = base.some(b => b.w != null), ed = forceEdit || canTrack(ma), doc = S.track[ma] || {};
+  const hasW = base.some(b => b.w != null), ed = forceEdit || canTrack(ma), doc = S.track[ma] || {}, pick = ma === S.me && KPI.PERSONAL.includes(ma);
   return `<section class="trk" data-trk="${ma}" style="display:flex;flex-direction:column;gap:14px">
     <div class="sec-h"><div><h2>Theo dõi thực hiện${ma === 'THAMNN' ? ' của Phòng' : TRACK_ONLY.includes(ma) || ma === S.me ? '' : ' – ' + ma}</h2>
       <p class="muted small">${ed ? 'Nhập số Thực hiện lũy kế mới nhất (cùng cách tính với số 30/9). ' : ''}Hệ thống tính lại %HT, điểm, GAP còn lại so với kế hoạch và việc cần làm cho các tháng còn lại.${doc.updatedAt ? ` Cập nhật gần nhất ${new Date(doc.updatedAt).toLocaleString('vi-VN')} bởi ${esc(doc.by || '')}.` : ''}</p></div>
       <div class="tabs" role="tablist">${[10, 11, 12].map(k => `<button class="tab" role="tab" data-ky="${k}" aria-selected="${k === m}">Đến ${KY[k]}</button>`).join('')}</div></div>
     <div data-stats>${trackStats(tr, hasW, m)}</div>
-    <div class="tw"><table><thead><tr><th>Chỉ tiêu</th><th class="n">TH 30/9</th><th class="n">TH đến ${KY[m].slice(0, 5)}</th><th class="n">%HT</th>${hasW ? '<th class="n">Điểm</th>' : ''}<th class="n">KH cần đạt 31/12</th><th class="n">Tiến độ đóng GAP Q4</th><th class="n">GAP còn lại</th><th>Việc cần làm còn lại</th><th class="n">${hasW ? 'Điểm nếu giữ tốc độ' : '%HT nếu giữ tốc độ'}</th></tr></thead><tbody>
-    ${tr.rows.map(o => { const c = o.ct, k = trackCells(o); return `<tr data-ct="${c.ma}"><td class="ctn">${esc(shortName(c))}<small>${esc(c.dvt)}</small></td><td class="n">${fnum(c, o.E)}</td>
+    ${pick ? '<div class="note small">Tích <b>☑</b> ở cột “Theo dõi” để chọn chỉ tiêu đưa lên <b>Bảng theo dõi</b> (bước 6).</div>' : ''}
+    <div class="tw"><table><thead><tr>${pick ? '<th>Theo dõi</th>' : ''}<th>Chỉ tiêu</th><th class="n">TH 30/9</th><th class="n">TH đến ${KY[m].slice(0, 5)}</th><th class="n">%HT</th>${hasW ? '<th class="n">Điểm</th>' : ''}<th class="n">KH cần đạt 31/12</th><th class="n">Tiến độ đóng GAP Q4</th><th class="n">GAP còn lại</th><th>Việc cần làm còn lại</th><th class="n">${hasW ? 'Điểm nếu giữ tốc độ' : '%HT nếu giữ tốc độ'}</th></tr></thead><tbody>
+    ${tr.rows.map(o => { const c = o.ct, k = trackCells(o); return `<tr data-ct="${c.ma}">${pick ? `<td><label class="pick"><input type="checkbox" data-pick="${c.ma}" ${followed(ma).includes(c.ma) ? 'checked' : ''} aria-label="Theo dõi ${esc(shortName(c))}"><span>Theo dõi</span></label></td>` : ''}<td class="ctn">${esc(shortName(c))}<small>${esc(c.dvt)}</small></td><td class="n">${fnum(c, o.E)}</td>
       <td class="n">${ed ? `<input type="number" inputmode="decimal" step="any" class="tin${isNum(o.Em) ? ' entered' : ''}" data-tin="${c.ma}" value="${isNum(o.Em) ? o.Em : ''}" placeholder="${isNum(o.E) ? +o.E.toFixed(3) : ''}" aria-label="Thực hiện mới nhất ${esc(shortName(c))}">` : fnum(c, o.Em)}</td>
       <td class="n" data-k="g">${k.g}</td>${hasW ? `<td class="n" data-k="h">${k.h}</td>` : ''}<td class="n" data-k="t">${k.t}</td><td class="n" data-k="p">${k.p}</td><td class="n" data-k="gap">${k.gap}</td><td data-k="todo">${k.todo}</td><td class="n" data-k="pace">${k.pace}</td></tr>`; }).join('')}
     </tbody></table></div>
@@ -975,6 +1038,10 @@ function bindTrack(ma) {
   const box = app.querySelector(`[data-trk="${CSS.escape(ma)}"]`); if (!box) return;
   const m = trkKyOf(ma);
   box.querySelectorAll('[data-ky]').forEach(b => b.onclick = () => { S.trkKy[ma] = +b.dataset.ky; render(); });
+  box.querySelectorAll('[data-pick]').forEach(cb => cb.onchange = () => {
+    const set = new Set(followed(ma)); if (cb.checked) set.add(cb.dataset.pick); else set.delete(cb.dataset.pick);
+    S.draft.theo_doi = CT.map(c => c.ma).filter(k => set.has(k)); queueSave();
+  });
   const recompute = () => {
     const base = trackBase(ma), tr = KPI.track(base, trkVals(ma, m), m), hasW = base.some(b => b.w != null);
     box.querySelector('[data-stats]').innerHTML = trackStats(tr, hasW, m);
@@ -993,6 +1060,176 @@ function bindTrack(ma) {
       await saveDoc('thuc_hien/' + ma, body);
     });
   });
+}
+
+/* ---------- Chỉ tiêu cán bộ chọn theo dõi ---------- */
+function followed(ma) {
+  const d = ma === S.me && S.draft ? S.draft.theo_doi : (S.plans[ma] || {}).theo_doi;
+  if (Array.isArray(d)) return d;
+  return trackBase(ma).filter(b => b.w != null && isNum(b.E)).map(b => b.ct.ma); // mặc định: chỉ tiêu được giao đã có số liệu
+}
+
+/* ---------- Bảng theo dõi (bước 6) ---------- */
+const ST = {
+  cham: { lbl: 'Chậm', cls: 'r', ord: 0 }, hoicham: { lbl: 'Hơi chậm', cls: 'y', ord: 1 }, chua: { lbl: 'Chưa có số mới', cls: 'n', ord: 2 },
+  dung: { lbl: 'Đúng tiến độ', cls: 'g', ord: 3 }, dat: { lbl: 'Đã đạt kế hoạch', cls: 'g', ord: 4 }
+};
+const q4Elapsed = () => { const now = new Date(), a = new Date(2026, 9, 1), b = new Date(2027, 0, 1); return Math.max(0, Math.min(1, (now - a) / (b - a))); };
+function statusOf(o, m) {
+  if (isNum(o.gapPlan) && o.gapPlan <= 1e-9) return 'dat';
+  if (o.Em == null) return 'chua';
+  const el = (m - 9) / 3, r = isNum(o.progress) ? o.progress / el : 0;
+  return r >= 1 ? 'dung' : r >= 0.7 ? 'hoicham' : 'cham';
+}
+function meterHtml(o, st) {
+  const vals = [o.E, o.Eu, o.T, o.F].filter(isNum), lo = Math.min(0, ...vals), hi = Math.max(...vals) * 1.06 || 1;
+  const x = v => ((v - lo) / (hi - lo) * 100).toFixed(2) + '%';
+  const mileV = isNum(o.T) && isNum(o.E) ? o.E + (o.T - o.E) * ((o.m - 9) / 3) : null;
+  return `<div class="meter" role="img" aria-label="Thực hiện ${fnum(o.ct, o.Eu)}, kế hoạch ${fnum(o.ct, o.T)}">
+    <div class="m-track"></div>
+    <div class="m-fill s-${ST[st].cls}" style="left:${x(Math.min(0, o.Eu ?? 0))};width:calc(${x(Math.max(o.Eu ?? 0, 0))} - ${x(Math.min(0, o.Eu ?? 0))})"></div>
+    ${isNum(o.F) ? `<i class="m-kh" style="left:${x(o.F)}" title="100% kế hoạch năm"></i>` : ''}
+    ${isNum(o.E) ? `<i class="m-309" style="left:${x(o.E)}" title="Thực hiện 30/9"></i>` : ''}
+    ${isNum(mileV) && st !== 'dat' && o.Em != null ? `<i class="m-mile" style="left:${x(mileV)}" title="Mốc cần đạt đến ${KY[o.m]}"></i>` : ''}
+    ${isNum(o.T) ? `<i class="m-target" style="left:${x(o.T)}" title="Kế hoạch 31/12"></i>` : ''}
+  </div>`;
+}
+function sparkHtml(ma, o) {
+  const ky = (S.track[ma] || {}).ky || {}, pts = [[0, o.E]];
+  [10, 11, 12].forEach(k => { const v = k === o.m ? o.Em : ((ky[k] || {}).values || {})[o.ct.ma]; if (isNum(v)) pts.push([k - 9, v]); });
+  if (!isNum(o.E) || !isNum(o.T) || o.ct.loai === 'binary') return '';
+  const all = [...pts.map(p => p[1]), o.T], lo = Math.min(...all), hi = Math.max(...all), pad = (hi - lo) * .12 || 1;
+  const W = 300, H = 92, L = 8, R = 62, T = 10, B = 20;
+  const X = i => L + i * (W - L - R) / 3, Y = v => T + (H - T - B) * (1 - (v - lo + pad) / (hi - lo + 2 * pad));
+  const lbl = ['30/9', '31/10', '30/11', '31/12'].map((t, i) => `<text x="${X(i)}" y="${H - 5}" text-anchor="${i === 0 ? 'start' : 'middle'}">${t}</text>`).join('');
+  const act = pts.map(p => `${X(p[0]).toFixed(1)},${Y(p[1]).toFixed(1)}`).join(' ');
+  const last = pts[pts.length - 1];
+  return `<svg class="spark" viewBox="0 0 ${W} ${H}" role="img" aria-label="Thực hiện so với đường kế hoạch">
+    <line class="sp-base" x1="${L}" x2="${W - R}" y1="${H - B}" y2="${H - B}"/>
+    <line class="sp-plan" x1="${X(0)}" y1="${Y(o.E)}" x2="${X(3)}" y2="${Y(o.T)}"><title>Đường kế hoạch: ${fnum(o.ct, o.E)} → ${fnum(o.ct, o.T)}</title></line>
+    <text class="sp-end" x="${X(3) + 6}" y="${Y(o.T) + 4}">KH ${fnum(o.ct, o.T)}</text>
+    ${pts.length > 1 ? `<polyline class="sp-act" points="${act}"/>` : ''}
+    ${pts.map(p => `<circle class="sp-dot" cx="${X(p[0])}" cy="${Y(p[1])}" r="4"><title>${['30/9', '31/10', '30/11', '31/12'][p[0]]}: ${fnum(o.ct, p[1])}</title></circle>`).join('')}
+    ${last[0] > 0 ? `<text class="sp-end act" x="${X(last[0]) + 7}" y="${Y(last[1]) - 7}">${fnum(o.ct, last[1])}</text>` : ''}
+    ${lbl}</svg>`;
+}
+function dashBlock(ma) {
+  const m = trkKyOf(ma), base = trackBase(ma), tr = KPI.track(base, trkVals(ma, m), m);
+  const P = KPI.plan(ma, S.draft.target, S.draft.rates), sel = followed(ma);
+  const cards = tr.rows.filter(o => sel.includes(o.ct.ma)).map(o => { o.m = m; o.st = statusOf(o, m); return o; }).sort((a, b) => ST[a.st].ord - ST[b.st].ord);
+  const cnt = k => cards.filter(o => o.st === k).length, el = q4Elapsed();
+  const tgt = isNum(P.target) ? P.target : null;
+  const card = o => { const c = o.ct, st = ST[o.st];
+    return `<article class="dc st-${st.cls}">
+      <header><div><b>${esc(shortName(c))}</b><small>${esc(c.dvt)} · TS ${o.w ?? '–'}</small></div><span class="pill ${st.cls}">${st.lbl}</span></header>
+      <div class="dc-nums"><div><label>Thực hiện ${o.Em != null ? 'đến ' + KY[m].slice(0, 5) : '30/9'}</label><b>${fnum(c, o.Eu)}</b></div>
+        <div><label>Kế hoạch 31/12</label><b>${fnum(c, o.T)}</b></div>
+        <div><label>Còn thiếu</label><b>${isNum(o.gapPlan) ? (o.gapPlan <= 0 ? '0' : fnum(c, o.gapPlan)) : '–'}</b></div></div>
+      ${meterHtml(o, o.st)}
+      <div class="dc-todo">${o.st === 'dat' ? 'Đã đạt mức kế hoạch – giữ vững đến 31/12.' : isNum(o.todo) ? `Cần <b>${fnum(c, o.todo)}</b> ${esc(o.todoUnit)}` : ''}${isNum(o.progress) && o.st !== 'dat' ? ` · đã đóng <b>${pct(o.progress, 0)}</b> GAP Q4` : ''}</div>
+      ${sparkHtml(ma, o)}
+      <footer><span>Điểm hiện tại <b>${o.Hm == null ? '–' : f(o.Hm)}</b></span><span>Nếu đạt kế hoạch <b>${o.Xplan == null ? '–' : f(o.Xplan)}</b> / ${o.w ? f(o.w * o.cap, 1) : '–'}</span></footer>
+    </article>`; };
+  return `<section class="dash">
+    <div class="band"><div class="band-in">
+      <div class="sec-h"><div><h2 style="color:var(--band-ink)">Bảng theo dõi của tôi</h2><p class="small" style="color:var(--band-muted);margin:2px 0 0">Số thực hiện ${Object.keys(trkVals(ma, m)).length ? 'đến ' + KY[m] : 'đến 30/09/2026 (chưa nhập số mới)'} · Q4 đã qua ${pct(el, 0)}</p></div>
+        <div class="row"><button class="btn sm ghost-b" id="dUpd">Cập nhật số thực hiện</button><button class="btn sm ghost-b" id="dPick">Chọn chỉ tiêu theo dõi</button></div></div>
+      <div class="kpis">
+        <div class="kpi hero"><span>Điểm KPI theo số mới nhất</span><b>${f(tr.Hm)}</b><small>trên ${f(P.maxScore, 1)} điểm tối đa</small></div>
+        <div class="kpi"><span>Nếu đạt đúng kế hoạch</span><b>${f(tr.Xplan)}</b><small>${tgt != null ? (tr.Xplan >= tgt - 1e-9 ? 'đạt mục tiêu ' + f(tgt, 1) : 'thiếu ' + f(tgt - tr.Xplan) + ' so với mục tiêu') : 'chưa đặt mục tiêu'}</small></div>
+        <div class="kpi"><span>Nếu giữ tốc độ hiện tại</span><b>${f(tr.Xpace)}</b><small>dòng, bình quân × 12/${Object.keys(trkVals(ma, m)).length ? m : 9}</small></div>
+        <div class="kpi"><span>Chỉ tiêu đang theo dõi</span><b>${cards.length}</b><small>${cnt('cham') + cnt('hoicham')} cần chú ý · ${cnt('dung') + cnt('dat')} ổn</small></div>
+      </div></div></div>
+    <div class="row chips-st">${['cham', 'hoicham', 'chua', 'dung', 'dat'].filter(k => cnt(k)).map(k => `<span class="pill ${ST[k].cls}">${cnt(k)} ${ST[k].lbl.toLowerCase()}</span>`).join('')}
+      <span class="legend-m"><i class="lg-fill"></i>Thực hiện <i class="lg-309"></i>30/9 <i class="lg-mile"></i>Mốc cần đạt kỳ này <i class="lg-target"></i>Kế hoạch 31/12 <i class="lg-kh"></i>100% KH năm</span></div>
+    ${cards.length ? `<div class="dcards">${cards.map(card).join('')}</div>` : '<div class="panel muted">Chưa chọn chỉ tiêu nào. Bấm <b>Chọn chỉ tiêu theo dõi</b> để tích các chỉ tiêu bạn muốn xem ở đây.</div>'}
+    <p class="explain">Trạng thái so tiến độ đóng GAP Q4 với thời gian đã qua của kỳ: đúng tiến độ khi phần GAP đã đóng ≥ phần thời gian đã qua; hơi chậm khi đạt 70–100%; chậm khi dưới 70%. Biểu đồ nhỏ: đường đứt là lộ trình kế hoạch từ 30/9 đến 31/12, đường liền là số thực hiện từng kỳ.</p>
+  </section>`;
+}
+function bindDash() { const g = () => go(5); if ($('#dUpd')) $('#dUpd').onclick = g; if ($('#dPick')) $('#dPick').onclick = g; }
+
+/* ---------- THAMNN: nhập số thực hiện một lần cho cả Phòng ---------- */
+const BULK = [{ ct: 'nii', lbl: 'Thu thuần lãi', sub: 'triệu đồng, lũy kế' }, { ct: 'duno', lbl: 'Dư nợ BQ', sub: 'tỷ đồng', bq: 1 }, { ct: 'nv', lbl: 'Nguồn vốn BQ', sub: 'tỷ đồng', bq: 1 }, { ct: 'casa', lbl: 'CASA BQ', sub: 'tỷ đồng', bq: 1 }];
+const nenOf = (ma, ct) => ((SEED.nen_bq || {})[ma] || {})[ct];
+function parseNum(s) {
+  s = String(s ?? '').trim().replace(/\s/g, ''); if (!s) return null;
+  if (s.includes(',') && s.includes('.')) s = s.lastIndexOf(',') > s.lastIndexOf('.') ? s.replace(/\./g, '').replace(',', '.') : s.replace(/,/g, '');
+  else if (s.includes(',')) s = s.replace(',', '.');
+  const v = Number(s); return isFinite(v) ? v : NaN;
+}
+function bulkState() {
+  const m = S.bulkKy || trkKyOf('THAMNN') || 10;
+  if (!S.bulk || S.bulk.m !== m) {
+    const vals = {};
+    KPI.ALLCB().forEach(ma => { const k = (((S.track[ma] || {}).ky || {})[m]) || {}; vals[ma] = {};
+      BULK.forEach(b => { const d = (k.values || {})[b.ct]; if (!isNum(d)) return;
+        vals[ma][b.ct] = b.bq && S.bulkMode !== 'delta' && isNum(nenOf(ma, b.ct)) ? String(+((k.bq || {})[b.ct] ?? nenOf(ma, b.ct) + d).toFixed(4)) : String(+d.toFixed(4)); }); });
+    S.bulk = { m, vals, dirty: false };
+  }
+  return S.bulk;
+}
+function bulkCell(ma, b, raw) {
+  const s = BY[ma].so_lieu[b.ct] || {}; if (!s.ke_hoach_nam) return { na: true };
+  const v = parseNum(raw); if (v == null) return { cap: 'chưa nhập' };
+  if (isNaN(v)) return { bad: 1, cap: 'số chưa hợp lệ' };
+  let delta = v;
+  if (b.bq && S.bulkMode !== 'delta') { const n = nenOf(ma, b.ct); if (!isNum(n)) return { bad: 1, cap: 'thiếu số nền – nhập Delta' }; delta = v - n; }
+  return { delta, cap: (b.bq ? 'Delta ' + f(delta) + ' · ' : '') + '%HT ' + pct(delta / s.ke_hoach_nam) };
+}
+function renderBulk() {
+  const st = bulkState(), m = st.m, mode = S.bulkMode || 'bq', cbs = KPI.ALLCB();
+  app.innerHTML = `
+    <div class="sec-h"><div><h1>Nhập số thực hiện cho cả Phòng</h1><p class="muted small">Nhập một lần cho tất cả cán bộ. Số lưu vào phần “Theo dõi thực hiện” của từng người, ai cũng thấy ngay. Có thể dán nguyên khối từ Excel (chọn ô đầu tiên rồi dán).</p></div>
+      <button class="btn sm" id="bkBack">← Về tổng hợp Phòng</button></div>
+    <div class="row" style="justify-content:space-between">
+      <div class="tabs">${[10, 11, 12].map(k => `<button class="tab" data-bky="${k}" aria-selected="${k === m}">Đến ${KY[k]}</button>`).join('')}</div>
+      <div class="seg" role="group" aria-label="Cách nhập số bình quân"><button data-bmode="bq" aria-pressed="${mode !== 'delta'}">Nhập số dư BQ</button><button data-bmode="delta" aria-pressed="${mode === 'delta'}">Nhập Delta tăng trưởng</button></div>
+    </div>
+    <div class="note small">${mode !== 'delta' ? `Dư nợ, Nguồn vốn, CASA: nhập <b>số dư bình quân năm lũy kế đến ${KY[m]}</b> (tỷ đồng). App tự tính Delta = số dư BQ − BQ cùng kỳ 2025 (nền đến 31/10/2025 trong bảng tổng hợp).` : 'Dư nợ, Nguồn vốn, CASA: nhập trực tiếp <b>Delta tăng trưởng bình quân</b> (tỷ đồng), cùng cách tính với số 30/9.'} Thu thuần lãi: số lũy kế từ đầu năm (triệu đồng).</div>
+    <div class="tw"><table class="bulk"><thead><tr><th>Cán bộ</th>${BULK.map(b => `<th>${b.lbl}<small style="display:block;font-weight:400">${b.sub}</small></th>`).join('')}</tr></thead><tbody>
+    ${cbs.map((ma, r) => `<tr><td class="ctn"><b>${ma}</b><small>${esc(BY[ma].ho_ten)}</small></td>${BULK.map((b, c) => { const k = bulkCell(ma, b, st.vals[ma][b.ct]);
+      return k.na ? '<td><span class="muted small">không giao</span></td>' : `<td><input class="tin bk${st.vals[ma][b.ct] ? ' entered' : ''}" inputmode="decimal" data-r="${r}" data-c="${c}" data-ma="${ma}" data-ct="${b.ct}" value="${esc(st.vals[ma][b.ct] || '')}" aria-label="${b.lbl} ${ma}"><small class="bkcap${k.bad ? ' bad' : ''}">${k.cap}</small></td>`; }).join('')}</tr>`).join('')}
+    </tbody></table></div>
+    <div class="sticky-sum"><span id="bkMsg" class="small muted">${st.dirty ? 'Có thay đổi chưa lưu' : 'Chưa có thay đổi'}</span><div class="sp"></div><button class="btn pri" id="bkSave" ${st.dirty ? '' : 'disabled'}>Lưu cho cả Phòng</button></div>`;
+  $('#bkBack').onclick = () => { if (st.dirty && !S.bulkWarned) { S.bulkWarned = 1; $('#bkMsg').textContent = 'Còn thay đổi chưa lưu – bấm lại để bỏ qua'; return; } S.bulkWarned = 0; S.view = 'sum'; render(); };
+  app.querySelectorAll('[data-bky]').forEach(b => b.onclick = () => { S.bulkKy = +b.dataset.bky; render(); });
+  app.querySelectorAll('[data-bmode]').forEach(b => b.onclick = () => { S.bulkMode = b.dataset.bmode; S.bulk = null; render(); });
+  const upd = i => { const k = bulkCell(i.dataset.ma, BULK.find(b => b.ct === i.dataset.ct), i.value); const cap = i.nextElementSibling; cap.textContent = k.cap; cap.classList.toggle('bad', !!k.bad); i.classList.toggle('entered', i.value.trim() !== ''); };
+  const inputs = [...app.querySelectorAll('input.bk')];
+  inputs.forEach(i => {
+    i.oninput = () => { st.vals[i.dataset.ma][i.dataset.ct] = i.value; st.dirty = true; upd(i); $('#bkSave').disabled = false; $('#bkMsg').textContent = 'Có thay đổi chưa lưu'; };
+    i.onpaste = e => {
+      const t = (e.clipboardData || window.clipboardData).getData('text'); if (!/[\t\n]/.test(t.trim())) return;
+      e.preventDefault();
+      t.replace(/\r/g, '').split('\n').filter(l => l.length).forEach((line, dr) => line.split('\t').forEach((cell, dc) => {
+        const tgt = inputs.find(x => +x.dataset.r === +i.dataset.r + dr && +x.dataset.c === +i.dataset.c + dc);
+        if (tgt) { tgt.value = cell.trim(); tgt.oninput(); }
+      }));
+    };
+  });
+  $('#bkSave').onclick = async () => {
+    const btn = $('#bkSave'); btn.disabled = true; let n = 0, bad = 0, err = 0;
+    for (const ma of cbs) {
+      const doc = JSON.parse(JSON.stringify(S.track[ma] || {})), ky = doc.ky || {}, cur = ky[m] || { values: {} };
+      const values = { ...(cur.values || {}) }, bq = { ...(cur.bq || {}) }; let changed = false;
+      BULK.forEach(b => {
+        if (!(b.ct in st.vals[ma])) return;
+        const k = bulkCell(ma, b, st.vals[ma][b.ct]); if (k.na) return; if (k.bad) { bad++; return; }
+        const raw = parseNum(st.vals[ma][b.ct]);
+        if (raw == null) { if (b.ct in values) { delete values[b.ct]; delete bq[b.ct]; changed = true; } return; }
+        if (values[b.ct] !== k.delta) { values[b.ct] = k.delta; changed = true; }
+        if (b.bq) { if (mode !== 'delta') bq[b.ct] = raw; else delete bq[b.ct]; }
+      });
+      if (!changed) continue;
+      ky[m] = { ...cur, values, bq, updatedAt: new Date().toISOString(), by: S.me };
+      const body = { ...doc, ky, latest: Math.max(...Object.keys(ky).filter(k => Object.keys(ky[k].values || {}).length).map(Number), doc.latest || 0), updatedAt: new Date().toISOString(), by: S.me };
+      $('#bkMsg').textContent = 'Đang lưu ' + ma + '…';
+      if (await saveDoc('thuc_hien/' + ma, body)) { S.track[ma] = body; n++; } else err++;
+    }
+    st.dirty = err > 0 || bad > 0;
+    $('#bkMsg').textContent = `Đã lưu ${n} cán bộ` + (bad ? ` · ${bad} ô chưa hợp lệ chưa được lưu` : '') + (err ? ` · ${err} cán bộ lưu chưa được, thử lại` : '');
+    btn.disabled = !st.dirty;
+  };
 }
 
 /* ---------- leader / Phòng ---------- */
@@ -1026,7 +1263,7 @@ function renderLeader() {
   app.innerHTML = `
     <div class="sec-h"><div><h1>${isPhong ? 'Tổng hợp KPI Phòng' : isLead ? 'KPI nhóm ' + me : 'Bảng xếp hạng Phòng'}</h1>
       <p class="muted small">${anon ? 'Tên cán bộ khác được ẩn. ' : ''}Điểm dự kiến cộng từ kế hoạch các cán bộ đã lưu; ai chưa lập thì tạm tính theo giữ tốc độ 9 tháng.</p></div>
-      <div class="row">${KPI.PERSONAL.includes(me) ? '<button class="btn pri sm" id="back">← Về kế hoạch của tôi</button>' : ''}${isPhong ? '<button class="btn sm" id="runTest">Đối chiếu ca kiểm thử mục 9</button>' : ''}</div></div>
+      <div class="row">${KPI.PERSONAL.includes(me) ? '<button class="btn pri sm" id="back">← Về kế hoạch của tôi</button>' : ''}${isPhong ? '<button class="btn pri sm" id="toBulk">Nhập số thực hiện cả Phòng</button><button class="btn sm" id="runTest">Đối chiếu ca kiểm thử mục 9</button>' : ''}</div></div>
     ${isLead ? `<div class="stats">
       <div class="stat hl"><label>KPI ${isPhong ? 'Phòng' : 'nhóm'} dự kiến</label><b>${f((isPhong ? ph : cur.cache[me]).t.L)}</b><small>theo kế hoạch đã lưu</small></div>
       <div class="stat"><label>Điểm đến 30/9</label><b>${f((isPhong ? ph : cur.cache[me]).t.H)}</b><small>${f((isPhong ? ph : cur.cache[me]).t.wData, 0)} trọng số có số liệu</small></div>
@@ -1042,6 +1279,7 @@ function renderLeader() {
     <div id="detail"></div>`;
   if ($('#back')) $('#back').onclick = () => { S.view = 'me'; render(); };
   if ($('#runTest')) $('#runTest').onclick = runTests;
+  if ($('#toBulk')) $('#toBulk').onclick = () => { S.view = 'bulk'; render(); scrollTo(0, 0); };
   bindExtraLeader();
   if (isLead) app.querySelectorAll('tr.click, [data-open]').forEach(tr => tr.onclick = () => { S.detail = tr.dataset.m || tr.dataset.open; renderDetail(cur); $('#detail').scrollIntoView({ behavior: 'smooth', block: 'start' }); });
   if (S.detail && isLead && (list.some(e => e.ma === S.detail) || TRACK_ONLY.includes(S.detail))) renderDetail(cur);
@@ -1213,4 +1451,4 @@ render();
 connect();
 };
 </script>
-<script src="boot.js?v=202610300153"></script></body></html>
+<script src="boot.js?v=202611020323"></script></body></html>
