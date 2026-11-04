@@ -1,4 +1,4 @@
-<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0e2a47"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="KPI Phòng"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style></head><body><script src="config.js?v=202611020323"></script><script src="store-shim.js?v=202611020323"></script><script src="data.enc.js?v=202611020323"></script><title>KPI Q4 Phòng 2026</title>
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0e2a47"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="KPI Phòng"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style></head><body><script src="config.js?v=202611040737"></script><script src="store-shim.js?v=202611040737"></script><script src="data.enc.js?v=202611040737"></script><title>KPI Q4 Phòng 2026</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
@@ -1421,6 +1421,9 @@ function runTests() {
   const T = SEED.kiem_thu, exp = T.tong_hop;
   // đối chiếu theo đúng cách cộng của file Excel gốc (mục 9), trên số liệu gốc
   const keepNii = { ...BY.HUYENHLL.so_lieu.nii }; KPI.setSoLieu('HUYENHLL', 'nii', SEED_SL.HUYENHLL.nii); KPI.setRule('excel');
+  // tạm đưa về số gốc của bản đặc tả (trước khi bổ sung số 30/9 ngày 04/11), kiểm xong trả lại
+  const goc = SEED.so_lieu_goc || {}, keep = [];
+  Object.entries(goc).forEach(([m, o]) => Object.entries(o).forEach(([ct, v]) => { keep.push([m, ct, { ...(BY[m].so_lieu[ct] || {}) }]); KPI.setSoLieu(m, ct, v); }));
   const s = KPI.summary({}); let ok = 0, tot = 0; const bad = [];
   const ck = (n, g, x, tol = 0.006) => { tot++; if (Math.abs(g - x) <= tol) ok++; else bad.push(n + ': ' + f(g) + ' ≠ ' + f(x)); };
   s.list.forEach(e => { const x = exp[e.ma]; ck(e.ma + ' điểm 30/9', e.t.H, x[0]); ck(e.ma + ' TS', e.t.wData, x[1], 0); ck(e.ma + ' giữ tốc độ', e.t.L, x[2]); ck(e.ma + ' đề xuất', e.t.X, x[3]); });
@@ -1429,9 +1432,10 @@ function runTests() {
   T.thuannh.goi_y_b.forEach(([m, v]) => ck('B ' + m, r(m).pB * 100, v, .06));
   ck('CASA GAP', r('casa').U, T.thuannh.casa_gap); ck('CASA BQ Q4', r('casa').todo, T.thuannh.casa_bq);
   ck('KPI Phòng sau KH THUANNH', KPI.summary({ THUANNH: { rates } }).list[0].t.L, T.thuannh.phong_sau);
-  KPI.setRule('moi'); KPI.setSoLieu('HUYENHLL', 'nii', keepNii);
+  KPI.setRule('moi');
   const sm = KPI.summary({}).list[0]; ck('Cách cộng mới: Phòng 30/9', sm.t.H, exp.THAMNN[0]); ck('Cách cộng mới: Phòng giữ tốc độ', sm.t.L, exp.THAMNN[2], .05);
-  $('#testOut').innerHTML = `<div class="${bad.length ? 'warnbox' : 'note'}"><b>${ok}/${tot} phép kiểm khớp</b> với mục 9 (10 dòng tổng hợp × 4 chỉ số, ca THUANNH mục tiêu 80: Gợi ý A/B, tỷ lệ chọn, 7 tỷ lệ Gợi ý B, CASA, KPI Phòng sau kế hoạch) theo cách cộng của file Excel gốc, và số Phòng theo cách cộng nhóm mới. Chạy trên số liệu gốc, không ảnh hưởng kế hoạch đã lưu.${bad.length ? '<br>' + bad.map(esc).join('<br>') : ''}</div>`;
+  keep.forEach(([m, ct, v]) => KPI.setSoLieu(m, ct, v)); KPI.setSoLieu('HUYENHLL', 'nii', keepNii);
+  $('#testOut').innerHTML = `<div class="${bad.length ? 'warnbox' : 'note'}"><b>${ok}/${tot} phép kiểm khớp</b> với mục 9 (10 dòng tổng hợp × 4 chỉ số, ca THUANNH mục tiêu 80: Gợi ý A/B, tỷ lệ chọn, 7 tỷ lệ Gợi ý B, CASA, KPI Phòng sau kế hoạch) theo cách cộng của file Excel gốc, và số Phòng theo cách cộng nhóm mới. Chạy trên số liệu gốc của bản đặc tả (trước khi bổ sung MainBank, CX, ĐMST… ngày 04/11), không ảnh hưởng số đang dùng và kế hoạch đã lưu.${bad.length ? '<br>' + bad.map(esc).join('<br>') : ''}</div>`;
 }
 
 
@@ -1451,4 +1455,4 @@ render();
 connect();
 };
 </script>
-<script src="boot.js?v=202611020323"></script></body></html>
+<script src="boot.js?v=202611040737"></script></body></html>
