@@ -1,4 +1,4 @@
-<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0e2a47"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="KPI Phòng"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style></head><body><script src="config.js?v=202611040737"></script><script src="store-shim.js?v=202611040737"></script><script src="data.enc.js?v=202611040737"></script><title>KPI Q4 Phòng 2026</title>
+<!doctype html><html lang="vi"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="robots" content="noindex,nofollow"><meta name="theme-color" content="#0e2a47"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><meta name="apple-mobile-web-app-title" content="KPI Phòng"><link rel="manifest" href="manifest.webmanifest"><link rel="icon" href="icon-192.png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style></head><body><script src="config.js?v=202611040748"></script><script src="store-shim.js?v=202611040748"></script><script src="data.enc.js?v=202611040748"></script><title>KPI Q4 Phòng 2026</title>
 <meta name="claude:viewport-fit-sides" content="cover">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800&display=swap">
@@ -337,7 +337,7 @@ const KPI = (function () {
   }
 
   // ---- Cách cộng nhóm/Phòng ----
-  // 'moi' (từ 29/10): HUYENHLL: NV, CASA = tổng tất cả CB; NII nhập thủ công; còn lại = BAUCT + QUYNNHTT + THAODTV.
+  // 'moi' (từ 29/10): HUYENHLL: NV, CASA, Dư nợ (từ 04/11) = tổng tất cả CB; NII nhập thủ công; còn lại = BAUCT + QUYNNHTT + THAODTV.
   //                   NAM.DOHOAI: tất cả = PHONGTDM + THANHDT7 + TRAMNDN. Phòng: TH/KH giữ số tổng của file;
   //                   dự kiến = Σ kế hoạch tất cả CB + phần còn lại của Phòng theo tốc độ 9 tháng.
   // 'excel': đúng file Excel gốc (dùng để đối chiếu ca kiểm thử mục 9).
@@ -345,7 +345,7 @@ const KPI = (function () {
   const TRACK_ONLY = ['THAODTV'];
   const ALLCB = () => [...PERSONAL, ...TRACK_ONLY.filter(m => BY[m])];
   const GROUP_RULE = {
-    HUYENHLL: { members: ['BAUCT', 'QUYNNHTT', 'THAODTV'], all: ['nv', 'casa'], manual: ['nii'] },
+    HUYENHLL: { members: ['BAUCT', 'QUYNNHTT', 'THAODTV'], all: ['nv', 'casa', 'duno'], manual: ['nii'] },
     'NAM.DOHOAI': { members: ['PHONGTDM', 'THANHDT7', 'TRAMNDN'], all: [], manual: [] }
   };
   const sumOrNull = arr => arr.every(v => v == null) ? null : arr.reduce((a, v) => a + N(v), 0);
@@ -1455,4 +1455,4 @@ render();
 connect();
 };
 </script>
-<script src="boot.js?v=202611040737"></script></body></html>
+<script src="boot.js?v=202611040748"></script></body></html>
