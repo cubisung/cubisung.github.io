@@ -461,14 +461,14 @@ function getPlan(ad){var k=ad.toUpperCase();return PLANS[k]||(PLANS[k]={phi:0,vb
 function vPlan(){
  var off=scopeOff(),edit=off.some(canEditPlan),k=function(a){return a.replace(/\W/g,'_')};
  var rows=off.map(function(u){var p=getPlan(u.ad),e=canEditPlan(u);
-  return '<tr><td>'+esc(u.ad)+'<br><small style="color:var(--muted)">'+POS_LABEL[u.pos]+(wide()&&filterDep==='all'?' · '+esc(u.depName):'')+'</small></td>'+PK.map(function(c){return '<td class="r">'+(e?'<input class="pi" inputmode="numeric" value="'+money(p[c[0]])+'" oninput="fmtPlan(this)" onchange="setPlan(\''+esc(u.ad)+'\',\''+c[0]+'\',this)" aria-label="'+esc(c[1])+' '+esc(u.ad)+'">':money(p[c[0]]))+'</td>'}).join('')+'</tr>'}).join('');
+  return '<tr><td>'+esc(u.ad)+'<br><small style="color:var(--muted)">'+POS_LABEL[u.pos]+(wide()&&filterDep==='all'?' · '+esc(u.depName):'')+'</small></td>'+PK.map(function(c){return '<td class="r">'+(e?'<input class="pi" inputmode="numeric" value="'+money(p[c[0]])+'" oninput="fmtPlan(this);setPlan(\''+esc(u.ad)+'\',\''+c[0]+'\',this)" aria-label="'+esc(c[1])+' '+esc(u.ad)+'">':money(p[c[0]]))+'</td>'}).join('')+'</tr>'}).join('');
  var tot=PK.map(function(c){return sumA(off.map(function(u){return getPlan(u.ad)[c[0]]}))});
  return head('Kế hoạch quý 4/'+YEAR,esc(scopeLabel())+' · kỳ 01/10 – 31/12/'+YEAR,depSel()+(edit?'<button class="btn" onclick="savePlan()">Lưu kế hoạch</button>':''))+
  (edit?'<div class="note">Lãnh đạo phòng nhập kế hoạch <b>cả quý 4</b> cho từng cán bộ. <b>Phí</b> tính như hiện nay (8 loại phí + hoa hồng BH dự kiến). <b>VBI</b> = doanh số VBI khoản vay + VBI ô tô KHCN + VBI ô tô KHDN. <b>Manulife</b> = doanh số. <b>Thẻ TDQT</b> = số khách hàng có thẻ active. Bấm <b>Lưu kế hoạch</b> để ghi lại.</div>':'<div class="note">Bạn chỉ xem kế hoạch. Lãnh đạo phòng là người nhập.</div>')+
  '<div class="scroll"><table><thead><tr><th>Cán bộ</th>'+PK.map(function(c){return '<th class="r">'+esc(c[1])+'<br><small>Q4 · '+c[2]+'</small></th>'}).join('')+'</tr></thead><tbody>'+rows+
  '<tr class="tot"><td>Tổng cộng ('+off.length+' cán bộ)</td>'+tot.map(function(v,i){return '<td class="r" id="pt_'+PK[i][0]+'">'+money(v)+'</td>'}).join('')+'</tr></tbody></table></div>'}
 function fmtPlan(el){el.value=el.value.replace(/\D/g,'').replace(/\B(?=(\d{3})+$)/g,'.')}
-function setPlan(ad,key,el){var v=+el.value.replace(/\D/g,'')||0;getPlan(ad)[key]=v;el.value=money(v);dirty[ad]=1;
+function setPlan(ad,key,el){var v=+el.value.replace(/\D/g,'')||0;getPlan(ad)[key]=v;dirty[ad]=1;
  var c=$('pt_'+key);if(c)c.textContent=money(sumA(scopeOff().map(function(u){return getPlan(u.ad)[key]})))}
 async function savePlan(){var a=document.activeElement;if(a&&a.classList&&a.classList.contains('pi'))a.blur();
  if(!SV3){toast('Máy chủ chưa cập nhật bản mới nên chưa lưu được kế hoạch Q4. Báo quản trị cập nhật Apps Script.');return}
