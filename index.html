@@ -99,7 +99,7 @@ tr.grp td{background:var(--accent-soft);color:var(--ink);text-align:left;padding
  aside{position:fixed;bottom:0;left:0;right:0;top:auto;height:auto;flex-direction:row;padding:6px;z-index:50}
  .brand,.me{display:none}nav{display:flex;width:100%;justify-content:space-between;overflow-x:auto}
  nav button{flex-direction:column;gap:2px;font-size:10px;padding:6px 8px;text-align:center;width:auto;box-shadow:none!important;white-space:nowrap}
- main{padding:16px 14px 90px}.g4{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}.feegrid{grid-template-columns:1fr 1fr}
+ main{padding:46px 14px 96px}.g4{grid-template-columns:1fr 1fr}.g2{grid-template-columns:1fr}.feegrid{grid-template-columns:1fr 1fr}
  .mobile-out{display:block!important}
 }
 .mobile-out{display:none;margin-top:8px}
@@ -126,7 +126,6 @@ tr.grp td{background:var(--accent-soft);color:var(--ink);text-align:left;padding
  </aside>
  <main id="main"></main>
 </div>
-<button class="btn hide" id="bell" onclick="bellOn()" style="position:fixed;bottom:14px;right:14px;z-index:70;padding:10px 16px;box-shadow:0 4px 14px rgba(0,0,0,.25)">🔔 Bật thông báo nhắc nhập phí</button>
 <button class="btn ghost mobile-out hide" id="mout" onclick="logout()" style="position:fixed;top:8px;right:8px;z-index:60;padding:4px 10px;font-size:12px">Đăng xuất</button>
 <div id="toast" class="toast hide"></div>
 <div id="busy" class="hide">Đang tải dữ liệu…</div>
@@ -139,7 +138,9 @@ var API_URL=(function(){var d='https://script.google.com/macros/s/AKfycbxmuWSJnQ
 window.OneSignalDeferred=window.OneSignalDeferred||[];
 OneSignalDeferred.push(function(OS){try{OS.init({appId:'8dea9195-32e6-4b8e-9fec-1b6b74e5ae36',allowLocalhostAsSecureOrigin:true,notifyButton:{enable:false}})}catch(e){}});
 function pushLogin(){if(!me)return;OneSignalDeferred.push(function(OS){try{OS.login(me.ad)}catch(e){}})}
-function bellRefresh(){var b=document.getElementById('bell');if(!b)return;var on='Notification' in window&&Notification.permission==='granted';b.classList.toggle('hide',!(me&&me.role==='staff')||on)}
+function bellNeed(){return !!(me&&me.role==='staff')&&!('Notification' in window&&Notification.permission==='granted')}
+function bellBtn(){return bellNeed()?'<button class="btn ghost" id="bell" onclick="bellOn()" style="margin-left:8px">🔔 Bật thông báo nhắc</button>':''}
+function bellRefresh(){var b=document.getElementById('bell');if(b&&!bellNeed())b.remove()}
 function bellOn(){var ios=/iPhone|iPad|iPod/.test(navigator.userAgent),sa=window.navigator.standalone||(window.matchMedia&&matchMedia('(display-mode: standalone)').matches);
  if(ios&&!sa){alert('Trên iPhone: bấm nút Chia sẻ của Safari, chọn "Thêm vào Màn hình chính", rồi mở app từ biểu tượng đó và bấm lại "Bật thông báo".');return}
  OneSignalDeferred.push(function(OS){OS.Notifications.requestPermission().then(function(){pushLogin();bellRefresh()})})}
@@ -310,7 +311,7 @@ function vHome0(){
   bhCard([me])+
   '<div class="grid g2" style="margin-top:14px"><div class="card"><h3>Phí theo ngày</h3>'+dayChart([me])+'</div>'+
   '<div class="card"><h3>Tuân thủ nhập liệu · tháng '+MS+'</h3><p style="font-size:34px;margin:6px 0"><b>'+(c==null?'—':c+'%')+'</b></p><div class="bar"><i style="width:'+(c||0)+'%"></i></div>'+
-  '<p style="color:var(--muted)">'+miss+' ngày làm việc chưa nhập.</p>'+(dn?'':'<button class="btn" onclick="go(\'enter\')">Nhập ngay</button>')+'</div></div>'+tables()}
+  '<p style="color:var(--muted)">'+miss+' ngày làm việc chưa nhập.</p><div style="display:flex;flex-wrap:wrap;gap:8px">'+(dn?'':'<button class="btn" onclick="go(\'enter\')">Nhập ngay</button>')+bellBtn().replace('margin-left:8px','')+'</div></div></div>'+tables()}
  var off=scopeOff(),A=sumA(off.map(function(u){return cumPhi(u.ad,MS)})),P=sumA(off.map(function(u){return planOf(u.ad,MS)})),dn2=off.filter(function(u){return doneToday(u.ad)}).length;
  return head('Tổng quan tiến độ',esc(scopeLabel())+' · '+lbl,depSel()+perSel())+
  '<div class="grid g4"><div class="card kpi"><small>Phí đã thu</small><b>'+tr(A)+'</b><span>'+money(A)+' đ · gồm hoa hồng BH</span></div>'+
